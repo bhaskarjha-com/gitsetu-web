@@ -38,16 +38,52 @@
       </div>
     </div>
 
-    <p class="guard-caption">
-      GitSetu's pre-commit guard is fail-closed.<br />
-      If your identity doesn't match, the commit is blocked — not warned.
-    </p>
+    <div class="guard-caption">
+      <p>
+        GitSetu's pre-commit guard is fail-closed.<br />
+        If your identity doesn't match, the commit is blocked — not warned.
+      </p>
+      <p class="guard-note">
+        <strong class="accent">Privacy Guard-Rail:</strong> GitSetu enforces <code>useConfigOnly = true</code> globally.<br />
+        Commits in unmapped directories are strictly blocked to prevent global identity leakage.
+      </p>
+    </div>
   </div>
 </section>
 
 <style>
   .guard-demo {
     background: var(--bg-primary);
+  }
+
+  .guard-caption {
+    text-align: center;
+    margin-top: var(--space-2xl);
+  }
+
+  .guard-caption p {
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
+  }
+
+  .guard-caption .guard-note {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    display: inline-block;
+  }
+
+  .guard-note code {
+    background: var(--bg-code);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    color: var(--text-heading);
+    font-family: var(--font-mono);
   }
 
   .terminal-wrapper {
@@ -127,14 +163,6 @@
   .error-bold {
     color: var(--color-error);
     font-weight: 600;
-  }
-
-  .guard-caption {
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: var(--text-lg);
-    margin-top: var(--space-2xl);
-    line-height: 1.6;
   }
 
   @media (max-width: 640px) {

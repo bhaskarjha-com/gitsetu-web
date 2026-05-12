@@ -5,9 +5,13 @@ const features = [
   { icon: '🔑', title: 'SSH Key Generation', desc: 'Generates ED25519 keypairs and wires up ~/.ssh/config' },
   { icon: '🛡️', title: 'Identity Guard', desc: 'Pre-commit hook blocks commits with wrong email' },
   { icon: '🔐', title: 'Credential Broker', desc: 'Per-profile PAT management via OS keychain' },
-  { icon: '🔄', title: 'Idempotent', desc: 'Safe to re-run. Managed blocks never touch your custom config' },
+  { icon: '🔄', title: 'Filesystem Safe', desc: 'Idempotent. Managed blocks never overwrite your custom config' },
   { icon: '📦', title: 'Encrypted Backup', desc: 'Export/restore identity state with OpenSSL encryption' },
-  { icon: '⚡', title: 'Shell Prompt', desc: 'Active profile in $PS1 — zero subshells, ~2ms' }
+  { icon: '⚡', title: 'Shell Prompt', desc: 'Active profile in $PS1 — zero subshells, ~2ms' },
+  { icon: '✍️', title: 'SSH Commit Signing', desc: 'Automates "Verified" commit badges. Bypasses GPG completely' },
+  { icon: '🔌', title: 'Hardware Keys', desc: 'Native FIDO2/YubiKey bootstrapping (ed25519-sk) with software fallback' },
+  { icon: '🩺', title: 'Diagnostic Doctor', desc: 'Built-in tools to instantly diagnose agent drift and config health' },
+  { icon: '⌨️', title: 'Autocompletion', desc: 'Rich <TAB> completion for commands and profile names in Bash/Zsh' }
 ];
 ---
 
@@ -74,6 +78,12 @@ const features = [
   }
 
   @media (max-width: 1024px) {
+    .features-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
     .features-grid {
       grid-template-columns: repeat(2, 1fr);
     }
