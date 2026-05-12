@@ -1,0 +1,48 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'GitSetu — Zero-Dependency Git Identity Manager',
+  description = 'Manage multiple Git identities automatically. SSH keys, credentials, and commit signing — all in pure Bash 3.2. Zero dependencies.'
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- OpenGraph -->
+    <meta property="og:title" content="GitSetu — Stop committing as the wrong person" />
+    <meta property="og:description" content="Auto-switch Git identity, SSH keys, and credentials by directory. Pure Bash. Zero deps." />
+    <meta property="og:image" content="https://gitsetu.bhaskarjha.dev/og-image.png" />
+    <meta property="og:url" content="https://gitsetu.bhaskarjha.dev" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://gitsetu.bhaskarjha.dev" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+
+    <!-- Global CSS -->
+    <style>
+      @import '../styles/global.css';
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

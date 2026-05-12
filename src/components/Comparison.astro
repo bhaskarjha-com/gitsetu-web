@@ -1,0 +1,195 @@
+---
+const comparisonData = [
+  { feature: 'Directory auto-switch', gitsetu: '✅', gitego: '✅', karn: '✅', gh: '❌', gcm: '❌' },
+  { feature: 'Uses native includeIf', gitsetu: '✅', gitego: '✅', karn: '❌', gh: '❌', gcm: '❌' },
+  { feature: 'SSH key generation', gitsetu: '✅', gitego: '❌', karn: '❌', gh: '❌', gcm: '❌' },
+  { feature: 'SSH config orchestration', gitsetu: '✅', gitego: '❌', karn: '❌', gh: '❌', gcm: '❌' },
+  { feature: 'HTTPS credential broker', gitsetu: '✅', gitego: '✅', karn: '❌', gh: '✅', gcm: '✅' },
+  { feature: 'Pre-commit identity guard', gitsetu: '✅', gitego: '⚡', karn: '❌', gh: '❌', gcm: '❌' },
+  { feature: 'SSH commit signing', gitsetu: '✅', gitego: '❌', karn: '⚡', gh: '❌', gcm: '❌' },
+  { feature: 'FIDO2 / YubiKey', gitsetu: '✅', gitego: '❌', karn: '❌', gh: '❌', gcm: '❌' },
+  { feature: 'Encrypted backup', gitsetu: '✅', gitego: '❌', karn: '❌', gh: '❌', gcm: '❌' },
+  { feature: 'Shell prompt', gitsetu: '✅', gitego: '❌', karn: '❌', gh: '❌', gcm: '❌' },
+  { feature: 'Diagnostic doctor', gitsetu: '✅', gitego: '❌', karn: '❌', gh: '❌', gcm: '❌' },
+  { feature: 'Zero dependencies', gitsetu: '✅', gitego: '❌', karn: '❌', gh: '❌', gcm: '❌' },
+  { feature: 'Runtime', gitsetu: 'Bash 3.2', gitego: 'Go 1.24', karn: 'Go', gh: 'Go', gcm: '.NET' }
+];
+---
+
+<section class="comparison section" id="comparison">
+  <div class="container">
+    <h2 class="section-title">How GitSetu compares.</h2>
+    <p class="section-subtitle">Verified May 2026 against each project's README.</p>
+
+    <div class="table-container">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="feature-col">Feature</th>
+            <th class="gitsetu-col">GitSetu</th>
+            <th>gitego</th>
+            <th>karn</th>
+            <th>gh CLI</th>
+            <th>GCM</th>
+          </tr>
+        </thead>
+        <tbody>
+          {comparisonData.map((row) => (
+            <tr>
+              <td class="feature-cell">{row.feature}</td>
+              <td class="gitsetu-cell">
+                <span class={row.gitsetu === '✅' ? 'success' : (row.gitsetu === '⚡' ? 'warning' : 'neutral')}>
+                  {row.gitsetu}
+                </span>
+              </td>
+              <td class="competitor-cell">
+                <span class={row.gitego === '✅' ? 'success' : (row.gitego === '⚡' ? 'warning' : 'neutral')}>
+                  {row.gitego}
+                </span>
+              </td>
+              <td class="competitor-cell">
+                <span class={row.karn === '✅' ? 'success' : (row.karn === '⚡' ? 'warning' : 'neutral')}>
+                  {row.karn}
+                </span>
+              </td>
+              <td class="competitor-cell">
+                <span class={row.gh === '✅' ? 'success' : (row.gh === '⚡' ? 'warning' : 'neutral')}>
+                  {row.gh}
+                </span>
+              </td>
+              <td class="competitor-cell">
+                <span class={row.gcm === '✅' ? 'success' : (row.gcm === '⚡' ? 'warning' : 'neutral')}>
+                  {row.gcm}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="legend">
+      <span><span class="success">✅</span> Full support</span>
+      <span><span class="warning">⚡</span> Partial</span>
+      <span><span class="neutral">❌</span> None</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .comparison {
+    background: var(--bg-secondary);
+  }
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-card);
+    background: var(--bg-primary);
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .compare-table th {
+    padding: var(--space-lg) var(--space-md);
+    font-weight: 600;
+    color: var(--text-heading);
+    border-bottom: 1px solid var(--border-card);
+    background: var(--bg-tertiary);
+  }
+
+  .compare-table td {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+  }
+
+  .compare-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .compare-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .feature-col, .feature-cell {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    background: var(--bg-primary);
+    z-index: 10;
+  }
+
+  .compare-table th.feature-col {
+    background: var(--bg-tertiary);
+  }
+
+  .compare-table tbody tr:hover .feature-cell {
+    background: var(--bg-tertiary);
+  }
+
+  .feature-cell {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .gitsetu-col, .gitsetu-cell {
+    background: rgba(0, 196, 204, 0.05);
+    font-weight: 600;
+  }
+
+  .gitsetu-col {
+    color: var(--accent-primary) !important;
+  }
+
+  .compare-table tbody tr:hover .gitsetu-cell {
+    background: rgba(0, 196, 204, 0.1);
+  }
+
+  .competitor-cell {
+    opacity: 0.8;
+  }
+
+  /* Specific styling for the Runtime row to not look like emojis */
+  .compare-table tr:last-child td span {
+    font-size: var(--text-sm);
+    opacity: 1;
+  }
+
+  .success {
+    color: var(--color-success);
+  }
+
+  .warning {
+    color: var(--color-warning);
+  }
+
+  .neutral {
+    opacity: 0.3;
+  }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+    margin-top: var(--space-lg);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .legend span span {
+    margin-right: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .compare-table th, .compare-table td {
+      padding: var(--space-sm) var(--space-md);
+    }
+  }
+</style>

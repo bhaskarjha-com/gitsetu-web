@@ -1,0 +1,80 @@
+---
+---
+
+<section class="philosophy section">
+  <div class="container philosophy-inner">
+    <div class="philosophy-text">
+      <p>
+        In Sanskrit, Setu (सेतु) means bridge —<br />
+        connecting two shores without disturbing either.
+      </p>
+      <p>
+        GitSetu bridges the gap between the developer you are<br />
+        in one directory and the developer you are in another.<br />
+        Invisibly. Correctly. Without asking anything of you<br />
+        after the first setup.
+      </p>
+      <p class="philosophy-highlight">
+        A tool that demands your attention has failed.<br />
+        GitSetu succeeds when you forget it exists.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .philosophy {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .philosophy-inner {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .philosophy-text {
+    max-width: 800px;
+    font-size: var(--text-xl);
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+
+  .philosophy-text p {
+    margin-bottom: var(--space-xl);
+  }
+
+  .philosophy-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .philosophy-highlight {
+    color: var(--text-heading);
+    font-weight: 600;
+    font-size: var(--text-2xl);
+    position: relative;
+    display: inline-block;
+  }
+
+  .philosophy-highlight::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background: var(--gradient-accent);
+    opacity: 0.5;
+  }
+
+  @media (max-width: 768px) {
+    .philosophy-text {
+      font-size: var(--text-lg);
+    }
+    
+    .philosophy-highlight {
+      font-size: var(--text-xl);
+    }
+  }
+</style>

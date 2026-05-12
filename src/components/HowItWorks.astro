@@ -1,0 +1,165 @@
+---
+const steps = [
+  {
+    number: '1',
+    title: 'Setup',
+    command: 'gitsetu setup',
+    description: 'Interactive wizard creates profiles with SSH keys, git config, and host aliases.'
+  },
+  {
+    number: '2',
+    title: 'Just cd',
+    command: 'cd ~/work/',
+    description: 'Git automatically loads your work identity — email, SSH key, and credentials.'
+  },
+  {
+    number: '3',
+    title: 'Clone normally',
+    command: 'git clone git@github.com:company/repo.git',
+    description: 'GitSetu intercepts mid-clone via native includeIf and injects the correct SSH key.'
+  }
+];
+---
+
+<section class="how-it-works section">
+  <div class="container">
+    <h2 class="section-title">
+      Three steps. Then <span class="accent-text">forget GitSetu exists.</span>
+    </h2>
+
+    <div class="steps">
+      {steps.map((step) => (
+        <div class="step">
+          <div class="step-number">{step.number}</div>
+          <h3 class="step-title">{step.title}</h3>
+          <div class="step-code">
+            <span class="prompt">$</span> {step.command}
+          </div>
+          <p class="step-desc">{step.description}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="comparison-block">
+      <p class="comparison-label">Other tools require:</p>
+      <code class="comparison-bad">git clone git@github-<span class="strikethrough">work</span>:repo.git</code>
+      <p class="comparison-label accent-text">GitSetu requires:</p>
+      <code class="comparison-good">git clone git@github.com:repo.git</code>
+      <p class="comparison-note">Same URL. Right key. Every time.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .how-it-works {
+    background: var(--bg-primary);
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+    margin-bottom: var(--space-4xl);
+  }
+
+  .step {
+    text-align: center;
+  }
+
+  .step-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--gradient-accent);
+    color: #000;
+    font-size: var(--text-xl);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-md);
+  }
+
+  .step-title {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-md);
+    color: var(--text-heading);
+  }
+
+  .step-code {
+    background: var(--bg-code);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-heading);
+    margin-bottom: var(--space-md);
+    display: inline-block;
+  }
+
+  .step-code .prompt {
+    color: var(--accent-primary);
+    margin-right: 6px;
+  }
+
+  .step-desc {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  .comparison-block {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .comparison-label {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-xs);
+    font-weight: 500;
+  }
+
+  .comparison-bad, .comparison-good {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .comparison-bad {
+    background: var(--color-error-muted);
+    color: var(--color-error);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    text-decoration: line-through;
+    text-decoration-color: rgba(239, 68, 68, 0.5);
+  }
+
+  .comparison-good {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--color-success);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+  }
+
+  .strikethrough {
+    color: var(--color-error);
+  }
+
+  .comparison-note {
+    font-size: var(--text-lg);
+    color: var(--text-heading);
+    font-weight: 600;
+    margin-top: var(--space-md);
+  }
+
+  @media (max-width: 768px) {
+    .steps {
+      grid-template-columns: 1fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

@@ -1,0 +1,84 @@
+---
+const trustSignals = [
+  {
+    title: 'Zero-Trust Guard',
+    desc: 'Fail-closed identity verification. Blocks commits when config is missing or tampered with.'
+  },
+  {
+    title: 'Atomic Locks',
+    desc: 'POSIX mkdir-based locks with stale reaping. Safe for parallel CI runners.'
+  },
+  {
+    title: 'Atomic Writes',
+    desc: 'Temp file + mv swap. No partial writes, no corruption.'
+  },
+  {
+    title: 'Clean Exit',
+    desc: 'EXIT/SIGINT/SIGTERM traps. Zero leaked files or orphaned locks.'
+  }
+];
+---
+
+<section class="enterprise section">
+  <div class="container">
+    <h2 class="section-title">Built for teams and CI pipelines.</h2>
+    
+    <div class="signals-grid">
+      {trustSignals.map((signal) => (
+        <div class="signal-card">
+          <h3 class="signal-title">{signal.title}</h3>
+          <p class="signal-desc">{signal.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .enterprise {
+    background: var(--bg-primary);
+  }
+
+  .signals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .signal-card {
+    background: var(--bg-code);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    transition: border-color var(--transition-base);
+  }
+
+  .signal-card:hover {
+    border-color: var(--border-card);
+  }
+
+  .signal-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: var(--space-sm);
+  }
+
+  .signal-desc {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 1024px) {
+    .signals-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .signals-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
