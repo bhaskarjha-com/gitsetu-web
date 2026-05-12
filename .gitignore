@@ -22,3 +22,6 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Dynamically fetched documentation
+src/pages/docs/

@@ -1,0 +1,250 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+const { frontmatter } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="GitSetu Documentation" />
+    <title>{frontmatter.title} | GitSetu Docs</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <Navbar />
+    
+    <div class="docs-container container">
+      <aside class="docs-sidebar">
+        <nav class="sidebar-nav">
+          <div class="nav-group">
+            <h3 class="nav-heading">Documentation</h3>
+            <ul>
+              <li><a href="/docs" class={frontmatter.title === 'Introduction' ? 'active' : ''}>Introduction</a></li>
+              <li><a href="/docs/architecture" class={frontmatter.title === 'Architecture' ? 'active' : ''}>Architecture</a></li>
+              <li><a href="/docs/troubleshooting" class={frontmatter.title === 'Troubleshooting' ? 'active' : ''}>Troubleshooting</a></li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <h3 class="nav-heading">Project</h3>
+            <ul>
+              <li><a href="/docs/manifesto" class={frontmatter.title === 'Manifesto' ? 'active' : ''}>Manifesto</a></li>
+              <li><a href="/docs/roadmap" class={frontmatter.title === 'Product Roadmap' ? 'active' : ''}>Roadmap</a></li>
+              <li><a href="/docs/contributing" class={frontmatter.title === 'Contributing' ? 'active' : ''}>Contributing</a></li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+      
+      <main class="docs-content markdown-body">
+        <slot />
+      </main>
+    </div>
+
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  .docs-container {
+    display: flex;
+    gap: var(--space-4xl);
+    padding-top: calc(var(--nav-height) + var(--space-2xl));
+    padding-bottom: var(--space-4xl);
+    min-height: calc(100vh - var(--nav-height));
+  }
+
+  .docs-sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-xl));
+    height: calc(100vh - var(--nav-height) - var(--space-4xl));
+    overflow-y: auto;
+    border-right: 1px solid var(--border-subtle);
+    padding-right: var(--space-lg);
+  }
+
+  .nav-group {
+    margin-bottom: var(--space-xl);
+  }
+
+  .nav-heading {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: var(--space-sm);
+  }
+
+  .sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar-nav li {
+    margin-bottom: var(--space-xs);
+  }
+
+  .sidebar-nav a {
+    display: block;
+    padding: var(--space-xs) var(--space-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    font-size: var(--text-sm);
+    margin-left: calc(var(--space-sm) * -1);
+  }
+
+  .sidebar-nav a:hover {
+    color: var(--text-heading);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .sidebar-nav a.active {
+    color: var(--accent-primary);
+    background: rgba(0, 196, 204, 0.1);
+    font-weight: 500;
+  }
+
+  .docs-content {
+    flex-grow: 1;
+    max-width: 800px;
+  }
+
+  /* Markdown Typography overrides */
+  .markdown-body h1 {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .markdown-body h2 {
+    font-size: var(--text-2xl);
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .markdown-body h3 {
+    font-size: var(--text-xl);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .markdown-body p {
+    margin-bottom: var(--space-lg);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .markdown-body ul, .markdown-body ol {
+    margin-bottom: var(--space-lg);
+    padding-left: var(--space-xl);
+    color: var(--text-secondary);
+  }
+
+  .markdown-body li {
+    margin-bottom: var(--space-xs);
+    line-height: 1.6;
+  }
+
+  .markdown-body a {
+    color: var(--accent-primary);
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 196, 204, 0.3);
+    text-underline-offset: 2px;
+  }
+
+  .markdown-body a:hover {
+    text-decoration-color: var(--accent-primary);
+  }
+
+  .markdown-body code {
+    background: var(--bg-code);
+    padding: 0.2em 0.4em;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--text-heading);
+  }
+
+  .markdown-body pre {
+    background: var(--bg-code);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    margin-bottom: var(--space-lg);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .markdown-body pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: var(--text-sm);
+  }
+
+  .markdown-body blockquote {
+    border-left: 4px solid var(--accent-primary);
+    padding-left: var(--space-md);
+    margin-bottom: var(--space-lg);
+    color: var(--text-muted);
+    background: rgba(0, 196, 204, 0.05);
+    padding: var(--space-md);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+
+  .markdown-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--space-lg);
+  }
+
+  .markdown-body th, .markdown-body td {
+    padding: var(--space-sm);
+    border: 1px solid var(--border-subtle);
+    text-align: left;
+    color: var(--text-secondary);
+  }
+
+  .markdown-body th {
+    background: var(--bg-tertiary);
+    color: var(--text-heading);
+    font-weight: 600;
+  }
+
+  .markdown-body img {
+    max-width: 100%;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  @media (max-width: 768px) {
+    .docs-container {
+      flex-direction: column;
+      padding-top: calc(var(--nav-height) + var(--space-lg));
+    }
+
+    .docs-sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      top: 0;
+      border-right: none;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-right: 0;
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+  }
+</style>
