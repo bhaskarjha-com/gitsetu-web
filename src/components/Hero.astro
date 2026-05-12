@@ -102,9 +102,6 @@ import TerminalDemo from './TerminalDemo.astro';
   .hero {
     background: var(--gradient-hero);
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -128,6 +125,10 @@ import TerminalDemo from './TerminalDemo.astro';
     position: relative;
     z-index: 1;
     padding: var(--space-4xl) 0;
+    min-height: calc(100vh - var(--nav-height));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .hero-split {
@@ -168,7 +169,7 @@ import TerminalDemo from './TerminalDemo.astro';
   }
 
   .hero-title {
-    font-size: clamp(2rem, 8vw, var(--text-5xl)); /* Responsive fluid font optimized for mobile */
+    font-size: clamp(2.5rem, 6vw, 4.5rem); /* Massive, premium SaaS scale */
     font-weight: 700;
     line-height: 1.1;
     margin-bottom: var(--space-lg);
@@ -286,6 +287,7 @@ import TerminalDemo from './TerminalDemo.astro';
     border-color: var(--accent-primary);
     color: var(--accent-primary);
     background: rgba(0, 196, 204, 0.05);
+    transform: translateY(-2px);
   }
 
   .hero-visual {

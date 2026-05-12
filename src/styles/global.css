@@ -154,7 +154,7 @@ img {
 
 /* --- Utility: Section Spacing --- */
 .section {
-  padding: var(--space-5xl) 0;
+  padding: var(--space-5xl) 0; /* 8rem (128px) for massive breathing room */
 }
 
 .section-title {
