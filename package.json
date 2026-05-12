@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "sync-docs": "./scripts/sync_docs.sh",
+    "sync-docs": "bash scripts/sync_docs.sh",
     "dev": "npm run sync-docs && astro dev",
     "build": "npm run sync-docs && astro build",
     "preview": "astro preview"
