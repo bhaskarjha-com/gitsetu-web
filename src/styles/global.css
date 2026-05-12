@@ -103,14 +103,15 @@ html {
 }
 
 /* --- Base Typography --- */
-body {
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  line-height: 1.6;
+html, body {
+  background: var(--bg-primary);
   color: var(--text-primary);
-  background-color: var(--bg-primary);
+  font-family: var(--font-sans);
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -148,6 +149,7 @@ img {
   margin-right: auto;
   padding-left: var(--space-lg);
   padding-right: var(--space-lg);
+  flex: 1 1 100%;
 }
 
 /* --- Utility: Section Spacing --- */

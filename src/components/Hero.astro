@@ -65,6 +65,13 @@ import TerminalDemo from './TerminalDemo.astro';
 
     </div>
   </div>
+
+  <!-- Scroll Indicator -->
+  <div class="scroll-indicator" aria-hidden="true">
+    <div class="mouse">
+      <div class="wheel"></div>
+    </div>
+  </div>
 </section>
 
 <script>
@@ -157,7 +164,7 @@ import TerminalDemo from './TerminalDemo.astro';
   }
 
   .hero-title {
-    font-size: clamp(2.5rem, 5vw, var(--text-5xl)); /* Responsive fluid font */
+    font-size: clamp(2rem, 8vw, var(--text-5xl)); /* Responsive fluid font optimized for mobile */
     font-weight: 700;
     line-height: 1.1;
     margin-bottom: var(--space-lg);
@@ -305,6 +312,42 @@ import TerminalDemo from './TerminalDemo.astro';
     50% { opacity: 0.5; }
   }
 
+  /* Scroll Indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: var(--space-xl);
+    left: 50%;
+    transform: translateX(-50%);
+    animation: fadeInUp 1s ease 1s forwards;
+    opacity: 0;
+    z-index: 10;
+  }
+
+  .mouse {
+    width: 24px;
+    height: 36px;
+    border: 2px solid var(--text-muted);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+  }
+
+  .wheel {
+    width: 4px;
+    height: 6px;
+    background: var(--text-secondary);
+    border-radius: 2px;
+    animation: scrollWheel 2s infinite;
+  }
+
+  @keyframes scrollWheel {
+    0% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(8px); opacity: 0; }
+    51% { transform: translateY(-4px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
   /* Responsive */
   @media (max-width: 1024px) {
     .hero-split {
@@ -337,12 +380,9 @@ import TerminalDemo from './TerminalDemo.astro';
   }
 
   @media (max-width: 768px) {
-    .hero-title {
-      font-size: var(--text-4xl);
-    }
-
     .install-block {
       padding: var(--space-sm) var(--space-md);
+      width: 100%;
     }
 
     .hero-ctas {
