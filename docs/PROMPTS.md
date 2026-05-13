@@ -33,24 +33,24 @@ LOCATION: /media/sf_dev/pro/gideon/gitsetu-web/
 WORKING DIRECTORY: Use Cwd=/media/sf_dev/pro/gideon/gitsetu-web/
 
 ═══════════════════════════════════════════════════════════════════
-STEP 1 — BUILD CONTEXT (Do not skip):
-1. View `package.json` to understand the build tooling.
-2. View `src/styles/global.css` to understand the design tokens and reset strategies.
-3. View `src/pages/index.astro` and key components (`Hero.astro`, `Pipeline.astro`) to grasp the narrative flow.
+AUTONOMOUS CONTEXT GATHERING:
+You have complete autonomy over how you build your context. Traverse the repository however you see fit. Explore the build configurations, the stylesheet architectures, the component compositions, the asset pipelines, or the marketing copy. Do not restrict yourself to obvious paths. Look for systemic flaws, silent bottlenecks, and missed paradigm shifts.
 
-STEP 2 — MERCILESS ANALYSIS:
-Challenge everything:
-- Are we using Astro effectively, or are we fighting it?
-- Is Vanilla CSS the absolute best choice here, or are we reinventing the wheel badly?
-- Is the CSS Grid/Flexbox implementation brittle?
-- Is the marketing narrative actually compelling, or is it developer-jargon soup?
+THE MERCILESS AUDIT DIRECTIVE:
+Your goal is not just to find bugs; your goal is to question the very foundation of this repository. 
+- Are we solving the right problems? 
+- Is our core technology stack or architectural pattern fundamentally holding us back from greatness? 
+- Are we missing a massive psychological hook in our UX/UI?
+- What are the "unknown unknowns" that we haven't even considered?
 
-STEP 3 — THE COMPREHENSIVE AUDIT REPORT:
+You have a complete blank canvas. Do not restrict your analysis to layout, styling, or Astro. Audit the developer experience, the performance ceilings, the psychological narrative flow, and anything else you deem critical to achieving a top 1% enterprise SaaS standard.
+
+THE COMPREHENSIVE AUDIT REPORT:
 Create an artifact named `paradigm_audit_report.md`. This report must contain:
 1. Executive Summary: Is the current implementation fundamentally sound, or does it need a paradigm shift?
-2. Brutal Critiques: Every bad decision you found.
+2. Brutal Critiques: Every flaw, bad decision, or missed opportunity you found across ANY domain (code, design, psychology, performance).
 3. Modern Alternatives: Better ways to achieve our goals based on state-of-the-art web engineering.
-4. Actionable Roadmap: If you decide the current approach can be salvaged/improved, tell me exactly what to refactor.
+4. Actionable Roadmap: A strategic plan to refactor, rebuild, or pivot our approach.
 
 Do NOT make code changes during this phase. Stop and ask for my approval on the Audit Report before proceeding.
 ```
