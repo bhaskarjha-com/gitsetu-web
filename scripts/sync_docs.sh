@@ -28,11 +28,20 @@ sync_doc() {
   if [ -f "$LOCAL_REPO_DIR/$source_path" ]; then
     cp "$LOCAL_REPO_DIR/$source_path" "$temp_file"
   else
-    curl -sL -f "$REPO_RAW_URL/$source_path" -o "$temp_file" || {
-      echo "Warning: Could not fetch $source_path"
-      rm -f "$temp_file"
-      return
-    }
+    # Check if a GitHub PAT is provided in Cloudflare env vars
+    if [ -n "${GITHUB_TOKEN:-}" ]; then
+      curl -sL -f -H "Authorization: token $GITHUB_TOKEN" "$REPO_RAW_URL/$source_path" -o "$temp_file" || {
+        echo "Warning: Could not fetch $source_path (Private Auth Failed)"
+        rm -f "$temp_file"
+        return
+      }
+    else
+      curl -sL -f "$REPO_RAW_URL/$source_path" -o "$temp_file" || {
+        echo "Warning: Could not fetch $source_path (Public Auth Failed)"
+        rm -f "$temp_file"
+        return
+      }
+    fi
   fi
 
   # Create subdirectories if needed
