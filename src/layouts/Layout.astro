@@ -11,6 +11,7 @@ const {
 
 import '../styles/global.css';
 import CommandPalette from '../components/CommandPalette.astro';
+import { ViewTransitions } from 'astro:transitions';
 ---
 
 <!doctype html>
@@ -39,7 +40,8 @@ import CommandPalette from '../components/CommandPalette.astro';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
-
+    <ViewTransitions />
+    <script defer data-domain="gitsetu.bhaskarjha.dev" src="https://plausible.io/js/script.js"></script>
   </head>
   <body>
     <!-- Persistent Noise Overlay -->
