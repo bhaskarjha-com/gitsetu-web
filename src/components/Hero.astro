@@ -54,32 +54,12 @@ import TerminalDemo from './TerminalDemo.astro';
       </div>
     </div>
 
-    <!-- Product As Demo -->
+      <!-- Product As Demo -->
     <div class="hero-visual reveal delay-200">
       <div class="terminal-glow"></div>
       
-      <!-- Interactive Identity Router Mockup -->
-      <div class="identity-router">
-        <div class="router-header">
-          <div class="dots"><span></span><span></span><span></span></div>
-          <div class="title">gitsetu-daemon</div>
-        </div>
-        <div class="router-body">
-          <div class="path-active">
-            <span class="dir">~/work/acme-corp</span>
-            <span class="arrow">→</span>
-            <span class="key match">id_ed25519_acme</span>
-          </div>
-          <div class="path-inactive">
-            <span class="dir">~/projects/personal</span>
-            <span class="arrow">→</span>
-            <span class="key">id_rsa_github</span>
-          </div>
-          <div class="status-line">
-            <span class="pulse"></span> [Guard] Commit signature verified via YubiKey.
-          </div>
-        </div>
-      </div>
+      <!-- Interactive Terminal Setup Demo -->
+      <TerminalDemo />
     </div>
 
   </div>
@@ -277,93 +257,6 @@ import TerminalDemo from './TerminalDemo.astro';
     animation: rotate 12s linear infinite;
   }
 
-  .identity-router {
-    background: rgba(5, 5, 5, 0.8);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--border-card);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-  }
-
-  .router-header {
-    background: rgba(255, 255, 255, 0.02);
-    border-bottom: 1px solid var(--border-subtle);
-    padding: var(--space-sm) var(--space-md);
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-  }
-
-  .dots { display: flex; gap: 6px; }
-  .dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--text-secondary); opacity: 0.8; }
-
-  .router-header .title {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--text-primary);
-    margin: 0 auto;
-    padding-right: 40px; /* offset dots */
-    font-weight: 600;
-  }
-
-  .router-body {
-    padding: var(--space-xl);
-    font-family: var(--font-mono);
-    font-size: 13px; /* hardcoded for demo feel, will scale via container query if needed */
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-lg);
-  }
-
-  .path-active, .path-inactive {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-sm);
-    border: 1px solid transparent;
-  }
-
-  .path-active {
-    background: rgba(0, 229, 255, 0.05);
-    border-color: rgba(0, 229, 255, 0.2);
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.05);
-  }
-
-  .path-inactive {
-    opacity: 0.7;
-    background: rgba(255, 255, 255, 0.02);
-  }
-
-  .dir { color: var(--text-primary); font-weight: 500; }
-  .arrow { color: var(--text-secondary); font-weight: bold; }
-  .key { color: var(--text-primary); }
-  .key.match { 
-    color: var(--accent-primary); 
-    text-shadow: 0 0 10px var(--accent-glow-strong);
-    font-weight: bold;
-  }
-
-  .status-line {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    color: var(--color-success);
-    margin-top: var(--space-sm);
-    padding-top: var(--space-lg);
-    border-top: 1px dashed var(--border-subtle);
-  }
-
-  .pulse {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--color-success);
-    box-shadow: 0 0 10px var(--color-success);
-    animation: pulse 2s infinite;
-  }
-
   @keyframes rotate {
     from { transform: translate(-50%, -50%) rotate(0deg); }
     to { transform: translate(-50%, -50%) rotate(360deg); }
@@ -397,14 +290,6 @@ import TerminalDemo from './TerminalDemo.astro';
     .hero-trust {
       justify-content: center;
       flex-wrap: wrap;
-    }
-    .identity-router {
-      max-width: 100%;
-      overflow-x: auto;
-    }
-    .router-body {
-      padding: var(--space-md);
-      font-size: 11px;
     }
   }
 </style>
