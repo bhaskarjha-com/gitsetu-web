@@ -8,7 +8,8 @@ export const GET = async () => {
       
       // Convert relative file path to an absolute URL path.
       // e.g. './docs/getting-started/quickstart.md' -> '/docs/getting-started/quickstart'
-      const url = path.replace('./docs/', '/docs/').replace('.md', '');
+      let url = path.replace('./docs/', '/docs/').replace('.md', '');
+      if (url === '/docs/index') url = '/docs';
       
       return {
         title: doc.frontmatter?.title || url,
