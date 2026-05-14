@@ -37,6 +37,10 @@
     const hint = document.getElementById('terminal-hint');
     if (!container) return;
     
+    // Proper Astro ClientRouter cleanup
+    if ((window as any).__gitsetuTerm) {
+      (window as any).__gitsetuTerm.dispose();
+    }
     container.innerHTML = '';
 
     const term = new Terminal({
@@ -59,6 +63,8 @@
       allowTransparency: true,
       disableStdin: false
     });
+
+    (window as any).__gitsetuTerm = term;
 
     const fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
@@ -94,6 +100,7 @@
       if (hint) hint.innerHTML = 'Type <kbd>gitsetu setup</kbd> and hit Enter';
       
       term.clear();
+      term.write('\x1b[3mSandbox active. Try typing \x1b[33mgitsetu setup\x1b[0m\x1b[3m.\x1b[0m\r\n\r\n');
       term.write(prompt);
       currentLine = '';
       setupState = 'IDLE';
@@ -206,6 +213,12 @@
             term.write('\b \b');
           }
           break;
+        case '\x03': // Ctrl+C
+          term.write('^C\r\n');
+          currentLine = '';
+          setupState = 'IDLE';
+          term.write(prompt);
+          break;
         default:
           if (e >= String.fromCharCode(32) && e <= String.fromCharCode(126)) {
             currentLine += e;
@@ -235,15 +248,15 @@
           term.write(`  \x1b[32m✓\x1b[0m Git config written: ~/.config/gitsetu/${profileName}.gitconfig\r\n`);
           term.write(`  \x1b[32m✓\x1b[0m SSH config updated: ~/.ssh/config\r\n`);
           term.write(`  \x1b[32m✓\x1b[0m Profile '${profileName}' created successfully\r\n\r\n`);
+          
+          const installCmd = document.getElementById('install-cmd');
+          if (installCmd && navigator.clipboard) {
+            navigator.clipboard.writeText(installCmd.textContent?.trim() || '');
+            term.write('\x1b[35m✨ Install command copied to clipboard. Paste into your real terminal!\x1b[0m\r\n\r\n');
+          }
+
           setupState = 'IDLE';
           term.write(prompt);
-          
-          setTimeout(() => {
-            const installCmd = document.getElementById('install-cmd');
-            if (installCmd && navigator.clipboard) {
-              navigator.clipboard.writeText(installCmd.textContent?.trim() || '');
-            }
-          }, 500);
         });
         return;
       }
