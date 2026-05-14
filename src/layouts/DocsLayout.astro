@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
@@ -20,7 +20,7 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     <title>{frontmatter.title} | GitSetu Docs</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <ViewTransitions />
+    <ClientRouter />
     <script defer data-domain="gitsetu.bhaskarjha.dev" src="https://plausible.io/js/script.js"></script>
   </head>
   <body>
