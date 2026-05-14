@@ -30,20 +30,61 @@
   import { FitAddon } from '@xterm/addon-fit';
   import '@xterm/xterm/css/xterm.css';
 
+  // Module-scoped state for perfect lifecycle management across Astro View Transitions
+  let term: Terminal | null = null;
+  let fitAddon: FitAddon | null = null;
+  let demoTimeout: any = null;
+  let processingInterval: any = null;
+  let observer: IntersectionObserver | null = null;
+  
+  let isAutoDemo = true;
+  let setupState = 'IDLE';
+  let currentLine = '';
+  let profileName = '';
+
+  const prompt = '\x1b[1;32m~\x1b[0m \x1b[1;36m❯\x1b[0m ';
+
+  // Global resize handler
+  const handleResize = () => {
+    try { if (fitAddon) fitAddon.fit(); } catch (e) {}
+  };
+
+  function cleanup() {
+    if (demoTimeout) clearTimeout(demoTimeout);
+    if (processingInterval) clearInterval(processingInterval);
+    if (observer) {
+      observer.disconnect();
+      observer = null;
+    }
+    window.removeEventListener('resize', handleResize);
+    
+    if (term) {
+      term.dispose();
+      term = null;
+    }
+    
+    isAutoDemo = true;
+    setupState = 'IDLE';
+    currentLine = '';
+    profileName = '';
+  }
+
+  // Astro View Transitions lifecycle hooks
+  document.addEventListener('astro:before-swap', cleanup);
+
   document.addEventListener('astro:page-load', () => {
     const container = document.getElementById('terminal-container');
     const demoBtn = document.getElementById('mode-demo');
     const interactiveBtn = document.getElementById('mode-interactive');
     const hint = document.getElementById('terminal-hint');
-    if (!container) return;
     
-    // Proper Astro ClientRouter cleanup
-    if ((window as any).__gitsetuTerm) {
-      (window as any).__gitsetuTerm.dispose();
-    }
+    if (!container) return; // We are on another page (e.g. /docs)
+    
+    // Enforce strict cleanup before re-initializing to prevent memory leaks
+    cleanup();
     container.innerHTML = '';
 
-    const term = new Terminal({
+    term = new Terminal({
       cursorBlink: true,
       fontFamily: 'JetBrains Mono, monospace',
       fontSize: 13,
@@ -64,36 +105,20 @@
       disableStdin: false
     });
 
-    (window as any).__gitsetuTerm = term;
-
-    const fitAddon = new FitAddon();
+    fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
     term.open(container);
     
-    setTimeout(() => {
-      try { fitAddon.fit(); } catch (e) {}
-    }, 100);
-
-    window.addEventListener('resize', () => {
-      try { fitAddon.fit(); } catch (e) {}
-    });
-
-    const prompt = '\x1b[1;32m~\x1b[0m \x1b[1;36m❯\x1b[0m ';
-    
-    let currentLine = '';
-    let setupState = 'IDLE'; 
-    let profileName = '';
-    
-    // Hybrid Mode State
-    let isAutoDemo = true;
-    let demoTimeout: any = null;
+    setTimeout(() => handleResize(), 100);
+    window.addEventListener('resize', handleResize);
 
     // --- HYBRID LOGIC ---
 
     function setInteractiveMode() {
-      if (!isAutoDemo) return;
+      if (!isAutoDemo || !term) return;
       isAutoDemo = false;
       clearTimeout(demoTimeout);
+      clearInterval(processingInterval);
       
       demoBtn?.classList.remove('active');
       interactiveBtn?.classList.add('active');
@@ -107,7 +132,7 @@
     }
 
     function setDemoMode() {
-      if (isAutoDemo) return;
+      if (isAutoDemo || !term) return;
       isAutoDemo = true;
       
       interactiveBtn?.classList.remove('active');
@@ -123,7 +148,6 @@
     demoBtn?.addEventListener('click', setDemoMode);
     interactiveBtn?.addEventListener('click', setInteractiveMode);
 
-    // Break out of demo instantly if user touches the terminal
     term.onKey(() => setInteractiveMode());
     container.addEventListener('click', () => setInteractiveMode());
 
@@ -131,7 +155,7 @@
     
     const typeText = async (text: string, speed = 45) => {
       for (let i = 0; i < text.length; i++) {
-        if (!isAutoDemo) return false;
+        if (!isAutoDemo || !term) return false;
         term.write(text.charAt(i));
         await new Promise(r => { demoTimeout = setTimeout(r, speed) });
       }
@@ -143,55 +167,59 @@
     };
 
     const runAutoDemo = async () => {
-      if (!isAutoDemo) return;
+      if (!isAutoDemo || !term) return;
       term.write(prompt);
       await wait(1000);
       
       if (!(await typeText('gitsetu setup', 60))) return;
       await wait(300);
+      if (!isAutoDemo || !term) return;
       term.write('\r\n  Profile name: ');
       await wait(600);
       if (!(await typeText('work', 80))) return;
       
       await wait(300);
+      if (!isAutoDemo || !term) return;
       term.write('\r\n  Git email: ');
       await wait(500);
       if (!(await typeText('dev@company.com', 50))) return;
       
       await wait(300);
+      if (!isAutoDemo || !term) return;
       term.write('\r\n  Directory: ');
       await wait(400);
       if (!(await typeText('~/work', 60))) return;
       
       await wait(300);
+      if (!isAutoDemo || !term) return;
       term.write('\r\n  \x1b[36mGenerating cryptographic keys\x1b[0m');
       
       for(let i = 0; i < 3; i++) {
         await wait(400);
-        if(!isAutoDemo) return;
+        if(!isAutoDemo || !term) return;
         term.write('.');
       }
       
       await wait(200);
-      if(!isAutoDemo) return;
+      if(!isAutoDemo || !term) return;
       term.write('\x1b[2K\r'); // Erase line
       term.write(`  \x1b[32m✓\x1b[0m SSH key generated: ~/.ssh/id_ed25519_work\r\n`);
       await wait(300);
-      if(!isAutoDemo) return;
+      if(!isAutoDemo || !term) return;
       term.write(`  \x1b[32m✓\x1b[0m Git config written: ~/.config/gitsetu/work.gitconfig\r\n`);
       await wait(300);
-      if(!isAutoDemo) return;
+      if(!isAutoDemo || !term) return;
       term.write(`  \x1b[32m✓\x1b[0m SSH config updated: ~/.ssh/config\r\n`);
       await wait(400);
-      if(!isAutoDemo) return;
+      if(!isAutoDemo || !term) return;
       term.write(`  \x1b[32m✓\x1b[0m Profile 'work' created successfully\r\n\r\n`);
       term.write(prompt);
     };
 
-    const observer = new IntersectionObserver((entries) => {
+    observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && isAutoDemo) {
         runAutoDemo();
-        observer.disconnect();
+        if (observer) observer.disconnect();
       }
     }, { threshold: 0.3 });
     observer.observe(container);
@@ -199,8 +227,11 @@
     // --- INTERACTIVE ENGINE ---
 
     term.onData(e => {
-      if (isAutoDemo) return; // Prevent raw injection during demo
+      if (isAutoDemo || !term) return; 
       
+      // Ignore unhandled ANSI escape sequences (like Arrow Keys) to prevent garbage [C printing
+      if (e.startsWith('\x1b')) return;
+
       switch (e) {
         case '\r': // Enter
           term.write('\r\n');
@@ -217,6 +248,7 @@
           term.write('^C\r\n');
           currentLine = '';
           setupState = 'IDLE';
+          clearInterval(processingInterval);
           term.write(prompt);
           break;
         default:
@@ -229,6 +261,7 @@
 
     function handleCommand(cmd: string) {
       cmd = cmd.trim();
+      if (!term) return;
       
       if (setupState === 'PROFILE') {
         profileName = cmd || 'work';
@@ -244,6 +277,7 @@
       if (setupState === 'DIRECTORY') {
         term.write('\r\n');
         simulateProcessing(() => {
+          if (!term) return;
           term.write(`  \x1b[32m✓\x1b[0m SSH key generated: ~/.ssh/id_ed25519_${profileName}\r\n`);
           term.write(`  \x1b[32m✓\x1b[0m Git config written: ~/.config/gitsetu/${profileName}.gitconfig\r\n`);
           term.write(`  \x1b[32m✓\x1b[0m SSH config updated: ~/.ssh/config\r\n`);
@@ -283,13 +317,15 @@
     }
 
     function simulateProcessing(callback: () => void) {
+      if (!term) return;
       let dots = 0;
       term.write('  \x1b[36mGenerating cryptographic keys\x1b[0m');
-      const interval = setInterval(() => {
+      processingInterval = setInterval(() => {
+        if (!term) return;
         term.write('.');
         dots++;
         if (dots >= 3) {
-          clearInterval(interval);
+          clearInterval(processingInterval);
           term.write('\x1b[2K\r'); 
           callback();
         }
