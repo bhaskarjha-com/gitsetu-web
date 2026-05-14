@@ -22,10 +22,17 @@ import TerminalDemo from './TerminalDemo.astro';
         GitSetu is a zero-dependency orchestration engine that automatically routes SSH keys and credentials based on your directory. Enforce Zero-Trust identity for developers and CI/CD pipelines.
       </p>
 
+      <!-- Product As Demo (Shifted Above Actions/URL) -->
+      <div class="hero-visual reveal delay-200">
+        <div class="terminal-glow"></div>
+        <!-- Interactive Terminal Setup Demo -->
+        <TerminalDemo />
+      </div>
+
       <!-- CTA & Command -->
       <div class="hero-actions reveal delay-300">
         <div class="install-block group">
-          <code class="install-command" id="install-cmd">curl -sL https://raw.githubusercontent.com/bhaskarjha-com/gitsetu/main/install.sh | bash</code>
+          <code class="install-command" id="install-cmd">curl -sL https://gitsetu.bhaskarjha.dev/install | bash</code>
           <button class="copy-btn" id="copy-btn" aria-label="Copy install command" type="button">
             <svg class="copy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
@@ -52,14 +59,6 @@ import TerminalDemo from './TerminalDemo.astro';
           Bash 3.2 Core
         </div>
       </div>
-    </div>
-
-      <!-- Product As Demo -->
-    <div class="hero-visual reveal delay-200">
-      <div class="terminal-glow"></div>
-      
-      <!-- Interactive Terminal Setup Demo -->
-      <TerminalDemo />
     </div>
 
   </div>
@@ -98,18 +97,22 @@ import TerminalDemo from './TerminalDemo.astro';
 
   /* Fluid Container Architecture */
   .hero-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-3xl);
     align-items: center;
+    text-align: center;
     position: relative;
     z-index: 10;
+    max-width: 950px;
+    margin: 0 auto;
   }
 
   .hero-content {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    width: 100%;
   }
 
   .hero-badge {
@@ -137,13 +140,13 @@ import TerminalDemo from './TerminalDemo.astro';
 
   .hero-title {
     /* Using clamp for true fluid typography */
-    font-size: clamp(2rem, 8vw, 5rem);
+    font-size: clamp(2.2rem, 8vw, 4.5rem);
     margin-bottom: var(--space-lg);
     line-height: 1.05;
   }
 
   .hero-subtitle {
-    margin-bottom: var(--space-2xl);
+    margin-bottom: var(--space-xl);
     font-size: var(--text-lg);
     color: #d4d4d8;
     max-width: 90%;
@@ -153,9 +156,12 @@ import TerminalDemo from './TerminalDemo.astro';
   .hero-actions {
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     gap: var(--space-md);
     margin-bottom: var(--space-2xl);
+    width: 100%;
+    max-width: 650px;
   }
 
   .install-block {
@@ -169,7 +175,6 @@ import TerminalDemo from './TerminalDemo.astro';
     width: 100%;
     gap: var(--space-md);
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-    max-width: 100%;
   }
 
   .install-block:hover {
@@ -185,7 +190,7 @@ import TerminalDemo from './TerminalDemo.astro';
     overflow-x: auto;
     white-space: nowrap;
     scrollbar-width: none;
-    text-align: left; /* Prevent center-aligned overflow clipping */
+    text-align: left;
   }
   .install-command::-webkit-scrollbar { display: none; }
 
@@ -219,6 +224,7 @@ import TerminalDemo from './TerminalDemo.astro';
   .hero-trust {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
     gap: var(--space-lg);
     font-size: var(--text-sm);
@@ -239,7 +245,8 @@ import TerminalDemo from './TerminalDemo.astro';
   .hero-visual {
     position: relative;
     width: 100%;
-    /* Create a local container for the visual component */
+    max-width: 600px;
+    margin: var(--space-md) 0;
     container-type: inline-size;
   }
 
@@ -268,28 +275,17 @@ import TerminalDemo from './TerminalDemo.astro';
   }
 
   .hero-content, .hero-visual {
-    min-width: 0; /* CRITICAL: Prevents CSS Grid blowout on mobile */
+    min-width: 0;
   }
 
-  /* Responsive Layout Fix */
-  @media (max-width: 900px) {
-    .hero-container {
-      grid-template-columns: minmax(0, 1fr);
-      text-align: center;
-      gap: var(--space-4xl);
-    }
-    .hero-content {
-      align-items: center;
-    }
-    .hero-subtitle {
-      max-width: 100%;
-    }
+  /* Responsive Adjustments */
+  @media (max-width: 600px) {
     .hero-actions {
-      justify-content: center;
+      flex-direction: column;
+      align-items: stretch;
     }
-    .hero-trust {
+    .btn-primary {
       justify-content: center;
-      flex-wrap: wrap;
     }
   }
 </style>
