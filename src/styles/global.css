@@ -127,8 +127,6 @@ html {
 }
 
 body {
-  container-type: inline-size;
-  container-name: root;
   max-width: 100%;
   overflow-x: hidden;
   background-color: transparent;

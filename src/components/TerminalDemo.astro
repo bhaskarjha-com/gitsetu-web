@@ -35,19 +35,21 @@
     demoTimeout: any = null;
     processingInterval: any = null;
     visibilityObserver: IntersectionObserver | null = null;
+    abortController: AbortController | null = null;
+    pageLoadHandler: (() => void) | null = null;
     
     isAutoDemo = true;
     isDemoRunning = false;
     setupState = 'IDLE';
     currentLine = '';
     profileName = '';
-    hasTriggered = false;
     
     prompt = '\x1b[1;32m~\x1b[0m \x1b[1;36m❯\x1b[0m ';
 
     connectedCallback() {
-      // Use astro:page-load to ensure DOM is ready and transitions are done
-      document.addEventListener('astro:page-load', this.initObserver.bind(this), { once: true });
+      this.abortController = new AbortController();
+      this.pageLoadHandler = this.initObserver.bind(this);
+      document.addEventListener('astro:page-load', this.pageLoadHandler, { once: true });
       if (document.readyState === 'complete') {
         this.initObserver();
       }
@@ -55,6 +57,9 @@
 
     disconnectedCallback() {
       this.cleanup();
+      if (this.pageLoadHandler) {
+        document.removeEventListener('astro:page-load', this.pageLoadHandler);
+      }
     }
 
     cleanup() {
@@ -64,6 +69,11 @@
       this.currentLine = '';
       this.profileName = '';
       
+      if (this.abortController) {
+        this.abortController.abort();
+        this.abortController = null;
+      }
+
       if (this.demoTimeout) clearTimeout(this.demoTimeout);
       if (this.processingInterval) clearInterval(this.processingInterval);
       if (this.visibilityObserver) {
@@ -85,8 +95,7 @@
           if (!this.term) {
             await this.initTerminal(container);
           }
-          if (this.isAutoDemo && !this.hasTriggered) {
-            this.hasTriggered = true;
+          if (this.isAutoDemo && !this.isDemoRunning) {
             this.runAutoDemo();
             if (this.visibilityObserver) this.visibilityObserver.disconnect();
           }
@@ -232,7 +241,19 @@
 
     async wait(ms: number) {
       return new Promise((resolve, reject) => { 
+        if (this.abortController?.signal.aborted) {
+          return reject(new Error('Aborted'));
+        }
+        
+        const onAbort = () => {
+          clearTimeout(this.demoTimeout);
+          reject(new Error('Aborted'));
+        };
+        
+        this.abortController?.signal.addEventListener('abort', onAbort, { once: true });
+        
         this.demoTimeout = setTimeout(() => {
+          this.abortController?.signal.removeEventListener('abort', onAbort);
           if (!this.isAutoDemo) {
             reject(new Error('Demo stopped'));
           } else {
@@ -244,8 +265,8 @@
 
     async typeText(text: string, speed = 45) {
       for (let i = 0; i < text.length; i++) {
-        if (!this.isAutoDemo || !this.term) {
-          this.isDemoRunning = false; // Reset lock if interrupted
+        if (!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) {
+          this.isDemoRunning = false;
           return false;
         }
         this.term.write(text.charAt(i));
@@ -260,7 +281,10 @@
       let dots = 0;
       this.term.write('  \x1b[36mGenerating cryptographic keys\x1b[0m');
       this.processingInterval = setInterval(() => {
-        if (!this.term) return;
+        if (!this.term || this.abortController?.signal.aborted) {
+          clearInterval(this.processingInterval);
+          return;
+        }
         this.term.write('.');
         dots++;
         if (dots >= 3) {
@@ -307,7 +331,7 @@
     }
 
     async runAutoDemo() {
-      if (this.isDemoRunning || !this.isAutoDemo || !this.term) return;
+      if (this.isDemoRunning || !this.isAutoDemo || !this.term || this.abortController?.signal.aborted) return;
       this.isDemoRunning = true;
       this.term.write(this.prompt);
       
@@ -316,55 +340,55 @@
       if (!(await this.typeText('gitsetu setup', 60))) return;
       
       await this.wait(400);
-      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      if(!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) { this.isDemoRunning = false; return; }
       this.term.write('\r\n  Profile name: ');
       
       await this.wait(600);
       if (!(await this.typeText('work', 80))) return;
       
       await this.wait(400);
-      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      if(!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) { this.isDemoRunning = false; return; }
       this.term.write('\r\n  Git email: ');
       
       await this.wait(500);
       if (!(await this.typeText('dev@company.com', 50))) return;
       
       await this.wait(400);
-      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      if(!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) { this.isDemoRunning = false; return; }
       this.term.write('\r\n  Directory: ');
       
       await this.wait(500);
       if (!(await this.typeText('~/work', 70))) return;
       
       await this.wait(500);
-      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      if(!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) { this.isDemoRunning = false; return; }
       this.term.write('\r\n  \x1b[36mGenerating cryptographic keys\x1b[0m');
       
       for(let i = 0; i < 3; i++) {
         await this.wait(400);
-        if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+        if(!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) { this.isDemoRunning = false; return; }
         this.term.write('.');
       }
       
       await this.wait(200);
-      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      if(!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) { this.isDemoRunning = false; return; }
       this.term.write('\x1b[2K\r'); // Erase line
       
       this.term.write('  \x1b[32m✔\x1b[0m SSH key generated: \x1b[33m~/.ssh/id_ed25519_work\x1b[0m\r\n');
       await this.wait(200);
-      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      if(!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) { this.isDemoRunning = false; return; }
       
       this.term.write('  \x1b[32m✔\x1b[0m Git config written: \x1b[33m~/.config/gitsetu/work.gitconfig\x1b[0m\r\n');
       await this.wait(200);
-      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      if(!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) { this.isDemoRunning = false; return; }
       
       this.term.write('  \x1b[32m✔\x1b[0m SSH config updated: \x1b[33m~/.ssh/config\x1b[0m\r\n');
       await this.wait(200);
-      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      if(!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) { this.isDemoRunning = false; return; }
       
       this.term.write('  \x1b[32m✔\x1b[0m Profile \'work\' created successfully\r\n\r\n');
       await this.wait(500);
-      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      if(!this.isAutoDemo || !this.term || this.abortController?.signal.aborted) { this.isDemoRunning = false; return; }
       
       this.term.write(this.prompt);
       this.isDemoRunning = false;

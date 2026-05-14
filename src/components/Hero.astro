@@ -268,7 +268,7 @@ import TerminalDemo from './TerminalDemo.astro';
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate3d(-50%, -50%, 0);
     width: 120%;
     height: 120%;
     background: radial-gradient(circle at 20% 30%, rgba(0, 229, 255, 0.15) 0%, transparent 40%),
@@ -277,6 +277,7 @@ import TerminalDemo from './TerminalDemo.astro';
     filter: blur(40px);
     z-index: -2;
     animation: slowMesh 15s ease-in-out infinite alternate;
+    will-change: transform;
   }
 
   .terminal-glow {

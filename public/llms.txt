@@ -7,7 +7,7 @@ Project: GitSetu
 Homepage: https://gitsetu.bhaskarjha.dev
 
 
---- START OF FILE: core-engines\credential-broker.md ---
+--- START OF FILE: core-engines/credential-broker.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -79,9 +79,9 @@ gitsetu auth work
 GitSetu securely prompts for your credential input inline, immediately streaming the string directly into your operating system's native encrypted secure storage layer. **Passwords and tokens are never stored in plain-text files.**
 
 
---- END OF FILE: core-engines\credential-broker.md ---
+--- END OF FILE: core-engines/credential-broker.md ---
 
---- START OF FILE: core-engines\identity-routing.md ---
+--- START OF FILE: core-engines/identity-routing.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -151,9 +151,9 @@ Because cross-platform filesystems handle casing, symlinks, and trailing paths d
 - **Virtualization Support:** Silently filters out malformed line endings and maps target workspace trees across Windows Subsystem for Linux (WSL) boundaries flawlessly.
 
 
---- END OF FILE: core-engines\identity-routing.md ---
+--- END OF FILE: core-engines/identity-routing.md ---
 
---- START OF FILE: core-engines\precommit-guard.md ---
+--- START OF FILE: core-engines/precommit-guard.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -236,9 +236,9 @@ gitsetu remove-guard
 ```
 
 
---- END OF FILE: core-engines\precommit-guard.md ---
+--- END OF FILE: core-engines/precommit-guard.md ---
 
---- START OF FILE: core-engines\ssh-orchestrator.md ---
+--- START OF FILE: core-engines/ssh-orchestrator.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -310,9 +310,9 @@ GitSetu's compiler natively intercepts and resolves these session blocks:
 - **Keychain Injection:** Automates passphrase pre-loading on macOS (`UseKeychain yes`) and Linux agents to optimize daily workflows seamlessly.
 
 
---- END OF FILE: core-engines\ssh-orchestrator.md ---
+--- END OF FILE: core-engines/ssh-orchestrator.md ---
 
---- START OF FILE: enterprise\product-roadmap.md ---
+--- START OF FILE: enterprise/product-roadmap.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -405,9 +405,9 @@ To maintain its extreme focus and zero-dependency reliability, GitSetu explicitl
 - **Historical Commit Sanitizer (`gitsetu sanitize`):** Users frequently request the ability to rewrite Git history to remove leaked personal emails. **Rejected.** Rewriting history natively in pure Bash 3.2 is wildly dangerous, highly complex, and risks catastrophic repository corruption. We defer this entirely to the official Python-based `git-filter-repo` tool.
 
 
---- END OF FILE: enterprise\product-roadmap.md ---
+--- END OF FILE: enterprise/product-roadmap.md ---
 
---- START OF FILE: enterprise\security-privacy.md ---
+--- START OF FILE: enterprise/security-privacy.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -463,9 +463,9 @@ Pre-compiled binary toolchains obscure their execution paths, forcing security a
 Because GitSetu is compiled entirely in pure, un-obfuscated POSIX **Bash 3.2**, organizational security engineers can transparently audit the entire operational chain simply by reading the plain-text shell source payload prior to deployment.
 
 
---- END OF FILE: enterprise\security-privacy.md ---
+--- END OF FILE: enterprise/security-privacy.md ---
 
---- START OF FILE: getting-started\installation.md ---
+--- START OF FILE: getting-started/installation.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -533,9 +533,9 @@ gitsetu teardown
 4. Instructs you on how to remove the final binary from your path.
 
 
---- END OF FILE: getting-started\installation.md ---
+--- END OF FILE: getting-started/installation.md ---
 
---- START OF FILE: getting-started\quickstart.md ---
+--- START OF FILE: getting-started/quickstart.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -617,9 +617,9 @@ Author: Aditya Kumar <dev@company.com> ← correct, automatically
 > **Global Fallback:** By default, GitSetu enforces `useConfigOnly = true` — commits outside a mapped directory are blocked to prevent identity leakage. Want a catch-all? Set one profile's directory to `~/` and it becomes the global fallback.
 
 
---- END OF FILE: getting-started\quickstart.md ---
+--- END OF FILE: getting-started/quickstart.md ---
 
---- START OF FILE: guides\hardware-keys.md ---
+--- START OF FILE: guides/hardware-keys.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -683,9 +683,9 @@ Your terminal session pauses automatically. You must **physically touch the hard
 > **Hardware Loss Risk:** Because the cryptographic private key resides strictly inside the secure element of your physical device, losing the physical token permanently destroys access to the SSH keypair. Always register redundant access paths (such as secondary hardware keys or restricted Personal Access Tokens) within your upstream provider configuration settings.
 
 
---- END OF FILE: guides\hardware-keys.md ---
+--- END OF FILE: guides/hardware-keys.md ---
 
---- START OF FILE: guides\shell-prompt.md ---
+--- START OF FILE: guides/shell-prompt.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -773,9 +773,9 @@ When traversing across folders, visual updates render instantly:
 ```
 
 
---- END OF FILE: guides\shell-prompt.md ---
+--- END OF FILE: guides/shell-prompt.md ---
 
---- START OF FILE: guides\vault-backups.md ---
+--- START OF FILE: guides/vault-backups.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -835,9 +835,9 @@ Upon successful decryption validation, GitSetu dynamically decomposes the `tar` 
 The entire environment reconstruction operation completes seamlessly in single-digit seconds, fully re-establishing your multi-profile capability pipeline instantaneously.
 
 
---- END OF FILE: guides\vault-backups.md ---
+--- END OF FILE: guides/vault-backups.md ---
 
---- START OF FILE: guides\wsl-integration.md ---
+--- START OF FILE: guides/wsl-integration.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -888,7 +888,7 @@ If your local environment utilizes Microsoft's cross-platform [Git Credential Ma
 > **GCM Identity Collisions:** Standard GCM pipelines struggle fundamentally to partition tokens bound to identical overlapping base hostnames (e.g., mapping distinct personal and corporate tokens concurrently to `github.com`). If you absolutely require Port 443 HTTPS multi-tenant cloning capabilities, we explicitly recommend utilizing GitSetu's native built-in fallback vault architecture.
 
 
---- END OF FILE: guides\wsl-integration.md ---
+--- END OF FILE: guides/wsl-integration.md ---
 
 --- START OF FILE: index.md ---
 
@@ -946,7 +946,7 @@ Ready to eradicate repository configuration friction permanently?
 
 --- END OF FILE: index.md ---
 
---- START OF FILE: overview\architecture.md ---
+--- START OF FILE: overview/architecture.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -1050,9 +1050,9 @@ GitSetu loads distinct library dependencies dynamically during runtime compilati
 | **`completion.sh`** | TAB completion for Bash/Zsh: subcommands and profile name completion. |
 
 
---- END OF FILE: overview\architecture.md ---
+--- END OF FILE: overview/architecture.md ---
 
---- START OF FILE: overview\comparisons.md ---
+--- START OF FILE: overview/comparisons.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -1144,9 +1144,9 @@ If you require seamless, automated identity security on POSIX-compliant platform
 If native compiled distribution targets or integrated IDE extensions represent hard operational blockers for your team, reviewing alternative Go tools or consulting our upcoming feature milestones provides clear planning direction.
 
 
---- END OF FILE: overview\comparisons.md ---
+--- END OF FILE: overview/comparisons.md ---
 
---- START OF FILE: overview\manifesto.md ---
+--- START OF FILE: overview/manifesto.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -1203,9 +1203,9 @@ To maintain absolute system reliability and maximum focus, GitSetu explicitly re
 - **Persistent Daemonization:** It operates entirely as an ephemeral configuration compiler, leaving zero lingering background listener tasks.
 
 
---- END OF FILE: overview\manifesto.md ---
+--- END OF FILE: overview/manifesto.md ---
 
---- START OF FILE: reference\cli-commands.md ---
+--- START OF FILE: reference/cli-commands.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -1287,9 +1287,9 @@ Toggles the fail-closed Pre-Commit Identity interceptor bounds inside the global
 - Restores the host Git environments to their pristine, pre-installation state without deleting your private SSH keys.
 
 
---- END OF FILE: reference\cli-commands.md ---
+--- END OF FILE: reference/cli-commands.md ---
 
---- START OF FILE: reference\contributing.md ---
+--- START OF FILE: reference/contributing.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -1335,9 +1335,9 @@ Do not introduce integrations, analytics tracking, environment scanners, or cras
 4. Outline your proposed updates clearly within the PR description block, specifically detailing your testing environments and confirmation of Bash 3.2 adherence.
 
 
---- END OF FILE: reference\contributing.md ---
+--- END OF FILE: reference/contributing.md ---
 
---- START OF FILE: reference\faq.md ---
+--- START OF FILE: reference/faq.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -1381,9 +1381,9 @@ Because GitSetu leverages POSIX Bash mechanisms, it does not support native Wind
 If native DBus secret tools are unavailable inside standard headless WSL distributions, GitSetu will securely fall back to provisioning an isolated, restricted permissions vault file located at `~/.config/gitsetu/credentials`.
 
 
---- END OF FILE: reference\faq.md ---
+--- END OF FILE: reference/faq.md ---
 
---- START OF FILE: reference\troubleshooting.md ---
+--- START OF FILE: reference/troubleshooting.md ---
 
 ---
 layout: ../../../layouts/DocsLayout.astro
@@ -1479,4 +1479,4 @@ gitsetu teardown
 This operation meticulously cleans all GitSetu managed layout boundaries from `~/.gitconfig` and OpenSSH paths safely without modifying your localized aliases, allowing you to execute `gitsetu setup` seamlessly against a fresh baseline.
 
 
---- END OF FILE: reference\troubleshooting.md ---
+--- END OF FILE: reference/troubleshooting.md ---

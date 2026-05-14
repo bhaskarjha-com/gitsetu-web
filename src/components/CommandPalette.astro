@@ -63,10 +63,9 @@
   <div id="cmd-announcer" aria-live="polite" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;"></div>
 </command-palette>
 <script>
-  let oramaDb: any = null;
-  let isFetching = false;
-
   class CommandPalette extends HTMLElement {
+    private oramaDb: any = null;
+    private isFetching = false;
     private backdrop: HTMLElement | null;
     private input: HTMLInputElement | null;
     private closeBtn: HTMLElement | null;
@@ -120,8 +119,8 @@
     }
 
     async fetchSearchIndex() {
-      if (oramaDb || isFetching) return;
-      isFetching = true;
+      if (this.oramaDb || this.isFetching) return;
+      this.isFetching = true;
       try {
         const res = await fetch('/search.json');
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
@@ -129,7 +128,7 @@
         
         const { create, insertMultiple } = await import('@orama/orama');
         
-        oramaDb = await create({
+        this.oramaDb = await create({
           schema: {
             title: 'string',
             description: 'string',
@@ -138,12 +137,14 @@
           }
         });
 
-        await insertMultiple(oramaDb, data);
+        await insertMultiple(this.oramaDb, data);
       } catch (e: any) {
         console.error('Failed to fetch search index:', e);
         if (this.dynamicResults) {
           this.dynamicResults.innerHTML = `<li role="option" style="padding: 12px; color: #ff5f56;">Failed to load search index</li>`;
         }
+      } finally {
+        this.isFetching = false;
       }
     }
 
@@ -197,7 +198,27 @@
       }
 
       if (e.key === 'Tab') {
-        e.preventDefault();
+        const focusable = Array.from(this.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')) as HTMLElement[];
+        const visibleFocusable = focusable.filter(el => {
+          const style = window.getComputedStyle(el);
+          return style.display !== 'none' && style.visibility !== 'hidden' && el.offsetWidth > 0;
+        });
+        
+        if (visibleFocusable.length === 0) {
+          e.preventDefault();
+          return;
+        }
+        
+        const firstElement = visibleFocusable[0];
+        const lastElement = visibleFocusable[visibleFocusable.length - 1];
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
         return;
       }
 
@@ -258,13 +279,13 @@
             this.dynamicSection.style.display = '';
             let html = '';
             
-            if (!oramaDb) {
+            if (!this.oramaDb) {
                this.dynamicResults.innerHTML = `<li role="option" style="padding: 12px 16px; color: var(--text-muted); font-size: 12px;">Initializing search engine...</li>`;
                return;
             }
 
             const { search } = await import('@orama/orama');
-            const searchResult = await search(oramaDb, {
+            const searchResult = await search(this.oramaDb, {
               term: query,
               properties: '*',
               tolerance: 1,
