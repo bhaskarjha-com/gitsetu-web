@@ -150,6 +150,9 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     <Footer />
 
     <script>
+      let toggleHandler: (() => void) | null = null;
+      let docsMenuBtn: HTMLElement | null = null;
+
       document.addEventListener('astro:page-load', () => {
         // Simple TOC generator for h2 and h3
         const tocList = document.getElementById('toc-list');
@@ -159,7 +162,7 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
           tocList.innerHTML = '';
           headings.forEach(heading => {
             if (!heading.id) {
-              heading.id = heading.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+              heading.id = heading.textContent?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || '';
             }
             const li = document.createElement('li');
             li.className = heading.tagName.toLowerCase() === 'h3' ? 'toc-sub' : '';
@@ -172,13 +175,23 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
         }
 
         // Docs Mobile Menu Toggle
-        const docsMenuBtn = document.getElementById('docs-mobile-menu-btn');
+        docsMenuBtn = document.getElementById('docs-mobile-menu-btn');
         const sidebarContent = document.getElementById('sidebar-content');
+        
         if (docsMenuBtn && sidebarContent) {
-          docsMenuBtn.addEventListener('click', () => {
+          toggleHandler = () => {
             sidebarContent.classList.toggle('active');
-          });
+          };
+          docsMenuBtn.addEventListener('click', toggleHandler);
         }
+      });
+
+      document.addEventListener('astro:before-swap', () => {
+        if (docsMenuBtn && toggleHandler) {
+          docsMenuBtn.removeEventListener('click', toggleHandler);
+        }
+        toggleHandler = null;
+        docsMenuBtn = null;
       });
     </script>
   </body>

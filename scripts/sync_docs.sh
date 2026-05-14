@@ -64,8 +64,8 @@ title: "$title"
 ---
 EOF
   
-  # Strip .md extensions from internal links for clean URLs
-  sed -E 's|\]\(([^)]+)\.md\)|\1|g' "$temp_file" >> "$DOCS_DIR/$dest_path"
+  # Strip .md extensions from internal links for clean URLs, preserving #anchors
+  sed -E 's|\]\(([^)]+)\.md(#.*)?\)|\1\2|g' "$temp_file" >> "$DOCS_DIR/$dest_path"
 
   rm -f "$temp_file"
 }

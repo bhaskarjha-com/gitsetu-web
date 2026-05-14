@@ -72,16 +72,16 @@ const {
     <slot />
     
     <script>
+      let revealObserver: IntersectionObserver | null = null;
+
       document.addEventListener('astro:page-load', () => {
         // Global Reveal on Scroll
         const revealElements = document.querySelectorAll('.reveal');
         
-        const revealObserver = new IntersectionObserver((entries) => {
+        revealObserver = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('active');
-              // Optional: stop observing once revealed
-              // revealObserver.unobserve(entry.target);
             }
           });
         }, {
@@ -90,7 +90,14 @@ const {
           rootMargin: "0px 0px -50px 0px"
         });
 
-        revealElements.forEach(el => revealObserver.observe(el));
+        revealElements.forEach(el => revealObserver?.observe(el));
+      });
+
+      document.addEventListener('astro:before-swap', () => {
+        if (revealObserver) {
+          revealObserver.disconnect();
+          revealObserver = null;
+        }
       });
     </script>
   </body>

@@ -14,10 +14,13 @@ export const GET = async () => {
       let url = path.replace('./docs/', '/docs/').replace('.md', '');
       if (url === '/docs/index') url = '/docs';
       
-      // Basic markdown stripping for clean search index payload
+      // Enhanced markdown and HTML stripping for clean search index payload
       const cleanContent = rawContent
         .replace(/---[\s\S]*?---/, '') // Strip frontmatter
-        .replace(/[#*`_\[\]()]/g, '')   // Strip basic markdown syntax
+        .replace(/<[^>]*>?/gm, '')     // Strip HTML tags
+        .replace(/!\[.*?\]\(.*?\)/g, '') // Strip images
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Extract text from links
+        .replace(/[#*`_~=|>]/g, '')    // Strip basic markdown syntax
         .replace(/\s+/g, ' ')          // Collapse whitespace
         .trim();
 

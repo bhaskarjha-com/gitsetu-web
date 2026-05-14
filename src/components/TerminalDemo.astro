@@ -30,11 +30,8 @@
 </gitsetu-terminal>
 
 <script>
-  import { Terminal } from '@xterm/xterm';
-  import '@xterm/xterm/css/xterm.css';
-
   class GitsetuTerminal extends HTMLElement {
-    term: Terminal | null = null;
+    term: any = null;
     demoTimeout: any = null;
     processingInterval: any = null;
     visibilityObserver: IntersectionObserver | null = null;
@@ -44,12 +41,16 @@
     setupState = 'IDLE';
     currentLine = '';
     profileName = '';
+    hasTriggered = false;
     
     prompt = '\x1b[1;32m~\x1b[0m \x1b[1;36m❯\x1b[0m ';
 
     connectedCallback() {
-      // Small delay to allow Astro View Transitions to inject the element safely
-      setTimeout(() => this.initTerminal(), 100);
+      // Use astro:page-load to ensure DOM is ready and transitions are done
+      document.addEventListener('astro:page-load', this.initObserver.bind(this), { once: true });
+      if (document.readyState === 'complete') {
+        this.initObserver();
+      }
     }
 
     disconnectedCallback() {
@@ -75,16 +76,36 @@
       }
     }
 
-    async initTerminal() {
+    initObserver() {
       const container = this.querySelector('#terminal-container') as HTMLElement;
+      if (!container) return;
+
+      this.visibilityObserver = new IntersectionObserver(async (entries) => {
+        if (entries[0].isIntersecting) {
+          if (!this.term) {
+            await this.initTerminal(container);
+          }
+          if (this.isAutoDemo && !this.hasTriggered) {
+            this.hasTriggered = true;
+            this.runAutoDemo();
+            if (this.visibilityObserver) this.visibilityObserver.disconnect();
+          }
+        }
+      }, { threshold: 0.1 });
+      this.visibilityObserver.observe(container);
+    }
+
+    async initTerminal(container: HTMLElement) {
       const demoBtn = this.querySelector('#mode-demo') as HTMLElement;
       const interactiveBtn = this.querySelector('#mode-interactive') as HTMLElement;
       const hint = this.querySelector('#terminal-hint') as HTMLElement;
       
-      if (!container) return;
-      
       this.cleanup();
       container.innerHTML = '';
+
+      // Dynamic import to prevent bundle bloat
+      const { Terminal } = await import('@xterm/xterm');
+      await import('@xterm/xterm/css/xterm.css');
 
       this.term = new Terminal({
         cols: 70, // Fixed safe column count that fits the 600px container perfectly
@@ -120,17 +141,6 @@
           this.term.clearTextureAtlas();
         }
       }).catch(() => {});
-
-      // Start Auto Demo automatically via IntersectionObserver
-      let hasTriggered = false;
-      this.visibilityObserver = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && this.isAutoDemo && !hasTriggered) {
-          hasTriggered = true;
-          this.runAutoDemo();
-          if (this.visibilityObserver) this.visibilityObserver.disconnect();
-        }
-      }, { threshold: 0.1 });
-      this.visibilityObserver.observe(container);
 
       // --- HYBRID LOGIC ---
 
@@ -221,7 +231,15 @@
     }
 
     async wait(ms: number) {
-      await new Promise(r => { this.demoTimeout = setTimeout(r, ms) });
+      return new Promise((resolve, reject) => { 
+        this.demoTimeout = setTimeout(() => {
+          if (!this.isAutoDemo) {
+            reject(new Error('Demo stopped'));
+          } else {
+            resolve(true);
+          }
+        }, ms);
+      }).catch(() => false);
     }
 
     async typeText(text: string, speed = 45) {
@@ -231,7 +249,8 @@
           return false;
         }
         this.term.write(text.charAt(i));
-        await this.wait(speed);
+        const continued = await this.wait(speed);
+        if (!continued) return false;
       }
       return true;
     }

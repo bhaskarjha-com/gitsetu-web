@@ -20,11 +20,11 @@
       </div>
 
       <!-- Connection Lines -->
-      <svg class="connection-lines" preserveAspectRatio="none" viewBox="0 0 1000 400">
+      <svg class="connection-lines" width="100%" height="100%">
         <!-- Work Path -->
-        <path class="line-path work-path" d="M 500 200 C 500 100, 200 250, 200 150" />
+        <path class="line-path work-path" d="" />
         <!-- Personal Path -->
-        <path class="line-path personal-path" d="M 500 200 C 500 300, 800 150, 800 250" />
+        <path class="line-path personal-path" d="" />
       </svg>
 
       <!-- Work Environment Node -->
@@ -287,3 +287,53 @@
     }
   }
 </style>
+
+<script>
+  let resizeObserver: ResizeObserver | null = null;
+
+  function drawLines() {
+    const daemon = document.querySelector('.daemon-node');
+    const work = document.querySelector('.work-node');
+    const personal = document.querySelector('.personal-node');
+    const svg = document.querySelector('.connection-lines');
+    const workPath = document.querySelector('.work-path');
+    const personalPath = document.querySelector('.personal-path');
+    
+    if (!daemon || !work || !personal || !svg || !workPath || !personalPath) return;
+
+    const svgRect = svg.getBoundingClientRect();
+    const dRect = daemon.getBoundingClientRect();
+    const wRect = work.getBoundingClientRect();
+    const pRect = personal.getBoundingClientRect();
+
+    // Center coordinates relative to SVG
+    const dx = dRect.left + dRect.width / 2 - svgRect.left;
+    const dy = dRect.top + dRect.height / 2 - svgRect.top;
+    
+    const wx = wRect.left + wRect.width / 2 - svgRect.left;
+    const wy = wRect.top + wRect.height / 2 - svgRect.top;
+    
+    const px = pRect.left + pRect.width / 2 - svgRect.left;
+    const py = pRect.top + pRect.height / 2 - svgRect.top;
+
+    // Draw curves
+    workPath.setAttribute('d', `M ${dx} ${dy} C ${dx} ${wy}, ${wx} ${dy}, ${wx} ${wy}`);
+    personalPath.setAttribute('d', `M ${dx} ${dy} C ${dx} ${py}, ${px} ${dy}, ${px} ${py}`);
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    drawLines();
+    const stage = document.querySelector('.visualizer-stage');
+    if (stage) {
+      resizeObserver = new ResizeObserver(drawLines);
+      resizeObserver.observe(stage);
+    }
+  });
+
+  document.addEventListener('astro:before-swap', () => {
+    if (resizeObserver) {
+      resizeObserver.disconnect();
+      resizeObserver = null;
+    }
+  });
+</script>

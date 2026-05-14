@@ -63,8 +63,6 @@
   <div id="cmd-announcer" aria-live="polite" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;"></div>
 </command-palette>
 <script>
-  import { create, insertMultiple, search } from '@orama/orama';
-
   let oramaDb: any = null;
   let isFetching = false;
 
@@ -128,6 +126,8 @@
         const res = await fetch('/search.json');
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
         const data = await res.json();
+        
+        const { create, insertMultiple } = await import('@orama/orama');
         
         oramaDb = await create({
           schema: {
@@ -263,6 +263,7 @@
                return;
             }
 
+            const { search } = await import('@orama/orama');
             const searchResult = await search(oramaDb, {
               term: query,
               properties: '*',
