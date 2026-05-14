@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import CommandPalette from '../components/CommandPalette.astro';
 
 const { frontmatter } = Astro.props;
 
@@ -22,6 +23,7 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
   <body>
     <!-- Persistent Noise Overlay -->
     <div class="noise-overlay"></div>
+    <CommandPalette />
     <Navbar />
     
     <div class="docs-container container">
@@ -32,9 +34,10 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
           Documentation Menu
         </button>
         <div class="sidebar-content" id="sidebar-content">
-          <nav class="sidebar-nav">
+          <div class="sidebar-inner">
+            <nav class="sidebar-nav">
           <!-- Optional Command Palette Mockup Trigger -->
-          <button class="search-btn">
+          <button class="search-btn" onclick="document.dispatchEvent(new CustomEvent('open-command-palette'))">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <span>Search docs...</span>
             <kbd>⌘K</kbd>
@@ -88,6 +91,7 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
             </ul>
           </div>
         </nav>
+          </div>
         </div>
       </aside>
       
@@ -375,11 +379,17 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
       cursor: pointer;
     }
     .sidebar-content {
-      display: none;
-      margin-top: var(--space-lg);
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows var(--transition-base), margin-top var(--transition-base);
+      margin-top: 0;
+    }
+    .sidebar-inner {
+      overflow: hidden;
     }
     .sidebar-content.active {
-      display: block;
+      grid-template-rows: 1fr;
+      margin-top: var(--space-lg);
     }
   }
 

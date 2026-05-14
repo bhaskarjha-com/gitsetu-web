@@ -310,7 +310,7 @@
 
   @container bento (max-width: 600px) {
     .bento-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     .span-2x2, .span-2x1, .span-3x1, .span-1x1 {
       grid-column: span 1;

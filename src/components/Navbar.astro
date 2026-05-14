@@ -63,14 +63,14 @@
   }
 
   searchBtn?.addEventListener('click', () => {
-    alert("Enterprise Search Palette connecting...");
+    document.dispatchEvent(new CustomEvent('open-command-palette'));
   });
 
   // Intercept Ctrl+K / Cmd+K
   document.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
-      searchBtn?.click();
+      document.dispatchEvent(new CustomEvent('open-command-palette'));
     }
   });
 
@@ -87,8 +87,9 @@
   .navbar {
     position: fixed;
     top: var(--space-md);
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
+    margin-inline: auto;
     width: 90%;
     max-width: var(--max-width);
     height: 60px;
@@ -115,7 +116,6 @@
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 clamp(1rem, 3vw, 2rem);
   }
 
@@ -154,6 +154,7 @@
     align-items: center;
     gap: var(--space-lg);
     list-style: none;
+    margin-left: var(--space-xl);
   }
 
   .nav-links a {
@@ -175,6 +176,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-md);
+    margin-left: auto;
   }
 
   /* Command Palette Button */
@@ -259,8 +261,15 @@
   }
 
   @media (max-width: 600px) {
+    .nav-actions {
+      gap: var(--space-xs);
+    }
+    
     .navbar, .navbar.scrolled {
       top: 0;
+      left: 0;
+      right: 0;
+      margin-inline: 0;
       width: 100%;
       border-radius: 0;
       border-left: none;
@@ -268,8 +277,10 @@
       border-top: none;
     }
     
-    .nav-actions .github-link, .cmd-text {
-      display: none;
+    .nav-actions .github-link,
+    .nav-actions .cmd-text,
+    .nav-actions .btn-outline {
+      display: none !important;
     }
 
     .cmd-palette-btn {
@@ -281,7 +292,10 @@
     }
 
     .mobile-nav-toggle {
-      display: block;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      margin-left: 4px;
     }
   }
 

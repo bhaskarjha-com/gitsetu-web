@@ -48,14 +48,42 @@
 </div>
 
 <script>
-  // Progressive reveal animation (IntersectionObserver-based)
+  // Progressive reveal & typing animation
   const terminal = document.getElementById('terminal-demo');
   if (terminal) {
     const lines = terminal.querySelectorAll('.terminal-line');
+    
+    // Initial hide
     lines.forEach(line => {
       (line as HTMLElement).style.opacity = '0';
       (line as HTMLElement).style.transform = 'translateY(4px)';
+      
+      const cmd = line.querySelector('.command');
+      if (cmd) {
+        (cmd as HTMLElement).dataset.text = cmd.textContent || '';
+        cmd.textContent = '';
+      }
     });
+
+    const typeCommand = (cmd: HTMLElement, text: string, callback: () => void) => {
+      let i = 0;
+      cmd.innerHTML = '<span class="cursor">█</span>';
+      const cursor = cmd.querySelector('.cursor') as HTMLElement;
+      
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          cmd.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+          i++;
+        } else {
+          clearInterval(interval);
+          cursor.classList.add('blink');
+          setTimeout(() => {
+            cursor.remove();
+            callback();
+          }, 300); // let it blink a few times then remove
+        }
+      }, 40); // typing speed
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -63,10 +91,18 @@
           if (entry.isIntersecting) {
             lines.forEach((line) => {
               const delay = parseInt((line as HTMLElement).dataset.delay || '0', 10);
+              const isOutput = line.classList.contains('output');
+              
               setTimeout(() => {
-                (line as HTMLElement).style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                (line as HTMLElement).style.transition = 'opacity 0.2s ease, transform 0.2s ease';
                 (line as HTMLElement).style.opacity = '1';
                 (line as HTMLElement).style.transform = 'translateY(0)';
+                
+                const cmd = line.querySelector('.command') as HTMLElement;
+                if (cmd) {
+                  const text = cmd.dataset.text || '';
+                  typeCommand(cmd, text, () => {});
+                }
               }, delay);
             });
             observer.disconnect();
@@ -83,13 +119,13 @@
   .terminal-window {
     width: 100%;
     margin: 0 auto;
-    background: rgba(5, 5, 5, 0.7);
+    background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl);
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 1), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 
   .terminal-header {
@@ -149,11 +185,28 @@
     margin-right: 8px;
     user-select: none;
     font-weight: 700;
+    text-shadow: 0 0 8px var(--accent-glow-strong);
   }
 
   .command {
     color: var(--text-heading);
     font-weight: 400;
+  }
+
+  .cursor {
+    display: inline-block;
+    color: var(--accent-primary);
+    margin-left: 2px;
+    vertical-align: baseline;
+  }
+  
+  .cursor.blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
   }
 
   .output {
@@ -162,6 +215,7 @@
 
   .success {
     color: var(--color-success);
+    text-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
   }
 
   .highlight {

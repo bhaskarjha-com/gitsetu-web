@@ -8,6 +8,9 @@ const {
   title = 'GitSetu — Zero-Dependency Git Identity Manager',
   description = 'Manage multiple Git identities automatically. SSH keys, credentials, and commit signing — all in pure Bash 3.2. Zero dependencies.'
 } = Astro.props;
+
+import '../styles/global.css';
+import CommandPalette from '../components/CommandPalette.astro';
 ---
 
 <!doctype html>
@@ -37,14 +40,11 @@ const {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
 
-    <!-- Global CSS -->
-    <style>
-      @import '../styles/global.css';
-    </style>
   </head>
   <body>
     <!-- Persistent Noise Overlay -->
     <div class="noise-overlay"></div>
+    <CommandPalette />
     <slot />
     
     <script>

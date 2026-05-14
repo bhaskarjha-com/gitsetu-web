@@ -123,10 +123,12 @@ html {
 html {
   background-color: var(--bg-primary);
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
+  max-width: 100%;
+  overflow-x: hidden;
   background-color: transparent;
   /* Deep Space Noise / Grid */
   background-image: 

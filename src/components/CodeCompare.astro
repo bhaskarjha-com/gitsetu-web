@@ -171,7 +171,7 @@
   /* Fluid Architecture via Container Queries */
   @container compare (max-width: 800px) {
     .compare-split {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: var(--space-3xl);
     }
     .new-way {
