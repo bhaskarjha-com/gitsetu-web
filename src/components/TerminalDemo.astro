@@ -69,10 +69,14 @@
     profileName = '';
   }
 
-  // Astro View Transitions lifecycle hooks
-  document.addEventListener('astro:before-swap', cleanup);
+  // Idempotent listener registration to absolutely prevent duplicate events
+  if (!(window as any).__gitsetuTermListeners) {
+    (window as any).__gitsetuTermListeners = true;
+    document.addEventListener('astro:before-swap', cleanup);
+    document.addEventListener('astro:page-load', initTerminal);
+  }
 
-  document.addEventListener('astro:page-load', () => {
+  function initTerminal() {
     const container = document.getElementById('terminal-container');
     const demoBtn = document.getElementById('mode-demo');
     const interactiveBtn = document.getElementById('mode-interactive');
@@ -85,6 +89,8 @@
     container.innerHTML = '';
 
     term = new Terminal({
+      cols: 80,
+      rows: 15,
       cursorBlink: true,
       fontFamily: 'JetBrains Mono, monospace',
       fontSize: 13,
@@ -124,7 +130,7 @@
       interactiveBtn?.classList.add('active');
       if (hint) hint.innerHTML = 'Type <kbd>gitsetu setup</kbd> and hit Enter';
       
-      term.clear();
+      term.reset(); // Hard reset prevents garbage characters instead of term.clear()
       term.write('\x1b[3mSandbox active. Try typing \x1b[33mgitsetu setup\x1b[0m\x1b[3m.\x1b[0m\r\n\r\n');
       term.write(prompt);
       currentLine = '';
@@ -139,7 +145,7 @@
       demoBtn?.classList.add('active');
       if (hint) hint.innerHTML = 'Click terminal to take control';
       
-      term.clear();
+      term.reset(); // Hard reset prevents garbage characters
       currentLine = '';
       setupState = 'IDLE';
       runAutoDemo();
@@ -305,7 +311,7 @@
         term.write('Usage: gitsetu <command>\r\n\r\nCommands:\r\n  setup    Create a new identity profile\r\n  list     List active profiles\r\n');
         term.write(prompt);
       } else if (cmd === 'clear') {
-        term.clear();
+        term.reset();
         term.write(prompt);
       } else if (cmd === 'ls') {
         term.write('\x1b[34mprojects\x1b[0m  \x1b[34mwork\x1b[0m  install.sh\r\n');
@@ -331,7 +337,7 @@
         }
       }, 350);
     }
-  });
+  } // End of initTerminal
 </script>
 
 <style>
