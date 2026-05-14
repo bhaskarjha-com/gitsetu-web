@@ -20,11 +20,26 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   </head>
   <body>
+    <!-- Persistent Noise Overlay -->
+    <div class="noise-overlay"></div>
     <Navbar />
     
     <div class="docs-container container">
+      <!-- Sidebar Navigation -->
       <aside class="docs-sidebar">
-        <nav class="sidebar-nav">
+        <button id="docs-mobile-menu-btn" class="docs-mobile-menu-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          Documentation Menu
+        </button>
+        <div class="sidebar-content" id="sidebar-content">
+          <nav class="sidebar-nav">
+          <!-- Optional Command Palette Mockup Trigger -->
+          <button class="search-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Search docs...</span>
+            <kbd>⌘K</kbd>
+          </button>
+
           <div class="nav-group">
             <h3 class="nav-heading">Getting Started</h3>
             <ul>
@@ -73,8 +88,10 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
             </ul>
           </div>
         </nav>
+        </div>
       </aside>
       
+      <!-- Main Content -->
       <main class="docs-content markdown-body">
         <slot />
         
@@ -85,30 +102,117 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
           </a>
         </div>
       </main>
+
+      <!-- Optional Table of Contents Pane (Fluid 3-column) -->
+      <aside class="docs-toc">
+        <div class="toc-inner">
+          <h4 class="toc-heading">On this page</h4>
+          <ul class="toc-list" id="toc-list">
+            <!-- Dynamically populated via script below if needed, or left empty as a placeholder for structural balance -->
+            <li class="toc-placeholder">No headings found.</li>
+          </ul>
+        </div>
+      </aside>
     </div>
 
     <Footer />
+
+    <script>
+      // Simple TOC generator for h2 and h3
+      document.addEventListener('DOMContentLoaded', () => {
+        const tocList = document.getElementById('toc-list');
+        const headings = document.querySelectorAll('.markdown-body h2, .markdown-body h3');
+        
+        if (headings.length > 0 && tocList) {
+          tocList.innerHTML = '';
+          headings.forEach(heading => {
+            if (!heading.id) {
+              heading.id = heading.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            }
+            const li = document.createElement('li');
+            li.className = heading.tagName.toLowerCase() === 'h3' ? 'toc-sub' : '';
+            const a = document.createElement('a');
+            a.href = '#' + heading.id;
+            a.textContent = heading.textContent;
+            li.appendChild(a);
+            tocList.appendChild(li);
+          });
+        }
+      });
+
+      // Docs Mobile Menu Toggle
+      const docsMenuBtn = document.getElementById('docs-mobile-menu-btn');
+      const sidebarContent = document.getElementById('sidebar-content');
+      if (docsMenuBtn && sidebarContent) {
+        docsMenuBtn.addEventListener('click', () => {
+          sidebarContent.classList.toggle('active');
+        });
+      }
+    </script>
   </body>
 </html>
 
 <style is:global>
+  /* Fluid Architecture for Docs */
   .docs-container {
-    display: flex;
-    gap: var(--space-4xl);
-    padding-top: calc(var(--nav-height) + var(--space-2xl));
+    display: grid;
+    /* 3 column layout: 250px sidebar, 1fr content, 200px toc */
+    grid-template-columns: 250px minmax(0, 1fr) 200px;
+    gap: var(--space-2xl);
+    padding-top: calc(var(--nav-height) + var(--space-xl));
     padding-bottom: var(--space-4xl);
-    min-height: calc(100vh - var(--nav-height));
+    align-items: start;
+    min-height: 100vh;
   }
 
+  /* Sidebar styling */
   .docs-sidebar {
-    width: 250px;
-    flex-shrink: 0;
     position: sticky;
     top: calc(var(--nav-height) + var(--space-xl));
-    height: calc(100vh - var(--nav-height) - var(--space-4xl));
+    /* Allow sidebar to scroll internally if very tall, without forcing the whole page */
+    max-height: calc(100vh - var(--nav-height) - var(--space-2xl));
     overflow-y: auto;
-    border-right: 1px solid var(--border-subtle);
-    padding-right: var(--space-lg);
+    padding-right: var(--space-md);
+    /* Hide scrollbar visually but allow scroll */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .docs-sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .docs-mobile-menu-btn {
+    display: none;
+  }
+
+  .search-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    margin-bottom: var(--space-xl);
+    transition: all var(--transition-fast);
+  }
+  .search-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-heading);
+    border-color: var(--border-card);
+  }
+  .search-btn kbd {
+    margin-left: auto;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: var(--font-mono);
   }
 
   .nav-group {
@@ -130,12 +234,12 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
   }
 
   .sidebar-nav li {
-    margin-bottom: var(--space-xs);
+    margin-bottom: 2px;
   }
 
   .sidebar-nav a {
     display: block;
-    padding: var(--space-xs) var(--space-sm);
+    padding: 6px var(--space-sm);
     color: var(--text-secondary);
     text-decoration: none;
     border-radius: var(--radius-sm);
@@ -151,13 +255,14 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
 
   .sidebar-nav a.active {
     color: var(--accent-primary);
-    background: rgba(0, 196, 204, 0.1);
+    background: rgba(0, 229, 255, 0.05);
     font-weight: 500;
   }
 
+  /* Content area */
   .docs-content {
-    flex-grow: 1;
-    max-width: 800px;
+    min-width: 0; /* Prevents grid blowout */
+    container-type: inline-size;
   }
 
   .docs-footer {
@@ -180,7 +285,105 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     color: var(--text-heading);
   }
 
-  /* Markdown Typography overrides */
+  /* Table of Contents */
+  .docs-toc {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-xl));
+    max-height: calc(100vh - var(--nav-height) - var(--space-2xl));
+    overflow-y: auto;
+  }
+
+  .toc-inner {
+    border-left: 1px solid var(--border-subtle);
+    padding-left: var(--space-md);
+  }
+
+  .toc-heading {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+    color: var(--text-heading);
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-list li {
+    margin-bottom: 8px;
+  }
+  
+  .toc-list li.toc-sub {
+    padding-left: var(--space-md);
+  }
+
+  .toc-list a {
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .toc-list a:hover {
+    color: var(--text-heading);
+  }
+
+  .toc-placeholder {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  /* Container Query responsive adjustments */
+  @media (max-width: 1024px) {
+    .docs-container {
+      grid-template-columns: 220px minmax(0, 1fr); /* Hide TOC on medium screens */
+    }
+    .docs-toc {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .docs-container {
+      grid-template-columns: 1fr;
+    }
+    .docs-sidebar {
+      position: relative;
+      top: 0;
+      max-height: none;
+      border-right: none;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-right: 0;
+      padding-bottom: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+    .docs-mobile-menu-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      color: var(--text-primary);
+      font-size: var(--text-base);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .sidebar-content {
+      display: none;
+      margin-top: var(--space-lg);
+    }
+    .sidebar-content.active {
+      display: block;
+    }
+  }
+
+  /* Markdown Typography overrides (Fluid) */
   .markdown-body h1 {
     font-size: var(--text-4xl);
     margin-bottom: var(--space-lg);
@@ -222,7 +425,7 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
   .markdown-body a {
     color: var(--accent-primary);
     text-decoration: underline;
-    text-decoration-color: rgba(0, 196, 204, 0.3);
+    text-decoration-color: rgba(0, 229, 255, 0.3);
     text-underline-offset: 2px;
   }
 
@@ -237,6 +440,7 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     font-family: var(--font-mono);
     font-size: 0.85em;
     color: var(--text-heading);
+    border: 1px solid var(--border-subtle);
   }
 
   .markdown-body pre {
@@ -245,7 +449,8 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     border-radius: var(--radius-lg);
     overflow-x: auto;
     margin-bottom: var(--space-lg);
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--border-card);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }
 
   .markdown-body pre code {
@@ -253,6 +458,7 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     padding: 0;
     color: inherit;
     font-size: var(--text-sm);
+    border: none;
   }
 
   /* GitHub Alerts Styling */
@@ -261,14 +467,14 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     margin-bottom: var(--space-lg);
     border-radius: var(--radius-md);
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
     border-left: 4px solid var(--text-muted);
   }
 
   /* Target lines inside blockquotes that look like [!NOTE] etc */
   .markdown-body blockquote:has(p:first-child:contains("[!NOTE]")) {
     border-left-color: var(--accent-primary);
-    background: rgba(0, 196, 204, 0.05);
+    background: rgba(0, 229, 255, 0.05);
   }
 
   .markdown-body blockquote:has(p:first-child:contains("[!WARNING]")),
@@ -306,24 +512,6 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     max-width: 100%;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-subtle);
-  }
-
-  @media (max-width: 768px) {
-    .docs-container {
-      flex-direction: column;
-      padding-top: calc(var(--nav-height) + var(--space-lg));
-    }
-
-    .docs-sidebar {
-      width: 100%;
-      height: auto;
-      position: relative;
-      top: 0;
-      border-right: none;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-right: 0;
-      padding-bottom: var(--space-md);
-      margin-bottom: var(--space-md);
-    }
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }
 </style>

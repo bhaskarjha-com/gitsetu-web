@@ -2,7 +2,7 @@
 ---
 
 <section class="code-compare section reveal" id="compare">
-  <div class="container">
+  <div class="compare-container container">
     <div class="compare-header reveal delay-100">
       <h2 class="section-title">The <span class="accent-text">end of</span> alias scripts.</h2>
       <p class="section-subtitle">Stop managing horrific SSH aliases and manual `git config` overrides. GitSetu handles it natively at the OS level.</p>
@@ -60,6 +60,11 @@
 </section>
 
 <style>
+  .compare-container {
+    container-type: inline-size;
+    container-name: compare;
+  }
+
   .compare-header {
     margin-bottom: var(--space-4xl);
   }
@@ -73,20 +78,37 @@
   }
 
   .code-panel {
-    background: var(--bg-code);
-    border: 1px solid var(--border-subtle);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
     border-radius: var(--radius-lg);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-card);
     transition: transform var(--transition-base), box-shadow var(--transition-base);
+    position: relative;
   }
 
   .new-way {
+    background: var(--bg-tertiary);
     border-color: var(--border-accent);
-    box-shadow: var(--shadow-glow);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-glow);
     transform: scale(1.02);
+  }
+
+  /* Deep Space Edge Highlight */
+  .new-way::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(180deg, rgba(0, 229, 255, 0.5) 0%, transparent 50%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 10;
   }
 
   .panel-header {
@@ -94,7 +116,7 @@
     justify-content: space-between;
     align-items: center;
     padding: var(--space-sm) var(--space-md);
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
     border-bottom: 1px solid var(--border-subtle);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
@@ -109,7 +131,7 @@
   }
 
   .error-label { background: rgba(239, 68, 68, 0.1); color: var(--color-error); }
-  .success-label { background: rgba(0, 229, 255, 0.1); color: var(--accent-primary); }
+  .success-label { background: rgba(0, 229, 255, 0.15); color: var(--accent-primary); box-shadow: 0 0 10px var(--accent-glow); }
 
   .file-name {
     color: var(--text-muted);
@@ -124,8 +146,9 @@
   pre {
     margin: 0;
     font-family: var(--font-mono);
-    font-size: var(--text-sm);
+    font-size: clamp(12px, 1.5cqw, 14px); /* Fluid type based on container */
     line-height: 1.6;
+    color: var(--text-primary);
   }
 
   .comment { color: var(--text-muted); font-style: italic; }
@@ -139,18 +162,20 @@
     font-size: var(--text-sm);
     font-weight: 500;
     border-top: 1px solid var(--border-subtle);
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(0, 0, 0, 0.3);
   }
 
   .error-footer { color: var(--color-error); }
-  .success-footer { color: var(--accent-primary); }
+  .success-footer { color: var(--accent-primary); text-shadow: 0 0 10px var(--accent-glow); }
 
-  @media (max-width: 768px) {
+  /* Fluid Architecture via Container Queries */
+  @container compare (max-width: 800px) {
     .compare-split {
       grid-template-columns: 1fr;
+      gap: var(--space-3xl);
     }
     .new-way {
-      transform: none;
+      transform: none; /* remove scale on mobile */
     }
   }
 </style>
