@@ -3,6 +3,9 @@
 
 <footer class="footer">
   <div class="container footer-inner">
+    <div class="footer-logo">
+      <img src="/logo.png" alt="GitSetu Logo" class="footer-logo-img" />
+    </div>
     <div class="footer-links">
       <a href="https://github.com/bhaskarjha-com/gitsetu" target="_blank" rel="noopener">GitHub</a>
       <span class="separator">·</span>
@@ -29,6 +32,23 @@
     padding: var(--space-2xl) 0;
     border-top: 1px solid var(--border-subtle);
     text-align: center;
+  }
+
+  .footer-logo {
+    margin-bottom: var(--space-lg);
+    display: flex;
+    justify-content: center;
+  }
+
+  .footer-logo-img {
+    height: 40px;
+    width: auto;
+    opacity: 0.8;
+    transition: opacity var(--transition-fast);
+  }
+
+  .footer-logo-img:hover {
+    opacity: 1;
   }
 
   .footer-links {

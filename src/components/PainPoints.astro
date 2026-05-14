@@ -13,10 +13,10 @@ const painPoints = [
     solution: 'Dedicated ED25519 keypair per profile, auto-wired'
   },
   {
-    icon: '🔒',
-    title: 'Port 22 blocked by corporate firewall',
-    problem: 'HTTPS only. PATs get mixed between accounts. 403 errors on every second push.',
-    solution: 'Per-profile credential broker via OS keychain'
+    icon: '💥',
+    title: 'Fear of breaking ~/.ssh/config',
+    problem: 'Other CLI tools blindly regex your global SSH config, eventually corrupting your other hosts.',
+    solution: 'Zero-Trust OpenSSH Include isolation. Never touches your config.'
   },
   {
     icon: '⚠️',
@@ -25,16 +25,16 @@ const painPoints = [
     solution: 'Pre-commit guard blocks the commit before it happens'
   },
   {
-    icon: '📝',
-    title: 'Editing ~/.gitconfig by hand',
-    problem: 'Edit, forget, break something, fix it, forget again. Every context switch is a liability.',
-    solution: 'One-time setup, automatic forever'
+    icon: '🔒',
+    title: 'Port 22 blocked by firewall',
+    problem: 'HTTPS only. PATs get mixed between accounts. 403 errors on every second push.',
+    solution: 'Per-profile credential broker via OS keychain'
   },
   {
-    icon: '📦',
-    title: 'Install Node just to manage Git?',
-    problem: 'Every identity switcher needs Go, Node, Python, or a background daemon. A bootstrapper that needs a bootstrapper.',
-    solution: 'Pure Bash 3.2. Zero dependencies. 10-second install.'
+    icon: '💀',
+    title: 'Tool rot & dependency hell',
+    problem: 'Tools built on Node or Go break when runtimes update, requiring constant manual maintenance.',
+    solution: 'Pure Bash 3.2. Zero dependencies. Native auto-updater.'
   }
 ];
 ---

@@ -4,6 +4,7 @@
 <nav class="navbar">
   <div class="navbar-inner container">
     <a href="/" class="logo">
+      <img src="/logo.png" alt="GitSetu Logo" class="logo-image" />
       <span class="logo-text">Git<span class="accent-text">Setu</span></span>
     </a>
     <div class="nav-links">
@@ -44,6 +45,15 @@
 
   .logo {
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .logo-image {
+    height: 32px;
+    width: auto;
+    display: block;
   }
 
   .logo-text {
