@@ -1,27 +1,27 @@
 ---
 const trustSignals = [
   {
-    title: 'Zero-Trust Guard',
-    desc: 'Fail-closed identity verification. Blocks commits when config is missing or tampered with.'
+    title: 'Zero-Trust Identity Guard',
+    desc: 'Fail-closed architecture definitively blocks commits if your active email does not strictly match the required profile.'
   },
   {
-    title: 'Atomic Locks',
-    desc: 'POSIX mkdir-based locks with stale reaping. Safe for parallel CI runners.'
+    title: 'Atomic POSIX Locks',
+    desc: 'Safe for highly parallel environments. POSIX mkdir-based locks with stale reaping guarantee zero race conditions.'
   },
   {
-    title: 'Atomic Writes',
-    desc: 'Temp file + mv swap. No partial writes, no corruption.'
+    title: 'Hardware-Backed Keys',
+    desc: 'Natively generates Ed25519 and FIDO2 (ed25519-sk) hardware-backed SSH keys out of the box.'
   },
   {
-    title: 'Clean Exit',
-    desc: 'EXIT/SIGINT/SIGTERM traps. Zero leaked files or orphaned locks.'
+    title: 'Resilient Filesystem Swaps',
+    desc: 'Temporary file generation with atomic mv swapping guarantees no partial writes or configuration corruption.'
   }
 ];
 ---
 
 <section class="enterprise section">
   <div class="container">
-    <h2 class="section-title">Built for teams and CI pipelines.</h2>
+    <h2 class="section-title">The identity security layer for teams and CI/CD.</h2>
     
     <div class="signals-grid">
       {trustSignals.map((signal) => (
