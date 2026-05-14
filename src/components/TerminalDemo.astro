@@ -1,343 +1,361 @@
 ---
 ---
 
-<div class="terminal-window" aria-label="Interactive Terminal showing GitSetu setup">
-  <div class="terminal-header">
-    <div class="traffic-lights">
-      <span class="terminal-dot red"></span>
-      <span class="terminal-dot yellow"></span>
-      <span class="terminal-dot green"></span>
+<gitsetu-terminal>
+  <div class="terminal-window" aria-label="Interactive Terminal showing GitSetu setup">
+    <div class="terminal-header">
+      <div class="traffic-lights">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+      </div>
+      <span class="terminal-title">gitsetu — bash</span>
+      
+      <div class="terminal-modes">
+        <button class="mode-btn active" id="mode-demo">Auto-Demo</button>
+        <button class="mode-btn" id="mode-interactive">Interactive</button>
+      </div>
     </div>
-    <span class="terminal-title">gitsetu — bash</span>
     
-    <div class="terminal-modes">
-      <button class="mode-btn active" id="mode-demo">Auto-Demo</button>
-      <button class="mode-btn" id="mode-interactive">Interactive</button>
+    <div class="terminal-body">
+      <div id="terminal-container" style="height: 340px; width: 100%; position: relative;">
+        <!-- Xterm.js will mount here -->
+      </div>
+    </div>
+    
+    <div class="terminal-hint" id="terminal-hint">
+      Click terminal to take control
     </div>
   </div>
-  
-  <div class="terminal-body" id="terminal-container" style="height: 340px; width: 100%;">
-    <!-- Xterm.js will mount here -->
-  </div>
-  
-  <div class="terminal-hint" id="terminal-hint">
-    Click terminal to take control
-  </div>
-</div>
+</gitsetu-terminal>
 
 <script>
   import { Terminal } from '@xterm/xterm';
-  import { FitAddon } from '@xterm/addon-fit';
   import '@xterm/xterm/css/xterm.css';
 
-  // Module-scoped state for perfect lifecycle management across Astro View Transitions
-  let term: Terminal | null = null;
-  let fitAddon: FitAddon | null = null;
-  let demoTimeout: any = null;
-  let processingInterval: any = null;
-  let observer: IntersectionObserver | null = null;
-  
-  let isAutoDemo = true;
-  let setupState = 'IDLE';
-  let currentLine = '';
-  let profileName = '';
-
-  const prompt = '\x1b[1;32m~\x1b[0m \x1b[1;36m❯\x1b[0m ';
-
-  // Global resize handler
-  const handleResize = () => {
-    try { if (fitAddon) fitAddon.fit(); } catch (e) {}
-  };
-
-  function cleanup() {
-    if (demoTimeout) clearTimeout(demoTimeout);
-    if (processingInterval) clearInterval(processingInterval);
-    if (observer) {
-      observer.disconnect();
-      observer = null;
-    }
-    window.removeEventListener('resize', handleResize);
-    
-    if (term) {
-      term.dispose();
-      term = null;
-    }
+  class GitsetuTerminal extends HTMLElement {
+    term: Terminal | null = null;
+    demoTimeout: any = null;
+    processingInterval: any = null;
+    visibilityObserver: IntersectionObserver | null = null;
     
     isAutoDemo = true;
+    isDemoRunning = false;
     setupState = 'IDLE';
     currentLine = '';
     profileName = '';
-  }
-
-  // Idempotent listener registration to absolutely prevent duplicate events
-  if (!(window as any).__gitsetuTermListeners) {
-    (window as any).__gitsetuTermListeners = true;
-    document.addEventListener('astro:before-swap', cleanup);
-    document.addEventListener('astro:page-load', initTerminal);
-  }
-
-  function initTerminal() {
-    const container = document.getElementById('terminal-container');
-    const demoBtn = document.getElementById('mode-demo');
-    const interactiveBtn = document.getElementById('mode-interactive');
-    const hint = document.getElementById('terminal-hint');
     
-    if (!container) return; // We are on another page (e.g. /docs)
-    
-    // Enforce strict cleanup before re-initializing to prevent memory leaks
-    cleanup();
-    container.innerHTML = '';
+    prompt = '\x1b[1;32m~\x1b[0m \x1b[1;36m❯\x1b[0m ';
 
-    term = new Terminal({
-      cols: 80,
-      rows: 15,
-      cursorBlink: true,
-      fontFamily: 'JetBrains Mono, monospace',
-      fontSize: 13,
-      theme: {
-        background: 'transparent',
-        foreground: '#d4d4d8',
-        cursor: '#00e5ff',
-        black: '#000000',
-        red: '#ff5f56',
-        green: '#27c93f',
-        yellow: '#ffbd2e',
-        blue: '#00e5ff',
-        magenta: '#ff79c6',
-        cyan: '#8be9fd',
-        white: '#bfbfbf'
-      },
-      allowTransparency: true,
-      disableStdin: false
-    });
-
-    fitAddon = new FitAddon();
-    term.loadAddon(fitAddon);
-    term.open(container);
-    
-    setTimeout(() => handleResize(), 100);
-    window.addEventListener('resize', handleResize);
-
-    // --- HYBRID LOGIC ---
-
-    function setInteractiveMode() {
-      if (!isAutoDemo || !term) return;
-      isAutoDemo = false;
-      clearTimeout(demoTimeout);
-      clearInterval(processingInterval);
-      
-      demoBtn?.classList.remove('active');
-      interactiveBtn?.classList.add('active');
-      if (hint) hint.innerHTML = 'Type <kbd>gitsetu setup</kbd> and hit Enter';
-      
-      term.reset(); // Hard reset prevents garbage characters instead of term.clear()
-      term.write('\x1b[3mSandbox active. Try typing \x1b[33mgitsetu setup\x1b[0m\x1b[3m.\x1b[0m\r\n\r\n');
-      term.write(prompt);
-      currentLine = '';
-      setupState = 'IDLE';
+    connectedCallback() {
+      // Small delay to allow Astro View Transitions to inject the element safely
+      setTimeout(() => this.initTerminal(), 100);
     }
 
-    function setDemoMode() {
-      if (isAutoDemo || !term) return;
-      isAutoDemo = true;
-      
-      interactiveBtn?.classList.remove('active');
-      demoBtn?.classList.add('active');
-      if (hint) hint.innerHTML = 'Click terminal to take control';
-      
-      term.reset(); // Hard reset prevents garbage characters
-      currentLine = '';
-      setupState = 'IDLE';
-      runAutoDemo();
+    disconnectedCallback() {
+      this.cleanup();
     }
 
-    demoBtn?.addEventListener('click', setDemoMode);
-    interactiveBtn?.addEventListener('click', setInteractiveMode);
+    cleanup() {
+      this.isAutoDemo = true;
+      this.isDemoRunning = false;
+      this.setupState = 'IDLE';
+      this.currentLine = '';
+      this.profileName = '';
+      
+      if (this.demoTimeout) clearTimeout(this.demoTimeout);
+      if (this.processingInterval) clearInterval(this.processingInterval);
+      if (this.visibilityObserver) {
+        this.visibilityObserver.disconnect();
+        this.visibilityObserver = null;
+      }
+      if (this.term) {
+        this.term.dispose();
+        this.term = null;
+      }
+    }
 
-    term.onKey(() => setInteractiveMode());
-    container.addEventListener('click', () => setInteractiveMode());
+    async initTerminal() {
+      const container = this.querySelector('#terminal-container') as HTMLElement;
+      const demoBtn = this.querySelector('#mode-demo') as HTMLElement;
+      const interactiveBtn = this.querySelector('#mode-interactive') as HTMLElement;
+      const hint = this.querySelector('#terminal-hint') as HTMLElement;
+      
+      if (!container) return;
+      
+      this.cleanup();
+      container.innerHTML = '';
 
-    // --- AUTO-DEMO ENGINE ---
-    
-    const typeText = async (text: string, speed = 45) => {
+      this.term = new Terminal({
+        cols: 70, // Fixed safe column count that fits the 600px container perfectly
+        rows: 15,
+        cursorBlink: true,
+        fontFamily: 'monospace', // Start with fallback to prevent early texture corruption
+        fontSize: 13,
+        theme: {
+          background: 'transparent',
+          foreground: '#d4d4d8',
+          cursor: '#00e5ff',
+          black: '#000000',
+          red: '#ff5f56',
+          green: '#27c93f',
+          yellow: '#ffbd2e',
+          blue: '#00e5ff',
+          magenta: '#ff79c6',
+          cyan: '#8be9fd',
+          white: '#bfbfbf'
+        },
+        allowTransparency: true,
+        disableStdin: false
+      });
+
+      this.term.open(container);
+      this.term.reset(); // Hard flush WebGL state
+      this.term.clearTextureAtlas();
+
+      // Dynamically upgrade font once loaded
+      document.fonts.load('13px "JetBrains Mono"').then(() => {
+        if (this.term) {
+          this.term.options.fontFamily = '"JetBrains Mono", monospace';
+          this.term.clearTextureAtlas();
+        }
+      }).catch(() => {});
+
+      // Start Auto Demo automatically via IntersectionObserver
+      let hasTriggered = false;
+      this.visibilityObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && this.isAutoDemo && !hasTriggered) {
+          hasTriggered = true;
+          this.runAutoDemo();
+          if (this.visibilityObserver) this.visibilityObserver.disconnect();
+        }
+      }, { threshold: 0.1 });
+      this.visibilityObserver.observe(container);
+
+      // --- HYBRID LOGIC ---
+
+      demoBtn?.addEventListener('click', () => {
+        if (this.isAutoDemo) return;
+        this.isAutoDemo = true;
+        this.isDemoRunning = false; // Reset lock
+        
+        demoBtn.classList.add('active');
+        interactiveBtn.classList.remove('active');
+        hint.style.opacity = '1';
+        
+        if (this.term) {
+          this.term.reset();
+          this.term.clearTextureAtlas();
+        }
+        
+        this.setupState = 'IDLE';
+        this.currentLine = '';
+        this.profileName = '';
+        
+        if (this.demoTimeout) clearTimeout(this.demoTimeout);
+        if (this.processingInterval) clearInterval(this.processingInterval);
+        
+        this.runAutoDemo();
+      });
+
+      interactiveBtn?.addEventListener('click', () => {
+        if (!this.isAutoDemo) return;
+        this.isAutoDemo = false; // The loops will check this and naturally exit!
+        
+        demoBtn.classList.remove('active');
+        interactiveBtn.classList.add('active');
+        hint.style.opacity = '0';
+        
+        // DO NOT clear demoTimeout! Let the async loop naturally detect isAutoDemo=false and terminate itself!
+        // This prevents the dead-promise hang bug when returning to Auto-Demo.
+        if (this.processingInterval) clearInterval(this.processingInterval);
+        
+        if (this.term) {
+          this.term.reset();
+          this.term.clearTextureAtlas();
+          this.term.write('\x1b[3mSandbox active. Try typing \x1b[33mgitsetu setup\x1b[0m\x1b[3m.\x1b[0m\r\n\r\n');
+          this.term.write(this.prompt);
+        }
+      });
+
+      container.addEventListener('click', () => {
+        if (this.isAutoDemo) {
+          interactiveBtn?.click();
+        }
+        if (this.term) this.term.focus();
+      });
+
+      // --- INTERACTIVE ENGINE ---
+
+      this.term.onData(e => {
+        if (this.isAutoDemo || !this.term) return; 
+
+        if (e === '\x1b[A' || e === '\x1b[B' || e === '\x1b[C' || e === '\x1b[D') return;
+
+        switch (e) {
+          case '\r': // Enter
+            this.term.write('\r\n');
+            this.handleCommand(this.currentLine.trim());
+            this.currentLine = '';
+            break;
+          case '\x7F': // Backspace
+            if (this.currentLine.length > 0) {
+              this.currentLine = this.currentLine.substring(0, this.currentLine.length - 1);
+              this.term.write('\b \b');
+            }
+            break;
+          case '\x03': // Ctrl+C
+            this.term.write('^C\r\n');
+            this.currentLine = '';
+            this.setupState = 'IDLE';
+            clearInterval(this.processingInterval);
+            this.term.write(this.prompt);
+            break;
+          default:
+            if (e >= String.fromCharCode(32) && e <= String.fromCharCode(126)) {
+              this.currentLine += e;
+              this.term.write(e);
+            }
+        }
+      });
+    }
+
+    async wait(ms: number) {
+      await new Promise(r => { this.demoTimeout = setTimeout(r, ms) });
+    }
+
+    async typeText(text: string, speed = 45) {
       for (let i = 0; i < text.length; i++) {
-        if (!isAutoDemo || !term) return false;
-        term.write(text.charAt(i));
-        await new Promise(r => { demoTimeout = setTimeout(r, speed) });
+        if (!this.isAutoDemo || !this.term) {
+          this.isDemoRunning = false; // Reset lock if interrupted
+          return false;
+        }
+        this.term.write(text.charAt(i));
+        await this.wait(speed);
       }
       return true;
-    };
-
-    const wait = async (ms: number) => {
-      await new Promise(r => { demoTimeout = setTimeout(r, ms) });
-    };
-
-    const runAutoDemo = async () => {
-      if (!isAutoDemo || !term) return;
-      term.write(prompt);
-      await wait(1000);
-      
-      if (!(await typeText('gitsetu setup', 60))) return;
-      await wait(300);
-      if (!isAutoDemo || !term) return;
-      term.write('\r\n  Profile name: ');
-      await wait(600);
-      if (!(await typeText('work', 80))) return;
-      
-      await wait(300);
-      if (!isAutoDemo || !term) return;
-      term.write('\r\n  Git email: ');
-      await wait(500);
-      if (!(await typeText('dev@company.com', 50))) return;
-      
-      await wait(300);
-      if (!isAutoDemo || !term) return;
-      term.write('\r\n  Directory: ');
-      await wait(400);
-      if (!(await typeText('~/work', 60))) return;
-      
-      await wait(300);
-      if (!isAutoDemo || !term) return;
-      term.write('\r\n  \x1b[36mGenerating cryptographic keys\x1b[0m');
-      
-      for(let i = 0; i < 3; i++) {
-        await wait(400);
-        if(!isAutoDemo || !term) return;
-        term.write('.');
-      }
-      
-      await wait(200);
-      if(!isAutoDemo || !term) return;
-      term.write('\x1b[2K\r'); // Erase line
-      term.write(`  \x1b[32m✓\x1b[0m SSH key generated: ~/.ssh/id_ed25519_work\r\n`);
-      await wait(300);
-      if(!isAutoDemo || !term) return;
-      term.write(`  \x1b[32m✓\x1b[0m Git config written: ~/.config/gitsetu/work.gitconfig\r\n`);
-      await wait(300);
-      if(!isAutoDemo || !term) return;
-      term.write(`  \x1b[32m✓\x1b[0m SSH config updated: ~/.ssh/config\r\n`);
-      await wait(400);
-      if(!isAutoDemo || !term) return;
-      term.write(`  \x1b[32m✓\x1b[0m Profile 'work' created successfully\r\n\r\n`);
-      term.write(prompt);
-    };
-
-    observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && isAutoDemo) {
-        runAutoDemo();
-        if (observer) observer.disconnect();
-      }
-    }, { threshold: 0.3 });
-    observer.observe(container);
-
-    // --- INTERACTIVE ENGINE ---
-
-    term.onData(e => {
-      if (isAutoDemo || !term) return; 
-      
-      // Ignore unhandled ANSI escape sequences (like Arrow Keys) to prevent garbage [C printing
-      if (e.startsWith('\x1b')) return;
-
-      switch (e) {
-        case '\r': // Enter
-          term.write('\r\n');
-          handleCommand(currentLine);
-          currentLine = '';
-          break;
-        case '\x7F': // Backspace
-          if (currentLine.length > 0) {
-            currentLine = currentLine.slice(0, -1);
-            term.write('\b \b');
-          }
-          break;
-        case '\x03': // Ctrl+C
-          term.write('^C\r\n');
-          currentLine = '';
-          setupState = 'IDLE';
-          clearInterval(processingInterval);
-          term.write(prompt);
-          break;
-        default:
-          if (e >= String.fromCharCode(32) && e <= String.fromCharCode(126)) {
-            currentLine += e;
-            term.write(e);
-          }
-      }
-    });
-
-    function handleCommand(cmd: string) {
-      cmd = cmd.trim();
-      if (!term) return;
-      
-      if (setupState === 'PROFILE') {
-        profileName = cmd || 'work';
-        term.write('  Git email: ');
-        setupState = 'EMAIL';
-        return;
-      }
-      if (setupState === 'EMAIL') {
-        term.write('  Directory: ');
-        setupState = 'DIRECTORY';
-        return;
-      }
-      if (setupState === 'DIRECTORY') {
-        term.write('\r\n');
-        simulateProcessing(() => {
-          if (!term) return;
-          term.write(`  \x1b[32m✓\x1b[0m SSH key generated: ~/.ssh/id_ed25519_${profileName}\r\n`);
-          term.write(`  \x1b[32m✓\x1b[0m Git config written: ~/.config/gitsetu/${profileName}.gitconfig\r\n`);
-          term.write(`  \x1b[32m✓\x1b[0m SSH config updated: ~/.ssh/config\r\n`);
-          term.write(`  \x1b[32m✓\x1b[0m Profile '${profileName}' created successfully\r\n\r\n`);
-          
-          const installCmd = document.getElementById('install-cmd');
-          if (installCmd && navigator.clipboard) {
-            navigator.clipboard.writeText(installCmd.textContent?.trim() || '');
-            term.write('\x1b[35m✨ Install command copied to clipboard. Paste into your real terminal!\x1b[0m\r\n\r\n');
-          }
-
-          setupState = 'IDLE';
-          term.write(prompt);
-        });
-        return;
-      }
-
-      if (cmd === '') {
-        term.write(prompt);
-      } else if (cmd === 'gitsetu setup') {
-        setupState = 'PROFILE';
-        term.write('  Profile name: ');
-      } else if (cmd === 'gitsetu') {
-        term.write('GitSetu Identity Orchestrator v1.1.0\r\n');
-        term.write('Usage: gitsetu <command>\r\n\r\nCommands:\r\n  setup    Create a new identity profile\r\n  list     List active profiles\r\n');
-        term.write(prompt);
-      } else if (cmd === 'clear') {
-        term.reset();
-        term.write(prompt);
-      } else if (cmd === 'ls') {
-        term.write('\x1b[34mprojects\x1b[0m  \x1b[34mwork\x1b[0m  install.sh\r\n');
-        term.write(prompt);
-      } else {
-        term.write(`bash: ${cmd}: command not found\r\n`);
-        term.write(prompt);
-      }
     }
 
-    function simulateProcessing(callback: () => void) {
-      if (!term) return;
+    simulateProcessing(callback: () => void) {
+      if (!this.term) return;
       let dots = 0;
-      term.write('  \x1b[36mGenerating cryptographic keys\x1b[0m');
-      processingInterval = setInterval(() => {
-        if (!term) return;
-        term.write('.');
+      this.term.write('  \x1b[36mGenerating cryptographic keys\x1b[0m');
+      this.processingInterval = setInterval(() => {
+        if (!this.term) return;
+        this.term.write('.');
         dots++;
         if (dots >= 3) {
-          clearInterval(processingInterval);
-          term.write('\x1b[2K\r'); 
+          clearInterval(this.processingInterval);
+          this.term.write('\x1b[2K\r'); 
           callback();
         }
       }, 350);
     }
-  } // End of initTerminal
+
+    handleCommand(cmd: string) {
+      if (!this.term) return;
+      if (this.setupState === 'IDLE') {
+        if (cmd === 'gitsetu setup') {
+          this.term.write('  Profile name: ');
+          this.setupState = 'PROFILE_NAME';
+        } else if (cmd === 'clear') {
+          this.term.reset();
+          this.term.write(this.prompt);
+        } else if (cmd !== '') {
+          this.term.write(`\x1b[31mbash: command not found:\x1b[0m ${cmd}\r\n${this.prompt}`);
+        } else {
+          this.term.write(this.prompt);
+        }
+      } else if (this.setupState === 'PROFILE_NAME') {
+        this.profileName = cmd || 'work';
+        this.term.write(`  Git email: `);
+        this.setupState = 'GIT_EMAIL';
+      } else if (this.setupState === 'GIT_EMAIL') {
+        this.term.write(`  Directory: `);
+        this.setupState = 'DIRECTORY';
+      } else if (this.setupState === 'DIRECTORY') {
+        this.setupState = 'PROCESSING';
+        this.simulateProcessing(() => {
+          if (!this.term) return;
+          this.term.write(`  \x1b[32m✔\x1b[0m SSH key generated: \x1b[33m~/.ssh/id_ed25519_${this.profileName}\x1b[0m\r\n`);
+          this.term.write(`  \x1b[32m✔\x1b[0m Git config written: \x1b[33m~/.config/gitsetu/${this.profileName}.gitconfig\x1b[0m\r\n`);
+          this.term.write(`  \x1b[32m✔\x1b[0m SSH config updated: \x1b[33m~/.ssh/config\x1b[0m\r\n`);
+          this.term.write(`  \x1b[32m✔\x1b[0m Profile '${this.profileName}' created successfully\r\n\r\n`);
+          this.term.write(this.prompt);
+          this.setupState = 'IDLE';
+        });
+      }
+    }
+
+    async runAutoDemo() {
+      if (this.isDemoRunning || !this.isAutoDemo || !this.term) return;
+      this.isDemoRunning = true;
+      this.term.write(this.prompt);
+      
+      await this.wait(1000);
+      
+      if (!(await this.typeText('gitsetu setup', 60))) return;
+      
+      await this.wait(400);
+      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      this.term.write('\r\n  Profile name: ');
+      
+      await this.wait(600);
+      if (!(await this.typeText('work', 80))) return;
+      
+      await this.wait(400);
+      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      this.term.write('\r\n  Git email: ');
+      
+      await this.wait(500);
+      if (!(await this.typeText('dev@company.com', 50))) return;
+      
+      await this.wait(400);
+      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      this.term.write('\r\n  Directory: ');
+      
+      await this.wait(500);
+      if (!(await this.typeText('~/work', 70))) return;
+      
+      await this.wait(500);
+      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      this.term.write('\r\n  \x1b[36mGenerating cryptographic keys\x1b[0m');
+      
+      for(let i = 0; i < 3; i++) {
+        await this.wait(400);
+        if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+        this.term.write('.');
+      }
+      
+      await this.wait(200);
+      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      this.term.write('\x1b[2K\r'); // Erase line
+      
+      this.term.write('  \x1b[32m✔\x1b[0m SSH key generated: \x1b[33m~/.ssh/id_ed25519_work\x1b[0m\r\n');
+      await this.wait(200);
+      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      
+      this.term.write('  \x1b[32m✔\x1b[0m Git config written: \x1b[33m~/.config/gitsetu/work.gitconfig\x1b[0m\r\n');
+      await this.wait(200);
+      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      
+      this.term.write('  \x1b[32m✔\x1b[0m SSH config updated: \x1b[33m~/.ssh/config\x1b[0m\r\n');
+      await this.wait(200);
+      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      
+      this.term.write('  \x1b[32m✔\x1b[0m Profile \'work\' created successfully\r\n\r\n');
+      await this.wait(500);
+      if(!this.isAutoDemo || !this.term) { this.isDemoRunning = false; return; }
+      
+      this.term.write(this.prompt);
+      this.isDemoRunning = false;
+    }
+  }
+
+  // Register the custom element once
+  if (typeof window !== 'undefined' && !customElements.get('gitsetu-terminal')) {
+    customElements.define('gitsetu-terminal', GitsetuTerminal);
+  }
 </script>
 
 <style>
