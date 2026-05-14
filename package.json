@@ -13,8 +13,8 @@
     "astro": "^6.3.1"
   },
   "dependencies": {
-    "@orama/orama": "latest",
-    "@xterm/addon-fit": "latest",
-    "@xterm/xterm": "latest"
+    "@orama/orama": "3.1.18",
+    "@xterm/addon-fit": "0.11.0",
+    "@xterm/xterm": "6.0.0"
   }
 }

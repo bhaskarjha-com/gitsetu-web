@@ -6,6 +6,8 @@ import Footer from '../components/Footer.astro';
 import CommandPalette from '../components/CommandPalette.astro';
 
 const { frontmatter } = Astro.props;
+const currentPath = Astro.url.pathname.replace(/^\/|\/$/g, '');
+const ogImageUrl = `https://gitsetu.bhaskarjha.dev/og/${currentPath}.png`;
 
 // Compute edit URL based on current path
 const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
@@ -21,6 +23,13 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <ClientRouter />
+
+    <!-- Dynamic Open Graph -->
+    <meta property="og:title" content={`${frontmatter.title} | GitSetu Docs`} />
+    <meta property="og:description" content={frontmatter.description || "GitSetu Documentation"} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:image" content={ogImageUrl} />
     
     <!-- JSON-LD Semantic Web -->
     <script type="application/ld+json" set:html={JSON.stringify({
