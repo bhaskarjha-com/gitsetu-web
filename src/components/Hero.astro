@@ -56,6 +56,7 @@ import TerminalDemo from './TerminalDemo.astro';
 
     <!-- Product As Demo (Shifted Top-Right) -->
     <div class="hero-visual reveal delay-200">
+      <div class="mesh-gradient"></div>
       <div class="terminal-glow"></div>
       <!-- Interactive Terminal Setup Demo -->
       <TerminalDemo />
@@ -260,6 +261,22 @@ import TerminalDemo from './TerminalDemo.astro';
     align-self: start;
     margin-top: 0;
     container-type: inline-size;
+    perspective: 1000px;
+  }
+
+  .mesh-gradient {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle at 20% 30%, rgba(0, 229, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 189, 46, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(39, 201, 63, 0.1) 0%, transparent 60%);
+    filter: blur(40px);
+    z-index: -2;
+    animation: slowMesh 15s ease-in-out infinite alternate;
   }
 
   .terminal-glow {
@@ -284,6 +301,11 @@ import TerminalDemo from './TerminalDemo.astro';
   @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
+  }
+
+  @keyframes slowMesh {
+    0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); }
   }
 
   .hero-content, .hero-visual {
