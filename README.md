@@ -1,57 +1,78 @@
-# GitSetu Landing Page
+# GitSetu — Official Website & Documentation Engine
 
-This is the source code for [gitsetu.bhaskarjha.dev](https://gitsetu.bhaskarjha.dev), the marketing landing page for the GitSetu CLI tool.
+This repository contains the pristine source code for [gitsetu.bhaskarjha.dev](https://gitsetu.bhaskarjha.dev), the premium marketing site and documentation search engine for the **GitSetu CLI** tool.
 
-## What is GitSetu?
+## 🌟 Architectural Philosophy
 
-[GitSetu](https://github.com/bhaskarjha-com/gitsetu) is a zero-dependency, pure Bash 3.2 CLI tool that automatically switches your Git identity, SSH keys, and credentials based on the directory you are working in.
+Mirroring the elite, zero-dependency philosophy of the core GitSetu CLI orchestrator, this web application is engineered for absolute maximum performance, lightning-fast SEO delivery, and zero client-side framework bloat.
 
-**This repository only contains the website.** For the core CLI tool, bug reports, and documentation, please visit the [main GitSetu repository](https://github.com/bhaskarjha-com/gitsetu).
+### The Stack
+- **Framework:** [Astro v6+](https://astro.build/) (Static Site Generation for sub-second delivery).
+- **Styling Engine:** Custom, zero-runtime Vanilla CSS utilizing semantic design variables and high-fidelity glassmorphism effects.
+- **Client-Side Scripting:** Pure Vanilla JS. Zero third-party dependencies. No React, Vue, Tailwind, or external search libraries.
 
-## Tech Stack
+---
 
-This website is built with an extreme focus on performance and minimal dependencies, mirroring the philosophy of the CLI tool it promotes.
+## 🔍 The Zero-Dependency Search Engine
 
-- **Framework:** [Astro](https://astro.build/)
-- **Styling:** Pure CSS (CSS Custom Properties)
-- **JavaScript:** Zero external dependencies. Ships ~0.5 KB of vanilla JS for the copy button and terminal scroll animation.
-- **Hosting:** Cloudflare Pages
+Unlike traditional static documentation sites that rely on heavy third-party external scripts like Algolia, Fuse.js, or Pagefind, `gitsetu-web` implements a completely native, high-performance search pipeline from scratch:
 
-## Local Development
+1. **Build-Time Extraction (`src/pages/search.json.ts`):** During the build phase, Astro's server engine crawls all Markdown files, extracts metadata, frontmatter, and compiles the raw text content (`.rawContent()`) into a strongly cached JSON search index.
+2. **Multi-Group Prioritization (`CommandPalette.astro`):** Client-side vanilla JS asynchronously fetches the index and filters queries in real-time. Results are grouped into distinct context tiers:
+   - **Documentation:** Primary matches against file titles, descriptions, and URL structures.
+   - **Commands:** Dynamically indexed actions extracted from static quick-links (e.g., install commands).
+   - **Text Mentions:** Deep matches found inside the raw markdown bodies.
+3. **Keyboard Navigation:** Complete accessibility integration. Global keydown listeners support seamless `↑` / `↓` indexing and `Enter` execution while safely locking focus in the input area.
 
-To run the website locally, you will need Node.js (v18+).
+---
+
+## 📚 Documentation Synchronization Engine
+
+> [!IMPORTANT]
+> **Do not manually author or edit Markdown documentation files directly inside `src/pages/docs/`.**
+
+To maintain a **Single Source of Truth (SSOT)**, all core documentation lives directly inside the home GitSetu CLI repository (`/docs/`). 
+
+Before every local development run or production build, the automated sync script (`scripts/sync_docs.sh`) safely purges the local target folders and dynamically imports, formats, and formats the latest pristine Markdown files.
+
+---
+
+## 🚀 Local Development Guide
+
+Ensure you have Node.js (v18+) installed.
 
 ```bash
-# Install dependencies
+# 1. Install pristine dependencies
 npm install
 
-# Start the local development server (localhost:4321)
+# 2. Start the local dev server (automatically triggers doc sync)
 npm run dev
 
-# Build for production
+# 3. Build optimized production assets
 npm run build
 
-# Preview the production build
+# 4. Preview the local production build
 npm run preview
 ```
 
-## Project Structure
+---
+
+## 📁 Repository Map
 
 ```text
-├── public/                 # Static assets (images, fonts, favicon)
+├── scripts/
+│   └── sync_docs.sh        # Core documentation synchronization engine
 ├── src/
-│   ├── components/         # Astro components (UI sections)
-│   ├── layouts/            # Base HTML wrapper
-│   ├── pages/              # index.astro (the single page)
-│   └── styles/             # global.css (design system tokens)
-├── astro.config.mjs        # Astro configuration
-└── package.json            # Project dependencies
+│   ├── components/         # High-fidelity Astro components (BentoGrid, Hero, CommandPalette)
+│   ├── layouts/            # Base document wrappers & SEO header schemas
+│   ├── pages/              # Primary routing (index.astro, search.json.ts)
+│   └── styles/             # Global design tokens & CSS system
+├── astro.config.mjs        # Native Astro configuration
+└── package.json            # Project configurations
 ```
 
-## Contributing
+---
 
-While we welcome fixes for typos or styling issues, major design overhauls should be discussed in an issue first. Please ensure that any changes maintain the "zero external JavaScript dependency" rule for the frontend.
+## 📄 License
 
-## License
-
-[MIT](LICENSE) © Bhaskar Jha
+Released under the [MIT License](LICENSE) © Bhaskar Jha. Built with zero-defect quality standards.
