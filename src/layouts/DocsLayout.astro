@@ -44,50 +44,53 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
           </button>
 
           <div class="nav-group">
-            <h3 class="nav-heading">Getting Started</h3>
+            <h3 class="nav-heading">Platform Overview</h3>
             <ul>
               <li><a href="/docs" class={frontmatter.title === 'Introduction' ? 'active' : ''}>Introduction</a></li>
+              <li><a href="/docs/overview/architecture" class={frontmatter.title === 'Architecture' ? 'active' : ''}>Architecture</a></li>
+              <li><a href="/docs/overview/comparisons" class={frontmatter.title === 'Ecosystem Comparisons' ? 'active' : ''}>Ecosystem Comparisons</a></li>
+              <li><a href="/docs/overview/manifesto" class={frontmatter.title === 'Design Manifesto' ? 'active' : ''}>Design Manifesto</a></li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <h3 class="nav-heading">Getting Started</h3>
+            <ul>
               <li><a href="/docs/getting-started/installation" class={frontmatter.title === 'Installation' ? 'active' : ''}>Installation</a></li>
               <li><a href="/docs/getting-started/quickstart" class={frontmatter.title === 'Quickstart' ? 'active' : ''}>Quickstart</a></li>
             </ul>
           </div>
           <div class="nav-group">
-            <h3 class="nav-heading">Core Concepts</h3>
+            <h3 class="nav-heading">Core Engines</h3>
             <ul>
-              <li><a href="/docs/core-concepts/identity-routing" class={frontmatter.title === 'Identity Routing' ? 'active' : ''}>Identity Routing</a></li>
-              <li><a href="/docs/core-concepts/credential-broker" class={frontmatter.title === 'Credential Broker' ? 'active' : ''}>Credential Broker</a></li>
-              <li><a href="/docs/core-concepts/precommit-guard" class={frontmatter.title === 'Pre-Commit Guard' ? 'active' : ''}>Pre-Commit Guard</a></li>
+              <li><a href="/docs/core-engines/identity-routing" class={frontmatter.title === 'Identity Routing' ? 'active' : ''}>Identity Routing</a></li>
+              <li><a href="/docs/core-engines/ssh-orchestrator" class={frontmatter.title === 'SSH Orchestrator' ? 'active' : ''}>SSH Orchestrator</a></li>
+              <li><a href="/docs/core-engines/credential-broker" class={frontmatter.title === 'Credential Broker' ? 'active' : ''}>Credential Broker</a></li>
+              <li><a href="/docs/core-engines/precommit-guard" class={frontmatter.title === 'Pre-Commit Guard' ? 'active' : ''}>Pre-Commit Guard</a></li>
             </ul>
           </div>
           <div class="nav-group">
             <h3 class="nav-heading">Guides</h3>
             <ul>
-              <li><a href="/docs/guides/hardware-keys-fido2" class={frontmatter.title === 'Hardware Keys (FIDO2)' ? 'active' : ''}>Hardware Keys (FIDO2)</a></li>
-              <li><a href="/docs/guides/backup-and-restore" class={frontmatter.title === 'Backup & Restore' ? 'active' : ''}>Backup & Restore</a></li>
+              <li><a href="/docs/guides/shell-prompt" class={frontmatter.title === 'Shell Prompt Integration' ? 'active' : ''}>Shell Prompt Integration</a></li>
+              <li><a href="/docs/guides/hardware-keys" class={frontmatter.title === 'Hardware Keys (FIDO2)' ? 'active' : ''}>Hardware Keys (FIDO2)</a></li>
               <li><a href="/docs/guides/wsl-integration" class={frontmatter.title === 'WSL Integration' ? 'active' : ''}>WSL Integration</a></li>
+              <li><a href="/docs/guides/vault-backups" class={frontmatter.title === 'Vault Backups' ? 'active' : ''}>Vault Backups</a></li>
             </ul>
           </div>
           <div class="nav-group">
-            <h3 class="nav-heading">Reference</h3>
-            <ul>
-              <li><a href="/docs/reference/cli-commands" class={frontmatter.title === 'CLI Command Reference' ? 'active' : ''}>CLI Command Reference</a></li>
-            </ul>
-          </div>
-          <div class="nav-group">
-            <h3 class="nav-heading">Enterprise</h3>
+            <h3 class="nav-heading">Enterprise & Vision</h3>
             <ul>
               <li><a href="/docs/enterprise/security-privacy" class={frontmatter.title === 'Security & Privacy' ? 'active' : ''}>Security & Privacy</a></li>
+              <li><a href="/docs/enterprise/product-roadmap" class={frontmatter.title === 'Product Roadmap' ? 'active' : ''}>Product Roadmap</a></li>
             </ul>
           </div>
           <div class="nav-group">
-            <h3 class="nav-heading">Project</h3>
+            <h3 class="nav-heading">Reference & Support</h3>
             <ul>
-              <li><a href="/docs/project/architecture" class={frontmatter.title === 'Architecture' ? 'active' : ''}>Architecture</a></li>
-              <li><a href="/docs/project/troubleshooting" class={frontmatter.title === 'Troubleshooting' ? 'active' : ''}>Troubleshooting</a></li>
-              <li><a href="/docs/project/faq" class={frontmatter.title === 'FAQ' ? 'active' : ''}>FAQ</a></li>
-              <li><a href="/docs/project/manifesto" class={frontmatter.title === 'Manifesto' ? 'active' : ''}>Manifesto</a></li>
-              <li><a href="/docs/project/roadmap" class={frontmatter.title === 'Product Roadmap' ? 'active' : ''}>Roadmap</a></li>
-              <li><a href="/docs/project/contributing" class={frontmatter.title === 'Contributing' ? 'active' : ''}>Contributing</a></li>
+              <li><a href="/docs/reference/cli-commands" class={frontmatter.title === 'CLI Commands' ? 'active' : ''}>CLI Commands</a></li>
+              <li><a href="/docs/reference/troubleshooting" class={frontmatter.title === 'Troubleshooting' ? 'active' : ''}>Troubleshooting</a></li>
+              <li><a href="/docs/reference/faq" class={frontmatter.title === 'FAQ' ? 'active' : ''}>FAQ</a></li>
+              <li><a href="/docs/reference/contributing" class={frontmatter.title === 'Contributing Guide' ? 'active' : ''}>Contributing Guide</a></li>
             </ul>
           </div>
         </nav>
