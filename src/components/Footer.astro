@@ -1,88 +1,86 @@
 ---
 ---
 
-<footer class="footer">
-  <div class="container footer-inner">
-    <div class="footer-logo">
-      <img src="/logo.png" alt="GitSetu Logo" class="footer-logo-img" />
+<footer class="status-bar">
+  <div class="status-left">
+    <div class="status-item brand">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3s0-3 3-3h12a3 3 0 0 0 3 3"></path></svg>
+      GitSetu
     </div>
-    <div class="footer-links">
-      <a href="https://github.com/bhaskarjha-com/gitsetu" target="_blank" rel="noopener">GitHub</a>
-      <span class="separator">·</span>
-      <a href="/docs">Documentation</a>
-      <span class="separator">·</span>
-      <a href="/docs/contributing">Contributing</a>
-      <span class="separator">·</span>
-      <a href="/docs/architecture">Architecture</a>
-      <span class="separator">·</span>
-      <a href="/docs/troubleshooting">Troubleshooting</a>
-      <span class="separator">·</span>
-      <a href="/docs/manifesto">Manifesto</a>
+    <div class="status-item branch">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>
+      main*
     </div>
-    
-    <div class="footer-attribution">
-      MIT License · Created by <a href="https://bhaskarjha.dev" target="_blank" rel="noopener" class="author-link">Bhaskar Jha</a>
+    <div class="status-item success">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      Zero-Trust: Enabled
+    </div>
+  </div>
+
+  <div class="status-right">
+    <a href="/docs/getting-started/quickstart" class="status-item link">Docs</a>
+    <a href="/docs/project/architecture" class="status-item link">Architecture</a>
+    <a href="/docs/project/roadmap" class="status-item link">Roadmap</a>
+    <a href="https://github.com/bhaskarjha-com/gitsetu" target="_blank" rel="noopener" class="status-item link">
+      GitHub
+    </a>
+    <div class="status-item">
+      MIT License
     </div>
   </div>
 </footer>
 
 <style>
-  .footer {
-    background: #06090f; /* Darker than primary */
-    padding: var(--space-2xl) 0;
-    border-top: 1px solid var(--border-subtle);
-    text-align: center;
-  }
-
-  .footer-logo {
-    margin-bottom: var(--space-lg);
+  .status-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    background: #007acc; /* VS Code Blue */
+    color: #ffffff;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    z-index: 100;
   }
 
-  .footer-logo-img {
-    height: 40px;
-    width: auto;
-    opacity: 0.8;
-    transition: opacity var(--transition-fast);
-  }
-
-  .footer-logo-img:hover {
-    opacity: 1;
-  }
-
-  .footer-links {
-    margin-bottom: var(--space-lg);
+  .status-left, .status-right {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-sm);
+    align-items: center;
+    height: 100%;
   }
 
-  .footer-links a {
-    color: var(--text-secondary);
-    font-size: var(--text-sm);
-    transition: color var(--transition-fast);
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    padding: 0 8px;
+    cursor: default;
+    transition: background var(--transition-fast);
   }
 
-  .footer-links a:hover {
-    color: var(--text-heading);
+  .status-item:hover {
+    background: rgba(255, 255, 255, 0.15);
   }
 
-  .separator {
-    color: var(--border-subtle);
+  .brand {
+    font-weight: 600;
   }
 
-  .footer-attribution {
-    color: var(--text-muted);
-    font-size: var(--text-sm);
+  .link {
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
   }
 
-  .author-link {
-    color: var(--text-secondary);
-  }
-
-  .author-link:hover {
-    color: var(--accent-primary);
+  @media (max-width: 768px) {
+    .status-bar {
+      display: none; /* Hide on mobile to save screen real estate */
+    }
   }
 </style>

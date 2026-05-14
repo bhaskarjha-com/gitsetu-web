@@ -1,0 +1,156 @@
+---
+---
+
+<section class="code-compare section reveal" id="compare">
+  <div class="container">
+    <div class="compare-header reveal delay-100">
+      <h2 class="section-title">The <span class="accent-text">end of</span> alias scripts.</h2>
+      <p class="section-subtitle">Stop managing horrific SSH aliases and manual `git config` overrides. GitSetu handles it natively at the OS level.</p>
+    </div>
+
+    <div class="compare-split reveal delay-200">
+      
+      <!-- The Old Way -->
+      <div class="code-panel old-way">
+        <div class="panel-header">
+          <span class="panel-label error-label">The Old Way</span>
+          <span class="file-name">~/.ssh/config</span>
+        </div>
+        <div class="panel-body">
+          <pre><code><span class="comment"># I hope I remember to use git@github-work.com...</span>
+<span class="keyword">Host</span> github-work.com
+  <span class="keyword">HostName</span> github.com
+  <span class="keyword">User</span> git
+  <span class="keyword">IdentityFile</span> ~/.ssh/id_rsa_work
+  <span class="keyword">IdentitiesOnly</span> yes
+
+<span class="keyword">Host</span> github-personal.com
+  <span class="keyword">HostName</span> github.com
+  <span class="keyword">User</span> git
+  <span class="keyword">IdentityFile</span> ~/.ssh/id_rsa_personal
+
+<span class="comment"># ...and 15 other random aliases</span></code></pre>
+        </div>
+        <div class="panel-footer error-footer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          Error-prone, leaks identities globally.
+        </div>
+      </div>
+
+      <!-- The GitSetu Way -->
+      <div class="code-panel new-way">
+        <div class="panel-header">
+          <span class="panel-label success-label">The GitSetu Way</span>
+          <span class="file-name">~/.ssh/config</span>
+        </div>
+        <div class="panel-body">
+          <pre><code><span class="comment"># GitSetu handles everything dynamically.</span>
+<span class="comment"># Just use 'git@github.com'.</span>
+
+<span class="keyword">Include</span> ~/.config/gitsetu/ssh/*</code></pre>
+        </div>
+        <div class="panel-footer success-footer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Idempotent, Zero-Trust, Automatic.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .compare-header {
+    margin-bottom: var(--space-4xl);
+  }
+
+  .compare-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .code-panel {
+    background: var(--bg-code);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .new-way {
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-glow);
+    transform: scale(1.02);
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+
+  .panel-label {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .error-label { background: rgba(239, 68, 68, 0.1); color: var(--color-error); }
+  .success-label { background: rgba(0, 229, 255, 0.1); color: var(--accent-primary); }
+
+  .file-name {
+    color: var(--text-muted);
+  }
+
+  .panel-body {
+    padding: var(--space-lg);
+    flex-grow: 1;
+    overflow-x: auto;
+  }
+
+  pre {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  .comment { color: var(--text-muted); font-style: italic; }
+  .keyword { color: var(--accent-secondary); font-weight: 600; }
+
+  .panel-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    border-top: 1px solid var(--border-subtle);
+    background: rgba(255, 255, 255, 0.01);
+  }
+
+  .error-footer { color: var(--color-error); }
+  .success-footer { color: var(--accent-primary); }
+
+  @media (max-width: 768px) {
+    .compare-split {
+      grid-template-columns: 1fr;
+    }
+    .new-way {
+      transform: none;
+    }
+  }
+</style>

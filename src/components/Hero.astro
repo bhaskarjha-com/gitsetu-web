@@ -2,41 +2,31 @@
 import TerminalDemo from './TerminalDemo.astro';
 ---
 
-<section class="hero" id="install">
-  <!-- Background glow -->
-  <div class="hero-glow" aria-hidden="true"></div>
-
+<section class="hero section reveal" id="install">
   <div class="container hero-inner">
-    <div class="hero-split">
-      
-      <!-- LEFT COLUMN: Copy & CTAs -->
-      <div class="hero-content">
-        <!-- Hero badge -->
-        <div class="hero-badge" aria-hidden="true">
-          <span class="badge-dot"></span>
-          <span>v1.1.0 — Production Ready</span>
-        </div>
+    
+    <div class="hero-content">
+      <!-- Badge -->
+      <div class="hero-badge reveal delay-100">
+        <span class="badge-dot"></span>
+        <span>v1.1.0 — Production Ready</span>
+      </div>
 
-        <!-- Headline -->
-        <h1 class="hero-title">
-          Stop committing as the<br />
-          <span class="accent-text">wrong person.</span>
-        </h1>
+      <!-- Headline -->
+      <h1 class="hero-title reveal delay-200">
+        Never leak a <br/>
+        <span class="accent-text">corporate commit</span> again.
+      </h1>
 
-        <!-- Subheadline -->
-        <p class="hero-subtitle">
-          A zero-dependency, self-updating pipeline that automatically generates your SSH keys and Git configs within a Zero-Trust architecture, then instantly switches them based on your directory.
-        </p>
+      <!-- Subheadline -->
+      <p class="hero-subtitle reveal delay-300">
+        GitSetu is a zero-dependency pipeline that automatically routes your SSH keys and Git credentials based on your directory using a Zero-Trust architecture. 
+        <br/><br/>
+        One setup. Automatic forever.
+      </p>
 
-        <!-- Badge row -->
-        <div class="hero-badges">
-          <span class="tag">Zero Dependencies</span>
-          <span class="tag">Bash 3.2+</span>
-          <span class="tag">Zero-Trust SSH</span>
-          <span class="tag">168 Tests Passing</span>
-        </div>
-
-        <!-- Install command -->
+      <!-- CTA & Command -->
+      <div class="hero-actions reveal delay-300">
         <div class="install-block">
           <code class="install-command" id="install-cmd">curl -sL https://raw.githubusercontent.com/bhaskarjha-com/gitsetu/main/install.sh | bash</code>
           <button class="copy-btn" id="copy-btn" aria-label="Copy install command" type="button">
@@ -44,32 +34,32 @@ import TerminalDemo from './TerminalDemo.astro';
             <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
           </button>
         </div>
+        <a href="/docs/getting-started/quickstart" class="btn btn-primary">Read the Docs</a>
+      </div>
 
-        <!-- CTA buttons -->
-        <div class="hero-ctas">
-          <a href="https://github.com/bhaskarjha-com/gitsetu" target="_blank" rel="noopener" class="btn btn-primary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            Star on GitHub
-          </a>
-          <a href="/docs" class="btn btn-secondary">
-            Read the Docs →
-          </a>
+      <!-- Trust Badges -->
+      <div class="hero-trust reveal delay-300">
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-success"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          168/168 Tests Passing
+        </div>
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Zero Telemetry
+        </div>
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+          100% Native Bash 3.2
         </div>
       </div>
-
-      <!-- RIGHT COLUMN: Terminal Demo -->
-      <div class="hero-visual">
-        <TerminalDemo />
-      </div>
-
     </div>
-  </div>
 
-  <!-- Scroll Indicator -->
-  <div class="scroll-indicator" aria-hidden="true">
-    <div class="mouse">
-      <div class="wheel"></div>
+    <!-- Product As Demo -->
+    <div class="hero-visual reveal delay-200">
+      <div class="terminal-glow"></div>
+      <TerminalDemo />
     </div>
+
   </div>
 </section>
 
@@ -99,50 +89,25 @@ import TerminalDemo from './TerminalDemo.astro';
 
 <style>
   .hero {
-    background: var(--gradient-hero);
     min-height: 100vh;
-    width: 100%;
+    padding-top: calc(var(--nav-height) + var(--space-4xl));
+    display: flex;
+    align-items: center;
     position: relative;
     overflow: hidden;
-    padding-top: var(--nav-height);
-  }
-
-  /* Deep, vibrant radial glow */
-  .hero-glow {
-    position: absolute;
-    top: 50%;
-    right: 10%;
-    transform: translateY(-50%);
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle, var(--accent-glow-strong) 0%, rgba(0, 196, 204, 0.05) 40%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
   }
 
   .hero-inner {
-    position: relative;
-    z-index: 1;
-    padding: var(--space-4xl) 0;
-    min-height: calc(100vh - var(--nav-height));
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .hero-split {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.1fr 0.9fr;
     gap: var(--space-4xl);
     align-items: center;
-  }
-
-  .hero-split > * {
-    min-width: 0;
+    position: relative;
+    z-index: 10;
   }
 
   .hero-content {
-    text-align: left;
+    max-width: 640px;
   }
 
   .hero-badge {
@@ -150,13 +115,12 @@ import TerminalDemo from './TerminalDemo.astro';
     align-items: center;
     gap: var(--space-sm);
     background: var(--bg-tertiary);
-    border: 1px solid var(--border-card);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-full);
     padding: var(--space-xs) var(--space-md);
     font-size: var(--text-sm);
     color: var(--text-secondary);
     margin-bottom: var(--space-xl);
-    animation: fadeInDown 0.6s ease forwards;
   }
 
   .badge-dot {
@@ -164,71 +128,43 @@ import TerminalDemo from './TerminalDemo.astro';
     height: 8px;
     border-radius: 50%;
     background: var(--color-success);
+    box-shadow: 0 0 10px var(--color-success);
     animation: pulse 2s ease-in-out infinite;
   }
 
   .hero-title {
-    font-size: clamp(2.5rem, 6vw, 4.5rem); /* Massive, premium SaaS scale */
-    font-weight: 700;
-    line-height: 1.1;
+    font-size: clamp(3rem, 5vw, 4.5rem);
     margin-bottom: var(--space-lg);
-    animation: fadeInUp 0.6s ease 0.1s forwards;
-    opacity: 0;
-    letter-spacing: -0.04em;
   }
 
   .hero-subtitle {
-    font-size: var(--text-lg);
-    color: var(--text-secondary);
-    margin-bottom: var(--space-xl);
-    line-height: 1.6;
-    animation: fadeInUp 0.6s ease 0.2s forwards;
-    opacity: 0;
-    max-width: 90%;
-  }
-
-  .hero-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
+    text-align: left;
+    margin-left: 0;
     margin-bottom: var(--space-2xl);
-    animation: fadeInUp 0.6s ease 0.3s forwards;
-    opacity: 0;
+    font-size: var(--text-lg);
   }
 
-  .tag {
-    display: inline-block;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-full);
-    padding: var(--space-xs) var(--space-md);
-    font-size: var(--text-xs);
-    color: var(--text-secondary);
-    font-weight: 500;
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-2xl);
+    flex-wrap: wrap;
   }
 
   .install-block {
     background: var(--bg-code);
     border: 1px solid var(--border-accent);
-    border-radius: var(--radius-lg);
-    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
     display: inline-flex;
     align-items: center;
     gap: var(--space-md);
-    max-width: 100%;
-    overflow-x: auto;
-    margin-bottom: var(--space-xl);
-    animation: fadeInUp 0.6s ease 0.4s forwards;
-    opacity: 0;
-    box-shadow: 0 0 30px var(--accent-glow);
+    box-shadow: var(--shadow-glow);
   }
 
   .install-command {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
     color: var(--accent-primary);
-    white-space: nowrap;
-    user-select: all;
   }
 
   .copy-btn {
@@ -236,80 +172,64 @@ import TerminalDemo from './TerminalDemo.astro';
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    padding: var(--space-xs);
-    border-radius: var(--radius-sm);
+    padding: 4px;
     transition: color var(--transition-fast);
-    flex-shrink: 0;
   }
-
-  .copy-btn:hover {
-    color: var(--accent-primary);
-  }
-
-  .hero-ctas {
-    display: flex;
-    gap: var(--space-md);
-    animation: fadeInUp 0.6s ease 0.5s forwards;
-    opacity: 0;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-xl);
-    border-radius: var(--radius-md);
-    font-size: var(--text-base);
-    font-weight: 600;
-    transition: all var(--transition-base);
-    text-decoration: none;
-  }
+  .copy-btn:hover { color: var(--accent-primary); }
 
   .btn-primary {
-    background: var(--gradient-accent);
-    color: #000;
+    background: var(--text-heading);
+    color: var(--bg-primary);
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
   }
-
   .btn-primary:hover {
-    box-shadow: var(--shadow-glow-strong);
-    transform: translateY(-2px);
-    color: #000;
+    background: var(--text-secondary);
   }
 
-  .btn-secondary {
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--text-primary);
-    border: 1px solid var(--border-card);
+  .hero-trust {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
   }
 
-  .btn-secondary:hover {
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
-    background: rgba(0, 196, 204, 0.05);
-    transform: translateY(-2px);
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
   }
+
+  .text-success { color: var(--color-success); }
+  .text-accent { color: var(--accent-primary); }
 
   .hero-visual {
-    animation: fadeInRight 0.8s ease 0.3s forwards;
-    opacity: 0;
     position: relative;
-    z-index: 2;
+    width: 100%;
+    max-width: 600px;
+    justify-self: end;
   }
 
-  /* Animations */
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  .terminal-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: conic-gradient(from 180deg at 50% 50%, rgba(0, 229, 255, 0) 0deg, rgba(0, 229, 255, 0.1) 180deg, rgba(0, 229, 255, 0) 360deg);
+    filter: blur(40px);
+    border-radius: 50%;
+    z-index: -1;
+    animation: rotate 10s linear infinite;
   }
 
-  @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes fadeInRight {
-    from { opacity: 0; transform: translateX(20px); }
-    to { opacity: 1; transform: translateX(0); }
+  @keyframes rotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
   }
 
   @keyframes pulse {
@@ -317,82 +237,32 @@ import TerminalDemo from './TerminalDemo.astro';
     50% { opacity: 0.5; }
   }
 
-  /* Scroll Indicator */
-  .scroll-indicator {
-    position: absolute;
-    bottom: var(--space-xl);
-    left: 50%;
-    transform: translateX(-50%);
-    animation: fadeInUp 1s ease 1s forwards;
-    opacity: 0;
-    z-index: 10;
-  }
-
-  .mouse {
-    width: 24px;
-    height: 36px;
-    border: 2px solid var(--text-muted);
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    padding-top: 6px;
-  }
-
-  .wheel {
-    width: 4px;
-    height: 6px;
-    background: var(--text-secondary);
-    border-radius: 2px;
-    animation: scrollWheel 2s infinite;
-  }
-
-  @keyframes scrollWheel {
-    0% { transform: translateY(0); opacity: 1; }
-    50% { transform: translateY(8px); opacity: 0; }
-    51% { transform: translateY(-4px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-  }
-
-  /* Responsive */
   @media (max-width: 1024px) {
-    .hero-split {
+    .hero-inner {
       grid-template-columns: 1fr;
       text-align: center;
-      gap: var(--space-3xl);
+      gap: var(--space-4xl);
     }
-    
+
     .hero-content {
+      margin: 0 auto;
+    }
+
+    .hero-subtitle {
       text-align: center;
     }
-    
-    .hero-subtitle {
-      margin: 0 auto var(--space-xl);
-    }
-    
-    .hero-badges {
-      justify-content: center;
-    }
-    
-    .hero-ctas {
+
+    .hero-actions {
       justify-content: center;
     }
 
-    .hero-glow {
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .install-block {
-      padding: var(--space-sm) var(--space-md);
-      width: 100%;
+    .hero-trust {
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    .hero-ctas {
-      flex-direction: column;
-      align-items: center;
+    .hero-visual {
+      justify-self: center;
     }
   }
 </style>
