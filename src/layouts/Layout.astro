@@ -1,4 +1,8 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
+import '../styles/global.css';
+import CommandPalette from '../components/CommandPalette.astro';
+
 interface Props {
   title?: string;
   description?: string;
@@ -8,10 +12,6 @@ const {
   title = 'GitSetu — Zero-Dependency Git Identity Manager',
   description = 'Manage multiple Git identities automatically. SSH keys, credentials, and commit signing — all in pure Bash 3.2. Zero dependencies.'
 } = Astro.props;
-
-import '../styles/global.css';
-import CommandPalette from '../components/CommandPalette.astro';
-import { ViewTransitions } from 'astro:transitions';
 ---
 
 <!doctype html>
