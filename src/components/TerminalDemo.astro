@@ -370,6 +370,7 @@
     overflow: hidden;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 1), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     position: relative;
+    text-align: left; /* Fix inherited text-align: center from Hero.astro on mobile */
   }
 
   .terminal-header {
@@ -442,6 +443,12 @@
     padding: var(--space-md);
     background: transparent;
     cursor: text;
+    overflow-x: auto; /* Handle fixed 70 cols on small screens safely */
+    scrollbar-width: none; /* Hide scrollbar for cleaner UI */
+  }
+  
+  .terminal-body::-webkit-scrollbar {
+    display: none;
   }
 
   .terminal-hint {
@@ -470,5 +477,27 @@
   
   :global(.xterm-screen) {
     padding-left: 8px;
+  }
+
+  /* Mobile Flaw Fixes */
+  @media (max-width: 600px) {
+    .terminal-title {
+      display: none; /* Prevent overlap with mode buttons */
+    }
+    
+    .terminal-modes {
+      position: static; /* Re-center mode buttons naturally */
+      margin-left: auto;
+    }
+    
+    .traffic-lights {
+      position: relative;
+      left: 0;
+    }
+    
+    .terminal-header {
+      justify-content: flex-start;
+      gap: var(--space-md);
+    }
   }
 </style>
