@@ -48,71 +48,73 @@
 </div>
 
 <script>
-  // Progressive reveal & typing animation
-  const terminal = document.getElementById('terminal-demo');
-  if (terminal) {
-    const lines = terminal.querySelectorAll('.terminal-line');
-    
-    // Initial hide
-    lines.forEach(line => {
-      (line as HTMLElement).style.opacity = '0';
-      (line as HTMLElement).style.transform = 'translateY(4px)';
+  document.addEventListener('astro:page-load', () => {
+    // Progressive reveal & typing animation
+    const terminal = document.getElementById('terminal-demo');
+    if (terminal) {
+      const lines = terminal.querySelectorAll('.terminal-line');
       
-      const cmd = line.querySelector('.command');
-      if (cmd) {
-        (cmd as HTMLElement).dataset.text = cmd.textContent || '';
-        cmd.textContent = '';
-      }
-    });
-
-    const typeCommand = (cmd: HTMLElement, text: string, callback: () => void) => {
-      let i = 0;
-      cmd.innerHTML = '<span class="cursor">█</span>';
-      const cursor = cmd.querySelector('.cursor') as HTMLElement;
-      
-      const interval = setInterval(() => {
-        if (i < text.length) {
-          cmd.insertBefore(document.createTextNode(text.charAt(i)), cursor);
-          i++;
-        } else {
-          clearInterval(interval);
-          cursor.classList.add('blink');
-          setTimeout(() => {
-            cursor.remove();
-            callback();
-          }, 300); // let it blink a few times then remove
+      // Initial hide
+      lines.forEach(line => {
+        (line as HTMLElement).style.opacity = '0';
+        (line as HTMLElement).style.transform = 'translateY(4px)';
+        
+        const cmd = line.querySelector('.command');
+        if (cmd) {
+          (cmd as HTMLElement).dataset.text = cmd.textContent || '';
+          cmd.textContent = '';
         }
-      }, 40); // typing speed
-    };
+      });
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            lines.forEach((line) => {
-              const delay = parseInt((line as HTMLElement).dataset.delay || '0', 10);
-              const isOutput = line.classList.contains('output');
-              
-              setTimeout(() => {
-                (line as HTMLElement).style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-                (line as HTMLElement).style.opacity = '1';
-                (line as HTMLElement).style.transform = 'translateY(0)';
-                
-                const cmd = line.querySelector('.command') as HTMLElement;
-                if (cmd) {
-                  const text = cmd.dataset.text || '';
-                  typeCommand(cmd, text, () => {});
-                }
-              }, delay);
-            });
-            observer.disconnect();
+      const typeCommand = (cmd: HTMLElement, text: string, callback: () => void) => {
+        let i = 0;
+        cmd.innerHTML = '<span class="cursor">█</span>';
+        const cursor = cmd.querySelector('.cursor') as HTMLElement;
+        
+        const interval = setInterval(() => {
+          if (i < text.length) {
+            cmd.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+            i++;
+          } else {
+            clearInterval(interval);
+            cursor.classList.add('blink');
+            setTimeout(() => {
+              cursor.remove();
+              callback();
+            }, 300); // let it blink a few times then remove
           }
-        });
-      },
-      { threshold: 0.3 }
-    );
-    observer.observe(terminal);
-  }
+        }, 40); // typing speed
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              lines.forEach((line) => {
+                const delay = parseInt((line as HTMLElement).dataset.delay || '0', 10);
+                const isOutput = line.classList.contains('output');
+                
+                setTimeout(() => {
+                  (line as HTMLElement).style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+                  (line as HTMLElement).style.opacity = '1';
+                  (line as HTMLElement).style.transform = 'translateY(0)';
+                  
+                  const cmd = line.querySelector('.command') as HTMLElement;
+                  if (cmd) {
+                    const text = cmd.dataset.text || '';
+                    typeCommand(cmd, text, () => {});
+                  }
+                }, delay);
+              });
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+      observer.observe(terminal);
+    }
+  });
 </script>
 
 <style>

@@ -2,20 +2,30 @@ export const GET = async () => {
   try {
     // Use Vite's import.meta.glob to read all markdown files at build-time.
     const allDocs = import.meta.glob('./docs/**/*.md', { eager: true });
+    // Use '?raw' to get the raw uncompiled markdown text since rawContent() was removed in Astro 5+
+    const rawDocs = import.meta.glob('./docs/**/*.md', { query: '?raw', import: 'default', eager: true });
     
     const results = Object.keys(allDocs).map((path) => {
       const doc = allDocs[path] as any;
+      const rawContent = rawDocs[path] as string || '';
       
       // Convert relative file path to an absolute URL path.
       // e.g. './docs/getting-started/quickstart.md' -> '/docs/getting-started/quickstart'
       let url = path.replace('./docs/', '/docs/').replace('.md', '');
       if (url === '/docs/index') url = '/docs';
       
+      // Basic markdown stripping for clean search index payload
+      const cleanContent = rawContent
+        .replace(/---[\s\S]*?---/, '') // Strip frontmatter
+        .replace(/[#*`_\[\]()]/g, '')   // Strip basic markdown syntax
+        .replace(/\s+/g, ' ')          // Collapse whitespace
+        .trim();
+
       return {
         title: doc.frontmatter?.title || url,
         description: doc.frontmatter?.description || '',
         url: url,
-        content: typeof doc.rawContent === 'function' ? doc.rawContent() : ''
+        content: cleanContent
       };
     });
 

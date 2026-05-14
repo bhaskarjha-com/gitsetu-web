@@ -65,26 +65,28 @@ import TerminalDemo from './TerminalDemo.astro';
 </section>
 
 <script>
-  const copyBtn = document.getElementById('copy-btn');
-  const installCmd = document.getElementById('install-cmd');
-  const copyIcon = copyBtn?.querySelector('.copy-icon');
-  const checkIcon = copyBtn?.querySelector('.check-icon');
+  document.addEventListener('astro:page-load', () => {
+    const copyBtn = document.getElementById('copy-btn');
+    const installCmd = document.getElementById('install-cmd');
+    const copyIcon = copyBtn?.querySelector('.copy-icon');
+    const checkIcon = copyBtn?.querySelector('.check-icon');
 
-  copyBtn?.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(installCmd?.textContent?.trim() || '');
-      if (copyIcon) copyIcon.style.display = 'none';
-      if (checkIcon) checkIcon.style.display = 'block';
-      setTimeout(() => {
-        if (copyIcon) copyIcon.style.display = 'block';
-        if (checkIcon) checkIcon.style.display = 'none';
-      }, 2000);
-    } catch {
-      const range = document.createRange();
-      if (installCmd) range.selectNodeContents(installCmd);
-      window.getSelection()?.removeAllRanges();
-      window.getSelection()?.addRange(range);
-    }
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(installCmd?.textContent?.trim() || '');
+        if (copyIcon) (copyIcon as HTMLElement).style.display = 'none';
+        if (checkIcon) (checkIcon as HTMLElement).style.display = 'block';
+        setTimeout(() => {
+          if (copyIcon) (copyIcon as HTMLElement).style.display = 'block';
+          if (checkIcon) (checkIcon as HTMLElement).style.display = 'none';
+        }, 2000);
+      } catch {
+        const range = document.createRange();
+        if (installCmd) range.selectNodeContents(installCmd);
+        window.getSelection()?.removeAllRanges();
+        window.getSelection()?.addRange(range);
+      }
+    });
   });
 </script>
 
