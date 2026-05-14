@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@orama/orama": "latest",
-    "@xterm/xterm": "latest",
-    "@xterm/addon-fit": "latest"
+    "@xterm/addon-fit": "latest",
+    "@xterm/xterm": "latest"
   }
 }
