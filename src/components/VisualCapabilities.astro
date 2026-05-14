@@ -71,8 +71,7 @@
 
 <style>
   .capabilities-container {
-    container-type: inline-size;
-    container-name: capabilities;
+    width: 100%;
   }
 
   .visualizer-stage {
@@ -259,8 +258,8 @@
     to { stroke-dashoffset: -1000; }
   }
 
-  /* Responsive Container Layout */
-  @container capabilities (max-width: 800px) {
+  /* Responsive Media Layout */
+  @media (max-width: 800px) {
     .visualizer-stage {
       flex-direction: column;
       height: auto;

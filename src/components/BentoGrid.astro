@@ -107,8 +107,7 @@
   }
 
   .bento-container {
-    container-type: inline-size;
-    container-name: bento;
+    width: 100%;
   }
 
   .bento-grid {
@@ -298,8 +297,8 @@
 
   /* Removed rotation CSS */
 
-  /* Container Queries based on `.bento-container` size */
-  @container bento (max-width: 900px) {
+  /* Standard Media Queries for predictable layout */
+  @media (max-width: 900px) {
     .bento-grid {
       grid-template-columns: 1fr 1fr;
     }
@@ -308,9 +307,9 @@
     }
   }
 
-  @container bento (max-width: 600px) {
+  @media (max-width: 600px) {
     .bento-grid {
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: 1fr;
     }
     .span-2x2, .span-2x1, .span-3x1, .span-1x1 {
       grid-column: span 1;

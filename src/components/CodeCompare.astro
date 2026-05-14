@@ -61,8 +61,7 @@
 
 <style>
   .compare-container {
-    container-type: inline-size;
-    container-name: compare;
+    width: 100%;
   }
 
   .compare-header {
@@ -168,10 +167,10 @@
   .error-footer { color: var(--color-error); }
   .success-footer { color: var(--accent-primary); text-shadow: 0 0 10px var(--accent-glow); }
 
-  /* Fluid Architecture via Container Queries */
-  @container compare (max-width: 800px) {
+  /* Fluid Architecture via Standard Media Queries */
+  @media (max-width: 800px) {
     .compare-split {
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: 1fr;
       gap: var(--space-3xl);
     }
     .new-way {
