@@ -61,33 +61,36 @@ EOF
   rm -f "$temp_file"
 }
 
-# 1. Getting Started
-sync_doc "docs/getting-started/introduction.md" "index.md" "Introduction"
+# 1. Platform Overview
+sync_doc "docs/overview/introduction.md" "index.md" "Introduction"
+sync_doc "docs/overview/architecture.md" "overview/architecture.md" "Architecture"
+sync_doc "docs/overview/comparisons.md" "overview/comparisons.md" "Ecosystem Comparisons"
+sync_doc "docs/overview/manifesto.md" "overview/manifesto.md" "Design Manifesto"
+
+# 2. Getting Started
 sync_doc "docs/getting-started/installation.md" "getting-started/installation.md" "Installation"
 sync_doc "docs/getting-started/quickstart.md" "getting-started/quickstart.md" "Quickstart"
 
-# 2. Core Concepts
-sync_doc "docs/core-concepts/identity-routing.md" "core-concepts/identity-routing.md" "Identity Routing"
-sync_doc "docs/core-concepts/credential-broker.md" "core-concepts/credential-broker.md" "Credential Broker"
-sync_doc "docs/core-concepts/precommit-guard.md" "core-concepts/precommit-guard.md" "Pre-Commit Guard"
+# 3. Core Engines
+sync_doc "docs/core-engines/identity-routing.md" "core-engines/identity-routing.md" "Identity Routing"
+sync_doc "docs/core-engines/ssh-orchestrator.md" "core-engines/ssh-orchestrator.md" "SSH Orchestrator"
+sync_doc "docs/core-engines/credential-broker.md" "core-engines/credential-broker.md" "Credential Broker"
+sync_doc "docs/core-engines/precommit-guard.md" "core-engines/precommit-guard.md" "Pre-Commit Guard"
 
-# 3. Guides
-sync_doc "docs/guides/hardware-keys-fido2.md" "guides/hardware-keys-fido2.md" "Hardware Keys (FIDO2)"
-sync_doc "docs/guides/backup-and-restore.md" "guides/backup-and-restore.md" "Backup & Restore"
+# 4. Guides
+sync_doc "docs/guides/shell-prompt.md" "guides/shell-prompt.md" "Shell Prompt Integration"
+sync_doc "docs/guides/hardware-keys.md" "guides/hardware-keys.md" "Hardware Keys (FIDO2)"
 sync_doc "docs/guides/wsl-integration.md" "guides/wsl-integration.md" "WSL Integration"
+sync_doc "docs/guides/vault-backups.md" "guides/vault-backups.md" "Vault Backups"
 
-# 4. Reference
-sync_doc "docs/reference/cli-commands.md" "reference/cli-commands.md" "CLI Command Reference"
-
-# 5. Enterprise
+# 5. Enterprise & Vision
 sync_doc "docs/enterprise/security-privacy.md" "enterprise/security-privacy.md" "Security & Privacy"
+sync_doc "docs/enterprise/product-roadmap.md" "enterprise/product-roadmap.md" "Product Roadmap"
 
-# 6. Project
-sync_doc "docs/project/architecture.md" "project/architecture.md" "Architecture"
-sync_doc "docs/project/troubleshooting.md" "project/troubleshooting.md" "Troubleshooting"
-sync_doc "docs/project/faq.md" "project/faq.md" "FAQ"
-sync_doc "docs/project/manifesto.md" "project/manifesto.md" "Manifesto"
-sync_doc "docs/project/roadmap.md" "project/roadmap.md" "Product Roadmap"
-sync_doc "CONTRIBUTING.md" "project/contributing.md" "Contributing"
+# 6. Reference & Support
+sync_doc "docs/reference/cli-commands.md" "reference/cli-commands.md" "CLI Commands"
+sync_doc "docs/reference/troubleshooting.md" "reference/troubleshooting.md" "Troubleshooting"
+sync_doc "docs/reference/faq.md" "reference/faq.md" "FAQ"
+sync_doc "CONTRIBUTING.md" "reference/contributing.md" "Contributing Guide"
 
 echo "Documentation sync complete!"
