@@ -37,8 +37,9 @@
     left: 0;
     width: 100%;
     height: 32px;
-    background: #007acc; /* VS Code Blue */
-    color: #ffffff;
+    background: #161b22; /* GitHub Dark */
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -73,9 +74,14 @@
   }
 
   .link {
-    color: #ffffff;
+    color: var(--text-secondary);
     text-decoration: none;
     cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .status-item:hover.link {
+    color: var(--text-heading);
   }
 
   @media (max-width: 768px) {
