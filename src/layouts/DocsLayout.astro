@@ -4,6 +4,9 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 
 const { frontmatter } = Astro.props;
+
+// Compute edit URL based on current path
+const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
 ---
 
 <!DOCTYPE html>
@@ -23,19 +26,50 @@ const { frontmatter } = Astro.props;
       <aside class="docs-sidebar">
         <nav class="sidebar-nav">
           <div class="nav-group">
-            <h3 class="nav-heading">Documentation</h3>
+            <h3 class="nav-heading">Getting Started</h3>
             <ul>
               <li><a href="/docs" class={frontmatter.title === 'Introduction' ? 'active' : ''}>Introduction</a></li>
-              <li><a href="/docs/architecture" class={frontmatter.title === 'Architecture' ? 'active' : ''}>Architecture</a></li>
-              <li><a href="/docs/troubleshooting" class={frontmatter.title === 'Troubleshooting' ? 'active' : ''}>Troubleshooting</a></li>
+              <li><a href="/docs/getting-started/installation" class={frontmatter.title === 'Installation' ? 'active' : ''}>Installation</a></li>
+              <li><a href="/docs/getting-started/quickstart" class={frontmatter.title === 'Quickstart' ? 'active' : ''}>Quickstart</a></li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <h3 class="nav-heading">Core Concepts</h3>
+            <ul>
+              <li><a href="/docs/core-concepts/identity-routing" class={frontmatter.title === 'Identity Routing' ? 'active' : ''}>Identity Routing</a></li>
+              <li><a href="/docs/core-concepts/credential-broker" class={frontmatter.title === 'Credential Broker' ? 'active' : ''}>Credential Broker</a></li>
+              <li><a href="/docs/core-concepts/precommit-guard" class={frontmatter.title === 'Pre-Commit Guard' ? 'active' : ''}>Pre-Commit Guard</a></li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <h3 class="nav-heading">Guides</h3>
+            <ul>
+              <li><a href="/docs/guides/hardware-keys-fido2" class={frontmatter.title === 'Hardware Keys (FIDO2)' ? 'active' : ''}>Hardware Keys (FIDO2)</a></li>
+              <li><a href="/docs/guides/backup-and-restore" class={frontmatter.title === 'Backup & Restore' ? 'active' : ''}>Backup & Restore</a></li>
+              <li><a href="/docs/guides/wsl-integration" class={frontmatter.title === 'WSL Integration' ? 'active' : ''}>WSL Integration</a></li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <h3 class="nav-heading">Reference</h3>
+            <ul>
+              <li><a href="/docs/reference/cli-commands" class={frontmatter.title === 'CLI Command Reference' ? 'active' : ''}>CLI Command Reference</a></li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <h3 class="nav-heading">Enterprise</h3>
+            <ul>
+              <li><a href="/docs/enterprise/security-privacy" class={frontmatter.title === 'Security & Privacy' ? 'active' : ''}>Security & Privacy</a></li>
             </ul>
           </div>
           <div class="nav-group">
             <h3 class="nav-heading">Project</h3>
             <ul>
-              <li><a href="/docs/manifesto" class={frontmatter.title === 'Manifesto' ? 'active' : ''}>Manifesto</a></li>
-              <li><a href="/docs/roadmap" class={frontmatter.title === 'Product Roadmap' ? 'active' : ''}>Roadmap</a></li>
-              <li><a href="/docs/contributing" class={frontmatter.title === 'Contributing' ? 'active' : ''}>Contributing</a></li>
+              <li><a href="/docs/project/architecture" class={frontmatter.title === 'Architecture' ? 'active' : ''}>Architecture</a></li>
+              <li><a href="/docs/project/troubleshooting" class={frontmatter.title === 'Troubleshooting' ? 'active' : ''}>Troubleshooting</a></li>
+              <li><a href="/docs/project/faq" class={frontmatter.title === 'FAQ' ? 'active' : ''}>FAQ</a></li>
+              <li><a href="/docs/project/manifesto" class={frontmatter.title === 'Manifesto' ? 'active' : ''}>Manifesto</a></li>
+              <li><a href="/docs/project/roadmap" class={frontmatter.title === 'Product Roadmap' ? 'active' : ''}>Roadmap</a></li>
+              <li><a href="/docs/project/contributing" class={frontmatter.title === 'Contributing' ? 'active' : ''}>Contributing</a></li>
             </ul>
           </div>
         </nav>
@@ -43,6 +77,13 @@ const { frontmatter } = Astro.props;
       
       <main class="docs-content markdown-body">
         <slot />
+        
+        <div class="docs-footer">
+          <a href={editUrl} target="_blank" rel="noopener noreferrer" class="edit-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            Edit this page on GitHub
+          </a>
+        </div>
       </main>
     </div>
 
@@ -119,6 +160,26 @@ const { frontmatter } = Astro.props;
     max-width: 800px;
   }
 
+  .docs-footer {
+    margin-top: var(--space-4xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .edit-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .edit-link:hover {
+    color: var(--text-heading);
+  }
+
   /* Markdown Typography overrides */
   .markdown-body h1 {
     font-size: var(--text-4xl);
@@ -129,7 +190,7 @@ const { frontmatter } = Astro.props;
 
   .markdown-body h2 {
     font-size: var(--text-2xl);
-    margin-top: var(--space-2xl);
+    margin-top: var(--space-3xl);
     margin-bottom: var(--space-md);
     padding-bottom: var(--space-xs);
     border-bottom: 1px solid var(--border-subtle);
@@ -137,7 +198,7 @@ const { frontmatter } = Astro.props;
 
   .markdown-body h3 {
     font-size: var(--text-xl);
-    margin-top: var(--space-xl);
+    margin-top: var(--space-2xl);
     margin-bottom: var(--space-sm);
   }
 
@@ -194,14 +255,32 @@ const { frontmatter } = Astro.props;
     font-size: var(--text-sm);
   }
 
+  /* GitHub Alerts Styling */
   .markdown-body blockquote {
-    border-left: 4px solid var(--accent-primary);
-    padding-left: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
     margin-bottom: var(--space-lg);
-    color: var(--text-muted);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 4px solid var(--text-muted);
+  }
+
+  /* Target lines inside blockquotes that look like [!NOTE] etc */
+  .markdown-body blockquote:has(p:first-child:contains("[!NOTE]")) {
+    border-left-color: var(--accent-primary);
     background: rgba(0, 196, 204, 0.05);
-    padding: var(--space-md);
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+
+  .markdown-body blockquote:has(p:first-child:contains("[!WARNING]")),
+  .markdown-body blockquote:has(p:first-child:contains("[!TIP]")) {
+    border-left-color: var(--color-warning);
+    background: rgba(245, 158, 11, 0.05);
+  }
+
+  .markdown-body blockquote:has(p:first-child:contains("[!IMPORTANT]")),
+  .markdown-body blockquote:has(p:first-child:contains("[!CAUTION]")) {
+    border-left-color: var(--color-error);
+    background: rgba(239, 68, 68, 0.05);
   }
 
   .markdown-body table {
