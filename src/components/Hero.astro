@@ -89,13 +89,10 @@ import TerminalDemo from './TerminalDemo.astro';
 
 <style>
   .hero {
-    min-height: calc(100vh - var(--nav-height));
-    padding-top: calc(var(--nav-height) + var(--space-4xl));
-    padding-bottom: var(--space-4xl);
-    display: flex;
-    align-items: center;
+    padding-top: calc(var(--nav-height) + var(--space-5xl));
+    padding-bottom: var(--space-5xl);
     position: relative;
-    overflow-x: clip; /* Prevent glow from causing horizontal scroll, but allow vertical expansion */
+    overflow-x: clip; /* Prevent glow from causing horizontal scroll */
   }
 
   .hero-inner {
@@ -211,7 +208,7 @@ import TerminalDemo from './TerminalDemo.astro';
     position: relative;
     width: 100%;
     max-width: 600px;
-    justify-self: end;
+    justify-self: center;
   }
 
   .terminal-glow {
