@@ -41,6 +41,28 @@ const {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
     <ClientRouter />
+    
+    <!-- JSON-LD Semantic Web -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "GitSetu",
+        "operatingSystem": "POSIX (Linux, macOS, WSL)",
+        "applicationCategory": "DeveloperApplication",
+        "softwareVersion": "1.1.0",
+        "softwareRequirements": "Bash 3.2+",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "USD"
+        },
+        "description": "Zero-dependency orchestration engine that automatically routes SSH keys and credentials based on your directory. Enforces Zero-Trust identity for developers.",
+        "url": "https://gitsetu.bhaskarjha.dev",
+        "downloadUrl": "https://gitsetu.bhaskarjha.dev/install"
+      }
+    </script>
+
     <script defer data-domain="gitsetu.bhaskarjha.dev" src="https://plausible.io/js/script.js"></script>
   </head>
   <body>

@@ -59,9 +59,13 @@
       <span><kbd>ESC</kbd> to close</span>
     </div>
   </div>
-</div>
-
 <script>
+  import { create, insertMultiple, search } from '@orama/orama';
+
+  // Orama DB instance is kept globally across page loads to avoid re-indexing
+  let oramaDb: any = null;
+  let isFetching = false;
+
   // Setup the Command Palette on every page navigation
   document.addEventListener('astro:page-load', () => {
     const backdrop = document.getElementById('command-palette-backdrop');
@@ -71,8 +75,6 @@
     const dynamicSection = document.getElementById('dynamic-search-section');
     const dynamicResults = document.getElementById('dynamic-search-results');
     
-    let searchIndex: Array<{title: string, description: string, url: string, content: string}> = [];
-    let isFetching = false;
     let selectedIndex = -1;
 
     function updateSelection() {
@@ -91,14 +93,26 @@
     }
 
     async function fetchSearchIndex() {
-      if (searchIndex.length > 0 || isFetching) return;
+      if (oramaDb || isFetching) return;
       isFetching = true;
       try {
         const res = await fetch('/search.json');
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
         const data = await res.json();
         if (data.error) throw new Error(data.error);
-        searchIndex = data;
+        
+        // Initialize Orama DB
+        oramaDb = await create({
+          schema: {
+            title: 'string',
+            description: 'string',
+            content: 'string',
+            url: 'string'
+          }
+        });
+
+        // Index the documentation into memory
+        await insertMultiple(oramaDb, data);
       } catch (e: any) {
         console.error('Failed to fetch search index:', e);
         if (dynamicResults) {
@@ -132,9 +146,9 @@
       input?.blur();
     }
 
-    // Live Search Filtering
-    input?.addEventListener('input', (e) => {
-      const query = (e.target as HTMLInputElement).value.toLowerCase().trim();
+    // Live Search Filtering using Orama
+    input?.addEventListener('input', async (e) => {
+      const query = (e.target as HTMLInputElement).value.trim();
       
       if (query.length > 0) {
         defaultSections.forEach(sec => (sec as HTMLElement).style.display = 'none');
@@ -142,32 +156,45 @@
         if (dynamicSection && dynamicResults) {
           dynamicSection.style.display = '';
           
+          let html = '';
+          
+          if (!oramaDb) {
+             dynamicResults.innerHTML = `<li style="padding: 12px 16px; color: var(--text-muted); font-size: 12px;">Initializing search engine...</li>`;
+             return;
+          }
+
+          // Execute Orama Search with typo tolerance
+          const searchResult = await search(oramaDb, {
+            term: query,
+            properties: '*',
+            tolerance: 1, // Allow 1 typo
+            limit: 15
+          });
+
           const titleMatches: Array<any> = [];
           const contentMatches: Array<any> = [];
-          const commandMatches: Array<string> = [];
-
-          searchIndex.forEach(item => {
-            const inTitle = item.title.toLowerCase().includes(query) || 
-                            item.description.toLowerCase().includes(query) ||
-                            item.url.toLowerCase().includes(query);
-                            
-            if (inTitle) {
-              titleMatches.push(item);
-            } else if (item.content && item.content.toLowerCase().includes(query)) {
-              contentMatches.push(item);
+          
+          // Categorize Orama hits
+          searchResult.hits.forEach(hit => {
+            const doc = hit.document;
+            // Basic heuristic: if the title or url matched well, it's a primary hit
+            if (doc.title.toLowerCase().includes(query.toLowerCase()) || doc.url.toLowerCase().includes(query.toLowerCase())) {
+              titleMatches.push(doc);
+            } else {
+              contentMatches.push(doc);
             }
           });
 
+          // Fallback search for static commands
+          const commandMatches: Array<string> = [];
           defaultSections.forEach(sec => {
             const items = sec.querySelectorAll('.cmd-item');
             items.forEach(item => {
-              if (item.textContent?.toLowerCase().includes(query)) {
+              if (item.textContent?.toLowerCase().includes(query.toLowerCase())) {
                 commandMatches.push(item.parentElement?.innerHTML || '');
               }
             });
           });
-
-          let html = '';
 
           if (titleMatches.length > 0) {
             html += '<div class="cmd-section-title" style="margin-top: 12px;">Documentation</div>';
@@ -205,11 +232,11 @@
           }
 
           if (html === '') {
-            html = `
+            html = \`
               <li style="padding: 12px 16px; color: var(--text-muted); font-size: 12px;">
-                No results found for "${query}".
+                No results found for "\${query}".
               </li>
-            `;
+            \`;
           }
 
           dynamicResults.innerHTML = html;

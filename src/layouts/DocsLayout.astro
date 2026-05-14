@@ -21,6 +21,19 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <ClientRouter />
+    
+    <!-- JSON-LD Semantic Web -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": frontmatter.title,
+      "description": frontmatter.description || "GitSetu Documentation",
+      "author": {
+        "@type": "Person",
+        "name": "Bhaskar Jha"
+      }
+    })} />
+
     <script defer data-domain="gitsetu.bhaskarjha.dev" src="https://plausible.io/js/script.js"></script>
   </head>
   <body>
