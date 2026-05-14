@@ -44,43 +44,53 @@
 </header>
 
 <script>
-  // Liquid Glass scroll effect
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) {
-      navbar?.classList.add('scrolled');
-    } else {
-      navbar?.classList.remove('scrolled');
+  document.addEventListener('astro:page-load', () => {
+    // Liquid Glass scroll effect
+    const navbar = document.getElementById('navbar');
+    
+    // Remove old event listener if it exists to prevent duplicates
+    const scrollHandler = () => {
+      if (window.scrollY > 20) {
+        navbar?.classList.add('scrolled');
+      } else {
+        navbar?.classList.remove('scrolled');
+      }
+    };
+    window.removeEventListener('scroll', scrollHandler);
+    window.addEventListener('scroll', scrollHandler);
+
+    // Search button functionality
+    const searchBtn = document.getElementById('search-btn');
+    const cmdKey = document.getElementById('cmd-key');
+    
+    if (navigator.platform.toUpperCase().indexOf('MAC') < 0) {
+      if(cmdKey) cmdKey.textContent = 'Ctrl+K';
     }
-  });
 
-  // Search button functionality
-  const searchBtn = document.getElementById('search-btn');
-  const cmdKey = document.getElementById('cmd-key');
-  
-  if (navigator.platform.toUpperCase().indexOf('MAC') < 0) {
-    if(cmdKey) cmdKey.textContent = 'Ctrl+K';
-  }
-
-  searchBtn?.addEventListener('click', () => {
-    document.dispatchEvent(new CustomEvent('open-command-palette'));
-  });
-
-  // Intercept Ctrl+K / Cmd+K
-  document.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-      e.preventDefault();
+    searchBtn?.addEventListener('click', () => {
       document.dispatchEvent(new CustomEvent('open-command-palette'));
-    }
+    });
+
+    // Mobile menu toggle
+    const mobileToggle = document.querySelector('.mobile-nav-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileToggle?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('active');
+    });
   });
 
-  // Mobile menu toggle
-  const mobileToggle = document.querySelector('.mobile-nav-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
-
-  mobileToggle?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('active');
-  });
+  // Intercept Ctrl+K / Cmd+K (Global, run once outside page-load to prevent duplicate triggers)
+  // But wait, if we only run it once, it's fine, but in Astro view transitions it persists across pages.
+  if (!window.hasCommandPaletteListener) {
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        document.dispatchEvent(new CustomEvent('open-command-palette'));
+      }
+    });
+    window.hasCommandPaletteListener = true;
+  }
 </script>
 
 <style>

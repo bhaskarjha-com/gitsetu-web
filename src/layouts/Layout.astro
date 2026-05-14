@@ -50,24 +50,26 @@ const {
     <slot />
     
     <script>
-      // Global Reveal on Scroll
-      const revealElements = document.querySelectorAll('.reveal');
-      
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-            // Optional: stop observing once revealed
-            // revealObserver.unobserve(entry.target);
-          }
+      document.addEventListener('astro:page-load', () => {
+        // Global Reveal on Scroll
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('active');
+              // Optional: stop observing once revealed
+              // revealObserver.unobserve(entry.target);
+            }
+          });
+        }, {
+          root: null,
+          threshold: 0.1,
+          rootMargin: "0px 0px -50px 0px"
         });
-      }, {
-        root: null,
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-      });
 
-      revealElements.forEach(el => revealObserver.observe(el));
+        revealElements.forEach(el => revealObserver.observe(el));
+      });
     </script>
   </body>
 </html>
