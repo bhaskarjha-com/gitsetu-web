@@ -4,25 +4,42 @@ This repository contains the pristine source code for [gitsetu.bhaskarjha.dev](h
 
 ## 🌟 Architectural Philosophy
 
-Mirroring the elite, zero-dependency philosophy of the core GitSetu CLI orchestrator, this web application is engineered for absolute maximum performance, lightning-fast SEO delivery, and zero client-side framework bloat.
+The GitSetu web platform is engineered as a **Frontier Developer Portal**. It moves beyond traditional static generation to deliver a fluid, application-like experience with military-grade integrations for AI agents, offline search, and interactive browser emulation.
 
 ### The Stack
 - **Framework:** [Astro v6+](https://astro.build/) (Static Site Generation for sub-second delivery).
 - **Styling Engine:** Custom, zero-runtime Vanilla CSS utilizing semantic design variables and high-fidelity glassmorphism effects.
-- **Client-Side Scripting:** Pure Vanilla JS. Zero third-party dependencies. No React, Vue, Tailwind, or external search libraries.
+- **Routing Engine:** Astro View Transitions (`ClientRouter`) for SPA-like instant navigation with zero React/Vue overhead.
+- **Terminal Emulation:** [@xterm/xterm](https://xtermjs.org/) for a fully interactive, browser-native sandbox.
+- **Search Engine:** [@orama/orama](https://oramasearch.com/) for offline, typo-tolerant vector search at the Edge.
 
 ---
 
-## 🔍 The Zero-Dependency Search Engine
+## 🤖 Agentic SEO & Machine Readability
 
-Unlike traditional static documentation sites that rely on heavy third-party external scripts like Algolia, Fuse.js, or Pagefind, `gitsetu-web` implements a completely native, high-performance search pipeline from scratch:
+We design for both humans and autonomous agents (GitHub Copilot, Cursor, ChatGPT).
 
-1. **Build-Time Extraction (`src/pages/search.json.ts`):** During the build phase, Astro's server engine crawls all Markdown files, extracts metadata, frontmatter, and compiles the raw text content (`.rawContent()`) into a strongly cached JSON search index.
-2. **Multi-Group Prioritization (`CommandPalette.astro`):** Client-side vanilla JS asynchronously fetches the index and filters queries in real-time. Results are grouped into distinct context tiers:
-   - **Documentation:** Primary matches against file titles, descriptions, and URL structures.
-   - **Commands:** Dynamically indexed actions extracted from static quick-links (e.g., install commands).
-   - **Text Mentions:** Deep matches found inside the raw markdown bodies.
-3. **Keyboard Navigation:** Complete accessibility integration. Global keydown listeners support seamless `↑` / `↓` indexing and `Enter` execution while safely locking focus in the input area.
+1. **`llms.txt` Pipeline:** We generate a highly concentrated, minified markdown file (`/llms.txt`) that agents can parse instantly to understand GitSetu's complete documentation without navigating complex HTML DOMs.
+2. **JSON-LD Semantic Web:** The site actively injects `SoftwareApplication` and `TechArticle` schemas. This explicitly defines our OS requirements (POSIX) and dependencies (Bash 3.2) directly to Google Rich Snippets for maximum organic discovery.
+
+---
+
+## 🔍 Offline-First Orama Search
+
+Our `⌘K` Command Palette abandons slow API requests and naive regex matching in favor of an **Offline-First Vector Search Engine**:
+
+1. **Build-Time Extraction:** Astro compiles all markdown into a raw `search.json` API endpoint.
+2. **Client-Side Indexing:** When a user opens the Command Palette, `@orama/orama` downloads the JSON and compiles a highly compressed binary `.trie` dictionary directly into browser memory.
+3. **Typo Tolerance:** Searches happen in sub-milliseconds with a built-in typo tolerance of 1 (e.g., searching "hardwre key" perfectly matches "Hardware Keys") without ever hitting a backend server.
+
+---
+
+## 💻 The Interactive Xterm Sandbox
+
+The hero section features a "Flawless Illusion" terminal demo to eliminate adoption friction.
+Instead of a static CSS animation or a massive WebAssembly download, we use **Xterm.js** coupled with a custom TypeScript State Machine. 
+
+Users can natively click the terminal, type `gitsetu setup`, and proceed through a perfect, keystroke-for-keystroke simulation of the cryptographic SSH-key generation process.
 
 ---
 
@@ -33,7 +50,7 @@ Unlike traditional static documentation sites that rely on heavy third-party ext
 
 To maintain a **Single Source of Truth (SSOT)**, all core documentation lives directly inside the home GitSetu CLI repository (`/docs/`). 
 
-Before every local development run or production build, the automated sync script (`scripts/sync_docs.sh`) safely purges the local target folders and dynamically imports, formats, and formats the latest pristine Markdown files.
+Before every local development run or production build, the automated sync script (`scripts/sync_docs.sh`) safely purges the local target folders and dynamically imports and formats the latest pristine Markdown files.
 
 ---
 
@@ -42,7 +59,7 @@ Before every local development run or production build, the automated sync scrip
 Ensure you have Node.js (v18+) installed.
 
 ```bash
-# 1. Install pristine dependencies
+# 1. Install dependencies (Astro, Orama, Xterm)
 npm install
 
 # 2. Start the local dev server (automatically triggers doc sync)
@@ -50,9 +67,6 @@ npm run dev
 
 # 3. Build optimized production assets
 npm run build
-
-# 4. Preview the local production build
-npm run preview
 ```
 
 ---
@@ -61,14 +75,16 @@ npm run preview
 
 ```text
 ├── scripts/
-│   └── sync_docs.sh        # Core documentation synchronization engine
+│   ├── sync_docs.sh        # Core documentation synchronization engine
+│   └── generate_llms.js    # Agentic SEO pipeline generator
 ├── src/
-│   ├── components/         # High-fidelity Astro components (BentoGrid, Hero, CommandPalette)
-│   ├── layouts/            # Base document wrappers & SEO header schemas
+│   ├── components/         # High-fidelity components (TerminalDemo, CommandPalette)
+│   ├── layouts/            # Base document wrappers & JSON-LD SEO schemas
 │   ├── pages/              # Primary routing (index.astro, search.json.ts)
 │   └── styles/             # Global design tokens & CSS system
+├── public/                 # Static assets (og-image.png, llms.txt)
 ├── astro.config.mjs        # Native Astro configuration
-└── package.json            # Project configurations
+└── package.json            # Project dependencies
 ```
 
 ---
