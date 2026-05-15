@@ -1,22 +1,23 @@
 ---
 ---
 
-<section class="philosophy section">
+<section class="philosophy reveal">
   <div class="container philosophy-inner">
     <div class="philosophy-text">
-      <p>
+      <p class="fade-text">
         In Sanskrit, Setu (सेतु) means bridge —<br />
         connecting two shores without disturbing either.
       </p>
-      <p>
-        GitSetu bridges the gap between the identities you orchestrate —<br />
-        human, CI pipeline, and autonomous AI agents.<br />
+      <div class="separator"></div>
+      <p class="fade-text delay-100">
+        Good security should not require developer discipline.<br />
         The question of "Who committed this?" is no longer personal;<br />
         it is architectural.
       </p>
-      <p class="philosophy-highlight">
-        A security tool that demands your attention has failed.<br />
-        GitSetu succeeds when your entire organization forgets it exists.
+      <div class="separator"></div>
+      <p class="philosophy-highlight delay-200">
+        A tool that demands your attention has failed.<br />
+        <span class="glow-text">GitSetu succeeds when you forget it exists.</span>
       </p>
     </div>
   </div>
@@ -24,8 +25,11 @@
 
 <style>
   .philosophy {
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border-subtle);
+    background: transparent;
+    padding-top: var(--space-6xl);
+    padding-bottom: var(--space-4xl);
+    position: relative;
+    z-index: 10;
   }
 
   .philosophy-inner {
@@ -41,38 +45,43 @@
     color: var(--text-secondary);
   }
 
-  .philosophy-text p {
-    margin-bottom: var(--space-xl);
+  .fade-text {
+    color: var(--text-muted);
+    transition: color var(--transition-base);
+  }
+  
+  .fade-text:hover {
+    color: var(--text-primary);
   }
 
-  .philosophy-text p:last-child {
-    margin-bottom: 0;
+  .separator {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, rgba(0, 229, 255, 0.3), transparent);
+    margin: var(--space-xl) auto;
   }
 
   .philosophy-highlight {
-    color: var(--text-heading);
-    font-weight: 600;
+    font-weight: 500;
     font-size: var(--text-2xl);
-    position: relative;
-    display: inline-block;
+    color: var(--text-heading);
+    letter-spacing: -0.02em;
   }
 
-  .philosophy-highlight::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 10%;
-    width: 80%;
-    height: 2px;
+  .glow-text {
     background: var(--gradient-accent);
-    opacity: 0.5;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(0, 229, 255, 0.4);
+    font-weight: 700;
+    display: inline-block;
+    margin-top: var(--space-md);
   }
 
   @media (max-width: 768px) {
     .philosophy-text {
       font-size: var(--text-lg);
     }
-    
     .philosophy-highlight {
       font-size: var(--text-xl);
     }

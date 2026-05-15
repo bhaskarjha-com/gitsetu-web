@@ -68,17 +68,17 @@ html {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
 
-  /* Fluid Typography using safe CSS Locks (@container) */
-  --text-xs: clamp(0.7rem, calc(0.65rem + 0.25cqw), 0.8rem);
-  --text-sm: clamp(0.8rem, calc(0.75rem + 0.25cqw), 0.9rem);
-  --text-base: clamp(1rem, calc(0.95rem + 0.25cqw), 1.1rem);
-  --text-lg: clamp(1.125rem, calc(1.06rem + 0.31cqw), 1.25rem);
-  --text-xl: clamp(1.25rem, calc(1.12rem + 0.62cqw), 1.5rem);
-  --text-2xl: clamp(1.5rem, calc(1.25rem + 1.25cqw), 2rem);
-  --text-3xl: clamp(2rem, calc(1.75rem + 1.25cqw), 2.5rem);
-  --text-4xl: clamp(2.5rem, calc(2rem + 2.5cqw), 3.5rem);
-  --text-5xl: clamp(3rem, calc(2.25rem + 3.75cqw), 4.5rem);
-  --text-6xl: clamp(3.5rem, calc(2.5rem + 5cqw), 5.5rem);
+  /* Fluid Typography using Viewport Width */
+  --text-xs: clamp(0.7rem, calc(0.65rem + 0.25vw), 0.8rem);
+  --text-sm: clamp(0.8rem, calc(0.75rem + 0.25vw), 0.9rem);
+  --text-base: clamp(1rem, calc(0.95rem + 0.25vw), 1.1rem);
+  --text-lg: clamp(1.125rem, calc(1.06rem + 0.31vw), 1.25rem);
+  --text-xl: clamp(1.25rem, calc(1.12rem + 0.62vw), 1.5rem);
+  --text-2xl: clamp(1.5rem, calc(1.25rem + 1.25vw), 2rem);
+  --text-3xl: clamp(2rem, calc(1.75rem + 1.25vw), 2.5rem);
+  --text-4xl: clamp(2.5rem, calc(2rem + 2.5vw), 3.5rem);
+  --text-5xl: clamp(3rem, calc(2.25rem + 3.75vw), 4.5rem);
+  --text-6xl: clamp(3.5rem, calc(2.5rem + 5vw), 5.5rem);
 
   /* Border radius */
   --radius-sm: 0.375rem;
@@ -122,17 +122,14 @@ html {
 /* --- Base Typography --- */
 html {
   background-color: var(--bg-primary);
-  overflow-y: auto;
   overflow-x: hidden;
 }
 
 body {
-  max-width: 100%;
-  overflow-x: hidden;
   background-color: transparent;
-  /* Deep Space Noise / Grid */
+  /* Deep Space Noise / Grid / Spotlight */
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.05) 0%, transparent 80%),
+    radial-gradient(circle 800px at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(0, 229, 255, 0.03) 0%, transparent 100%),
     linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
   background-size: 100% 100%, 40px 40px, 40px 40px;

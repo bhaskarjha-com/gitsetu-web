@@ -1,29 +1,32 @@
 ---
 const trustSignals = [
   {
-    title: 'Zero-Trust Identity Guard',
-    desc: 'Fail-closed architecture definitively blocks commits if your active email does not strictly match the required profile. Never leak a key again.'
+    title: 'Fleet-Wide Compliance',
+    desc: 'Standardize cryptographic signing and identity isolation across hundreds of workstations instantly.'
   },
   {
     title: 'CI/CD Headless Ready',
-    desc: 'Fail-safe orchestration for CI runners. Eliminates the non-human identity credential risk in automated build pipelines.'
+    desc: 'Fail-safe routing for CI runners. Eliminates the non-human identity credential risk in automated pipelines.'
   },
   {
-    title: 'Hardware-Backed Keys',
-    desc: 'Natively generates Ed25519 and FIDO2 (ed25519-sk) hardware-backed SSH keys out of the box for maximum enterprise compliance.'
+    title: 'Zero-State Provisioning',
+    desc: 'Onboard new engineers in seconds. Encrypted profile portability guarantees an identical secure environment anywhere.'
   },
   {
     title: 'Agentic Development Stack',
-    desc: 'The missing identity layer for the AI era. Provide structured, scoped cryptographic authorization for autonomous developer agents.'
+    desc: 'The missing identity layer for the AI era. Provide structured, scoped cryptographic authorization for autonomous agents.'
   }
 ];
 ---
 
-<section class="enterprise section">
+<section class="enterprise section reveal" id="enterprise">
   <div class="container">
-    <h2 class="section-title">The identity security layer for teams and CI/CD.</h2>
+    <div class="enterprise-header reveal delay-100">
+      <h2 class="section-title">Architected for human and <span class="accent-text">non-human identities.</span></h2>
+      <p class="section-subtitle">A unified identity fabric that scales from local developer environments to fleet-wide deployments and headless pipelines.</p>
+    </div>
     
-    <div class="signals-grid">
+    <div class="signals-grid reveal delay-200">
       {trustSignals.map((signal) => (
         <div class="signal-card">
           <h3 class="signal-title">{signal.title}</h3>
@@ -37,6 +40,10 @@ const trustSignals = [
 <style>
   .enterprise {
     background: var(--bg-primary);
+  }
+
+  .enterprise-header {
+    margin-bottom: var(--space-4xl);
   }
 
   .signals-grid {

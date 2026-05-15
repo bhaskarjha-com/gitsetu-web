@@ -22,10 +22,14 @@
       <!-- Connection Lines -->
       <svg class="connection-lines" width="100%" height="100%">
         <!-- Work Path -->
-        <path class="line-path work-path" d="" />
+        <path id="work-line" class="line-path work-path" d="" />
         <!-- Personal Path -->
-        <path class="line-path personal-path" d="" />
+        <path id="personal-line" class="line-path personal-path" d="" />
       </svg>
+      
+      <!-- Data Orbs -->
+      <div class="data-orb work-orb"></div>
+      <div class="data-orb personal-orb"></div>
 
       <!-- Work Environment Node -->
       <div class="env-node work-node">
@@ -156,13 +160,38 @@
     fill: none;
     stroke: var(--border-subtle);
     stroke-width: 2;
-    stroke-dasharray: 6 6;
-    animation: dashFlow 20s linear infinite;
   }
 
   .work-path {
-    stroke: var(--accent-primary);
-    filter: drop-shadow(0 0 8px var(--accent-primary));
+    stroke: rgba(0, 229, 255, 0.2);
+  }
+
+  /* Data Orbs */
+  .data-orb {
+    position: absolute;
+    top: 0; left: 0;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    offset-distance: 0%;
+    z-index: 6;
+  }
+  .work-orb {
+    background: var(--accent-primary);
+    box-shadow: 0 0 15px var(--accent-primary), 0 0 30px var(--accent-primary);
+    offset-path: var(--work-path);
+    animation: flowOrb 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+  .personal-orb {
+    background: var(--text-secondary);
+    box-shadow: 0 0 15px var(--text-secondary);
+    offset-path: var(--personal-path);
+    animation: flowOrb 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.25s;
+  }
+  @keyframes flowOrb {
+    0% { offset-distance: 0%; opacity: 0; transform: scale(0.5); }
+    10% { opacity: 1; transform: scale(1); }
+    90% { opacity: 1; transform: scale(1); }
+    100% { offset-distance: 100%; opacity: 0; transform: scale(2); }
   }
 
   /* Environment Nodes */
@@ -181,11 +210,18 @@
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
   }
 
+  /* Node Heartbeat */
+  @keyframes nodeHeartbeat {
+    0%, 90% { box-shadow: 0 0 20px rgba(0, 229, 255, 0.05); }
+    95% { box-shadow: 0 0 40px rgba(0, 229, 255, 0.4), inset 0 0 20px rgba(0, 229, 255, 0.2); border-color: rgba(0, 229, 255, 0.8); }
+    100% { box-shadow: 0 0 20px rgba(0, 229, 255, 0.05); }
+  }
+
   .work-node {
     top: 20%;
     left: 10%;
     border-color: rgba(0, 229, 255, 0.4);
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.05);
+    animation: nodeHeartbeat 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
   .personal-node {
@@ -319,6 +355,10 @@
     // Draw curves
     workPath.setAttribute('d', `M ${dx} ${dy} C ${dx} ${wy}, ${wx} ${dy}, ${wx} ${wy}`);
     personalPath.setAttribute('d', `M ${dx} ${dy} C ${dx} ${py}, ${px} ${dy}, ${px} ${py}`);
+    
+    // Set variables for offset-path
+    document.documentElement.style.setProperty('--work-path', `path('M ${dx} ${dy} C ${dx} ${wy}, ${wx} ${dy}, ${wx} ${wy}')`);
+    document.documentElement.style.setProperty('--personal-path', `path('M ${dx} ${dy} C ${dx} ${py}, ${px} ${dy}, ${px} ${py}')`);
   }
 
   document.addEventListener('astro:page-load', () => {
