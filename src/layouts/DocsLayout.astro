@@ -529,32 +529,14 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     border: none;
   }
 
-  /* GitHub Alerts Styling */
+  /* Standard Blockquote Styling */
   .markdown-body blockquote {
     padding: var(--space-md) var(--space-lg);
     margin-bottom: var(--space-lg);
     border-radius: var(--radius-md);
     color: var(--text-primary);
     background: rgba(255, 255, 255, 0.02);
-    border-left: 4px solid var(--text-muted);
-  }
-
-  /* Target lines inside blockquotes that look like [!NOTE] etc */
-  .markdown-body blockquote:has(p:first-child:contains("[!NOTE]")) {
-    border-left-color: var(--text-heading);
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .markdown-body blockquote:has(p:first-child:contains("[!WARNING]")),
-  .markdown-body blockquote:has(p:first-child:contains("[!TIP]")) {
-    border-left-color: var(--color-warning);
-    background: rgba(245, 158, 11, 0.05);
-  }
-
-  .markdown-body blockquote:has(p:first-child:contains("[!IMPORTANT]")),
-  .markdown-body blockquote:has(p:first-child:contains("[!CAUTION]")) {
-    border-left-color: var(--color-error);
-    background: rgba(239, 68, 68, 0.05);
+    border-left: 4px solid var(--accent-primary);
   }
 
   .markdown-body table {

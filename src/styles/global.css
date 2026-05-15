@@ -23,7 +23,6 @@ html {
   --bg-secondary: #080808;
   --bg-tertiary: #121212;
   --bg-code: rgba(255, 255, 255, 0.03);
-  --bg-nav: rgba(0, 0, 0, 0.7);
 
   /* Text (Titanium Silver to White) */
   --text-primary: #ededed;
@@ -43,8 +42,6 @@ html {
   --color-error: #ef4444;
 
   /* Gradients */
-  --gradient-hero: linear-gradient(180deg, #000000 0%, #080808 100%);
-  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
   --gradient-accent: linear-gradient(135deg, #00c4cc 0%, #0ea5e9 100%);
   --gradient-accent-text: linear-gradient(135deg, #00c4cc 0%, #0ea5e9 100%);
 
