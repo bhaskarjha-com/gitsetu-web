@@ -34,7 +34,6 @@
     term: any = null;
     demoTimeout: any = null;
     processingInterval: any = null;
-    visibilityObserver: IntersectionObserver | null = null;
     abortController: AbortController | null = null;
     
     isAutoDemo = true;
@@ -45,15 +44,18 @@
     
     prompt = '\x1b[1;32m~\x1b[0m \x1b[1;36m❯\x1b[0m ';
 
-    connectedCallback() {
+    setup() {
+      if (this.abortController) return; // Prevent double initialization
       this.abortController = new AbortController();
       
-      // Execute on next tick to ensure inner HTML is fully parsed by the browser
-      setTimeout(() => {
-        if (this.isConnected) {
-          this.initObserver();
+      const container = this.querySelector('#terminal-container') as HTMLElement;
+      if (!container) return;
+
+      this.initTerminal(container).then(() => {
+        if (this.isAutoDemo && !this.isDemoRunning) {
+          this.runAutoDemo();
         }
-      }, 0);
+      });
     }
 
     disconnectedCallback() {
@@ -86,25 +88,7 @@
       if (container) container.innerHTML = '';
     }
 
-    initObserver() {
-      if (this.visibilityObserver) return;
-      
-      const container = this.querySelector('#terminal-container') as HTMLElement;
-      if (!container) return;
-
-      this.visibilityObserver = new IntersectionObserver(async (entries) => {
-        if (entries[0].isIntersecting) {
-          if (!this.term) {
-            await this.initTerminal(container);
-          }
-          if (this.isAutoDemo && !this.isDemoRunning) {
-            this.runAutoDemo();
-            if (this.visibilityObserver) this.visibilityObserver.disconnect();
-          }
-        }
-      }, { threshold: 0.1 });
-      this.visibilityObserver.observe(container);
-    }
+    // IntersectionObserver removed for guaranteed synchronous initialization
 
     async initTerminal(container: HTMLElement) {
       const demoBtn = this.querySelector('#mode-demo') as HTMLElement;
@@ -401,6 +385,14 @@
   if (typeof window !== 'undefined' && !customElements.get('gitsetu-terminal')) {
     customElements.define('gitsetu-terminal', GitsetuTerminal);
   }
+
+  // Astro's official lifecycle hook guarantees CSS is loaded and layout is stable
+  // This prevents Xterm.js from measuring a 0x0 container on initial Cloudflare loads
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('gitsetu-terminal').forEach(el => {
+      (el as GitsetuTerminal).setup();
+    });
+  });
 </script>
 
 <style>
