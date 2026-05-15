@@ -173,7 +173,7 @@
     width: 12px; height: 12px;
     border-radius: 50%;
     offset-distance: 0%;
-    z-index: 6;
+    z-index: 4; /* Travels UNDER the env-nodes for 3D depth */
   }
   .work-orb {
     background: var(--accent-primary);
@@ -227,7 +227,15 @@
   .personal-node {
     bottom: 20%;
     right: 10%;
-    opacity: 0.7;
+    border-color: rgba(255, 255, 255, 0.1);
+    animation: personalHeartbeat 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.25s;
+    opacity: 0.85;
+  }
+
+  @keyframes personalHeartbeat {
+    0%, 90% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.02); }
+    95% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.3); }
+    100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.02); }
   }
 
   .env-header {
@@ -314,12 +322,13 @@
     }
 
     .connection-lines {
-      display: none; /* Simplify mobile view */
+      opacity: 0.6; /* Ensure lines are visible on mobile to guide the orbs */
     }
 
     .env-node {
       width: 100%;
       max-width: 320px;
+      margin: 0 auto;
     }
   }
 </style>
@@ -352,22 +361,43 @@
     const px = pRect.left + pRect.width / 2 - svgRect.left;
     const py = pRect.top + pRect.height / 2 - svgRect.top;
 
-    // Draw curves
-    workPath.setAttribute('d', `M ${cx} ${cy} C ${cx} ${wy}, ${wx} ${cy}, ${wx} ${wy}`);
-    personalPath.setAttribute('d', `M ${cx} ${cy} C ${cx} ${py}, ${px} ${cy}, ${px} ${py}`);
-    
-    // Set variables for offset-path
-    document.documentElement.style.setProperty('--work-path', `path('M ${cx} ${cy} C ${cx} ${wy}, ${wx} ${cy}, ${wx} ${wy}')`);
-    document.documentElement.style.setProperty('--personal-path', `path('M ${cx} ${cy} C ${cx} ${py}, ${px} ${cy}, ${px} ${py}')`);
+    const isMobile = window.innerWidth <= 800;
+
+    if (isMobile) {
+      // 2-lane data bus vertical flow for mobile
+      const laneOffset = 15;
+      
+      const wPathStr = `M ${cx - laneOffset} ${cy} L ${wx - laneOffset} ${wy}`;
+      const pPathStr = `M ${cx + laneOffset} ${cy} L ${px + laneOffset} ${py}`;
+      
+      workPath.setAttribute('d', wPathStr);
+      personalPath.setAttribute('d', pPathStr);
+      
+      document.documentElement.style.setProperty('--work-path', `path('${wPathStr}')`);
+      document.documentElement.style.setProperty('--personal-path', `path('${pPathStr}')`);
+    } else {
+      // Curved desktop paths
+      const wPathStr = `M ${cx} ${cy} C ${cx} ${wy}, ${wx} ${cy}, ${wx} ${wy}`;
+      const pPathStr = `M ${cx} ${cy} C ${cx} ${py}, ${px} ${cy}, ${px} ${py}`;
+      
+      workPath.setAttribute('d', wPathStr);
+      personalPath.setAttribute('d', pPathStr);
+      
+      document.documentElement.style.setProperty('--work-path', `path('${wPathStr}')`);
+      document.documentElement.style.setProperty('--personal-path', `path('${pPathStr}')`);
+    }
   }
 
   document.addEventListener('astro:page-load', () => {
-    drawLines();
-    const stage = document.querySelector('.visualizer-stage');
-    if (stage) {
-      resizeObserver = new ResizeObserver(drawLines);
-      resizeObserver.observe(stage);
-    }
+    // Delay ensures CSS layout is firmly painted before calculating bezier paths
+    setTimeout(() => {
+      drawLines();
+      const stage = document.querySelector('.visualizer-stage');
+      if (stage) {
+        resizeObserver = new ResizeObserver(drawLines);
+        resizeObserver.observe(stage);
+      }
+    }, 100);
   });
 
   document.addEventListener('astro:before-swap', () => {
