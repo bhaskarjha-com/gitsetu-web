@@ -10,8 +10,8 @@
 
     <div class="visualizer-stage reveal delay-200">
       
-      <!-- Central Hub / Daemon -->
-      <div class="daemon-node">
+      <!-- Central Hub / Core Engine -->
+      <div class="core-node">
         <div class="pulse-ring"></div>
         <div class="node-inner">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -106,8 +106,8 @@
     opacity: 0.5;
   }
 
-  /* Central Daemon Node */
-  .daemon-node {
+  /* Central Core Engine Node */
+  .core-node {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -304,7 +304,7 @@
       gap: var(--space-3xl);
     }
 
-    .daemon-node, .env-node {
+    .core-node, .env-node {
       position: relative;
       top: auto;
       left: auto;
@@ -328,23 +328,23 @@
   let resizeObserver: ResizeObserver | null = null;
 
   function drawLines() {
-    const daemon = document.querySelector('.daemon-node');
+    const core = document.querySelector('.core-node');
     const work = document.querySelector('.work-node');
     const personal = document.querySelector('.personal-node');
     const svg = document.querySelector('.connection-lines');
     const workPath = document.querySelector('.work-path');
     const personalPath = document.querySelector('.personal-path');
     
-    if (!daemon || !work || !personal || !svg || !workPath || !personalPath) return;
+    if (!core || !work || !personal || !svg || !workPath || !personalPath) return;
 
     const svgRect = svg.getBoundingClientRect();
-    const dRect = daemon.getBoundingClientRect();
+    const cRect = core.getBoundingClientRect();
     const wRect = work.getBoundingClientRect();
     const pRect = personal.getBoundingClientRect();
 
     // Center coordinates relative to SVG
-    const dx = dRect.left + dRect.width / 2 - svgRect.left;
-    const dy = dRect.top + dRect.height / 2 - svgRect.top;
+    const cx = cRect.left + cRect.width / 2 - svgRect.left;
+    const cy = cRect.top + cRect.height / 2 - svgRect.top;
     
     const wx = wRect.left + wRect.width / 2 - svgRect.left;
     const wy = wRect.top + wRect.height / 2 - svgRect.top;
@@ -353,12 +353,12 @@
     const py = pRect.top + pRect.height / 2 - svgRect.top;
 
     // Draw curves
-    workPath.setAttribute('d', `M ${dx} ${dy} C ${dx} ${wy}, ${wx} ${dy}, ${wx} ${wy}`);
-    personalPath.setAttribute('d', `M ${dx} ${dy} C ${dx} ${py}, ${px} ${dy}, ${px} ${py}`);
+    workPath.setAttribute('d', `M ${cx} ${cy} C ${cx} ${wy}, ${wx} ${cy}, ${wx} ${wy}`);
+    personalPath.setAttribute('d', `M ${cx} ${cy} C ${cx} ${py}, ${px} ${cy}, ${px} ${py}`);
     
     // Set variables for offset-path
-    document.documentElement.style.setProperty('--work-path', `path('M ${dx} ${dy} C ${dx} ${wy}, ${wx} ${dy}, ${wx} ${wy}')`);
-    document.documentElement.style.setProperty('--personal-path', `path('M ${dx} ${dy} C ${dx} ${py}, ${px} ${dy}, ${px} ${py}')`);
+    document.documentElement.style.setProperty('--work-path', `path('M ${cx} ${cy} C ${cx} ${wy}, ${wx} ${cy}, ${wx} ${wy}')`);
+    document.documentElement.style.setProperty('--personal-path', `path('M ${cx} ${cy} C ${cx} ${py}, ${px} ${cy}, ${px} ${py}')`);
   }
 
   document.addEventListener('astro:page-load', () => {
