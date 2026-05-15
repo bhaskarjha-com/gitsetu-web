@@ -1,6 +1,7 @@
 ---
 ---
 
+<visual-capabilities>
 <section class="capabilities-section section reveal" id="capabilities">
   <div class="capabilities-container container">
     <div class="capabilities-header reveal delay-100">
@@ -72,6 +73,7 @@
     </div>
   </div>
 </section>
+</visual-capabilities>
 
 <style>
   .capabilities-container {
@@ -334,76 +336,79 @@
 </style>
 
 <script>
-  let resizeObserver: ResizeObserver | null = null;
+  class VisualCapabilities extends HTMLElement {
+    private resizeObserver: ResizeObserver | null = null;
 
-  function drawLines() {
-    const core = document.querySelector('.core-node');
-    const work = document.querySelector('.work-node');
-    const personal = document.querySelector('.personal-node');
-    const svg = document.querySelector('.connection-lines');
-    const workPath = document.querySelector('.work-path');
-    const personalPath = document.querySelector('.personal-path');
-    
-    if (!core || !work || !personal || !svg || !workPath || !personalPath) return;
+    connectedCallback() {
+      const stage = this.querySelector('.visualizer-stage');
+      if (!stage) return;
+      
+      // Native ResizeObserver guarantees CSS is fully painted and dimensions are accurate
+      this.resizeObserver = new ResizeObserver(() => this.drawLines());
+      this.resizeObserver.observe(stage);
+    }
 
-    const svgRect = svg.getBoundingClientRect();
-    const cRect = core.getBoundingClientRect();
-    const wRect = work.getBoundingClientRect();
-    const pRect = personal.getBoundingClientRect();
+    disconnectedCallback() {
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+        this.resizeObserver = null;
+      }
+    }
 
-    // Center coordinates relative to SVG
-    const cx = cRect.left + cRect.width / 2 - svgRect.left;
-    const cy = cRect.top + cRect.height / 2 - svgRect.top;
-    
-    const wx = wRect.left + wRect.width / 2 - svgRect.left;
-    const wy = wRect.top + wRect.height / 2 - svgRect.top;
-    
-    const px = pRect.left + pRect.width / 2 - svgRect.left;
-    const py = pRect.top + pRect.height / 2 - svgRect.top;
+    drawLines() {
+      const core = this.querySelector('.core-node');
+      const work = this.querySelector('.work-node');
+      const personal = this.querySelector('.personal-node');
+      const svg = this.querySelector('.connection-lines');
+      const workPath = this.querySelector('.work-path');
+      const personalPath = this.querySelector('.personal-path');
+      
+      if (!core || !work || !personal || !svg || !workPath || !personalPath) return;
 
-    const isMobile = window.innerWidth <= 800;
+      const svgRect = svg.getBoundingClientRect();
+      const cRect = core.getBoundingClientRect();
+      const wRect = work.getBoundingClientRect();
+      const pRect = personal.getBoundingClientRect();
 
-    if (isMobile) {
-      // 2-lane data bus vertical flow for mobile
-      const laneOffset = 15;
+      // Center coordinates relative to SVG
+      const cx = cRect.left + cRect.width / 2 - svgRect.left;
+      const cy = cRect.top + cRect.height / 2 - svgRect.top;
       
-      const wPathStr = `M ${cx - laneOffset} ${cy} L ${wx - laneOffset} ${wy}`;
-      const pPathStr = `M ${cx + laneOffset} ${cy} L ${px + laneOffset} ${py}`;
+      const wx = wRect.left + wRect.width / 2 - svgRect.left;
+      const wy = wRect.top + wRect.height / 2 - svgRect.top;
       
-      workPath.setAttribute('d', wPathStr);
-      personalPath.setAttribute('d', pPathStr);
-      
-      document.documentElement.style.setProperty('--work-path', `path('${wPathStr}')`);
-      document.documentElement.style.setProperty('--personal-path', `path('${pPathStr}')`);
-    } else {
-      // Curved desktop paths
-      const wPathStr = `M ${cx} ${cy} C ${cx} ${wy}, ${wx} ${cy}, ${wx} ${wy}`;
-      const pPathStr = `M ${cx} ${cy} C ${cx} ${py}, ${px} ${cy}, ${px} ${py}`;
-      
-      workPath.setAttribute('d', wPathStr);
-      personalPath.setAttribute('d', pPathStr);
-      
-      document.documentElement.style.setProperty('--work-path', `path('${wPathStr}')`);
-      document.documentElement.style.setProperty('--personal-path', `path('${pPathStr}')`);
+      const px = pRect.left + pRect.width / 2 - svgRect.left;
+      const py = pRect.top + pRect.height / 2 - svgRect.top;
+
+      const isMobile = window.innerWidth <= 800;
+
+      if (isMobile) {
+        // 2-lane data bus vertical flow for mobile
+        const laneOffset = 15;
+        
+        const wPathStr = `M ${cx - laneOffset} ${cy} L ${wx - laneOffset} ${wy}`;
+        const pPathStr = `M ${cx + laneOffset} ${cy} L ${px + laneOffset} ${py}`;
+        
+        workPath.setAttribute('d', wPathStr);
+        personalPath.setAttribute('d', pPathStr);
+        
+        document.documentElement.style.setProperty('--work-path', `path('${wPathStr}')`);
+        document.documentElement.style.setProperty('--personal-path', `path('${pPathStr}')`);
+      } else {
+        // Curved desktop paths
+        const wPathStr = `M ${cx} ${cy} C ${cx} ${wy}, ${wx} ${cy}, ${wx} ${wy}`;
+        const pPathStr = `M ${cx} ${cy} C ${cx} ${py}, ${px} ${cy}, ${px} ${py}`;
+        
+        workPath.setAttribute('d', wPathStr);
+        personalPath.setAttribute('d', pPathStr);
+        
+        document.documentElement.style.setProperty('--work-path', `path('${wPathStr}')`);
+        document.documentElement.style.setProperty('--personal-path', `path('${pPathStr}')`);
+      }
     }
   }
 
-  document.addEventListener('astro:page-load', () => {
-    // Delay ensures CSS layout is firmly painted before calculating bezier paths
-    setTimeout(() => {
-      drawLines();
-      const stage = document.querySelector('.visualizer-stage');
-      if (stage) {
-        resizeObserver = new ResizeObserver(drawLines);
-        resizeObserver.observe(stage);
-      }
-    }, 100);
-  });
-
-  document.addEventListener('astro:before-swap', () => {
-    if (resizeObserver) {
-      resizeObserver.disconnect();
-      resizeObserver = null;
-    }
-  });
+  if (typeof window !== 'undefined' && !customElements.get('visual-capabilities')) {
+    customElements.define('visual-capabilities', VisualCapabilities);
+  }
 </script>

@@ -1,4 +1,5 @@
 ---
+import '@xterm/xterm/css/xterm.css';
 ---
 
 <gitsetu-terminal>
@@ -44,13 +45,29 @@
     
     prompt = '\x1b[1;32m~\x1b[0m \x1b[1;36m❯\x1b[0m ';
 
-    setup() {
-      if (this.abortController) return; // Prevent double initialization
-      this.abortController = new AbortController();
-      
+    connectedCallback() {
+      // First Principle: Xterm.js strictly requires painted physical dimensions to boot.
+      // We use a native ResizeObserver to deterministically wait until the browser 
+      // has fully parsed the DOM and applied all CSS to the container.
+      // This completely bypasses any Astro routing race conditions or Cloudflare deferred execution bugs.
       const container = this.querySelector('#terminal-container') as HTMLElement;
       if (!container) return;
 
+      const observer = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+            observer.disconnect(); // Stop observing once painted
+            if (!this.abortController) { // Prevent double initialization
+              this.setup(container);
+            }
+          }
+        }
+      });
+      observer.observe(container);
+    }
+
+    setup(container: HTMLElement) {
+      this.abortController = new AbortController();
       this.initTerminal(container).then(() => {
         if (this.isAutoDemo && !this.isDemoRunning) {
           this.runAutoDemo();
@@ -98,9 +115,8 @@
       this.cleanup();
       container.innerHTML = '';
 
-      // Dynamic import to prevent bundle bloat
+      // Dynamic import to prevent bundle bloat (CSS is statically imported in frontmatter)
       const { Terminal } = await import('@xterm/xterm');
-      await import('@xterm/xterm/css/xterm.css');
 
       this.term = new Terminal({
         cols: 70, // Fixed safe column count that fits the 600px container perfectly
@@ -385,14 +401,6 @@
   if (typeof window !== 'undefined' && !customElements.get('gitsetu-terminal')) {
     customElements.define('gitsetu-terminal', GitsetuTerminal);
   }
-
-  // Astro's official lifecycle hook guarantees CSS is loaded and layout is stable
-  // This prevents Xterm.js from measuring a 0x0 container on initial Cloudflare loads
-  document.addEventListener('astro:page-load', () => {
-    document.querySelectorAll('gitsetu-terminal').forEach(el => {
-      (el as GitsetuTerminal).setup();
-    });
-  });
 </script>
 
 <style>

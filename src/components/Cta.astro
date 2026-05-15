@@ -1,6 +1,7 @@
 ---
 ---
 
+<gitsetu-cta>
 <section class="cta-section section reveal">
   <div class="event-horizon-container">
     <div class="event-horizon"></div>
@@ -23,18 +24,25 @@
     </div>
   </div>
 </section>
+</gitsetu-cta>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
-    const ctaSection = document.querySelector('.cta-section') as HTMLElement;
-    if (ctaSection) {
-      ctaSection.addEventListener('mousemove', (e) => {
-        const rect = ctaSection.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        ctaSection.style.setProperty('--mouse-x', `${x}%`);
-      });
+  class GitsetuCta extends HTMLElement {
+    connectedCallback() {
+      const ctaSection = this.querySelector('.cta-section') as HTMLElement;
+      if (ctaSection) {
+        ctaSection.addEventListener('mousemove', (e: MouseEvent) => {
+          const rect = ctaSection.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          ctaSection.style.setProperty('--mouse-x', `${x}%`);
+        });
+      }
     }
-  });
+  }
+
+  if (typeof window !== 'undefined' && !customElements.get('gitsetu-cta')) {
+    customElements.define('gitsetu-cta', GitsetuCta);
+  }
 </script>
 
 <style>
