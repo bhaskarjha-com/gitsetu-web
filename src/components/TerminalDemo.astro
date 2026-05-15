@@ -36,7 +36,6 @@
     processingInterval: any = null;
     visibilityObserver: IntersectionObserver | null = null;
     abortController: AbortController | null = null;
-    pageLoadHandler: (() => void) | null = null;
     
     isAutoDemo = true;
     isDemoRunning = false;
@@ -49,27 +48,16 @@
     connectedCallback() {
       this.abortController = new AbortController();
       
-      const setup = () => {
-        if (!this.isConnected) return;
-        this.initObserver();
-      };
-
-      document.addEventListener('astro:page-load', setup);
-      this.pageLoadHandler = setup;
-
-      // Fallback for initial load
-      if (document.readyState === 'complete') {
-        setTimeout(setup, 100);
-      } else {
-        window.addEventListener('load', setup, { once: true });
-      }
+      // Execute on next tick to ensure inner HTML is fully parsed by the browser
+      setTimeout(() => {
+        if (this.isConnected) {
+          this.initObserver();
+        }
+      }, 0);
     }
 
     disconnectedCallback() {
       this.cleanup();
-      if (this.pageLoadHandler) {
-        document.removeEventListener('astro:page-load', this.pageLoadHandler);
-      }
     }
 
     cleanup() {
