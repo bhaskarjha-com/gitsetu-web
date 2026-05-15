@@ -21,7 +21,7 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     <meta name="description" content="GitSetu Documentation" />
     <title>{frontmatter.title} | GitSetu Docs</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <ClientRouter />
 
     <!-- Dynamic Open Graph -->
@@ -291,17 +291,20 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
     transition: all var(--transition-fast);
     font-size: var(--text-sm);
     margin-left: calc(var(--space-sm) * -1);
+    border-left: 2px solid transparent;
   }
 
   .sidebar-nav a:hover {
     color: var(--text-heading);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
+    border-left-color: rgba(255, 255, 255, 0.1);
   }
 
   .sidebar-nav a.active {
-    color: var(--accent-primary);
-    background: rgba(0, 229, 255, 0.05);
+    color: var(--text-heading);
+    background: rgba(255, 255, 255, 0.05);
     font-weight: 500;
+    border-left-color: var(--accent-primary);
   }
 
   /* Content area */
@@ -474,14 +477,14 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
   }
 
   .markdown-body a {
-    color: var(--accent-primary);
+    color: var(--text-heading);
     text-decoration: underline;
-    text-decoration-color: rgba(0, 229, 255, 0.3);
+    text-decoration-color: rgba(255, 255, 255, 0.2);
     text-underline-offset: 2px;
   }
 
   .markdown-body a:hover {
-    text-decoration-color: var(--accent-primary);
+    text-decoration-color: var(--text-heading);
   }
 
   .markdown-body code {
@@ -495,13 +498,27 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
   }
 
   .markdown-body pre {
-    background: var(--bg-code);
-    padding: var(--space-lg);
+    background: var(--bg-secondary);
+    padding: var(--space-lg) var(--space-lg) var(--space-md) var(--space-lg);
     border-radius: var(--radius-lg);
     overflow-x: auto;
     margin-bottom: var(--space-lg);
-    border: 1px solid var(--border-card);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    padding-top: 40px; /* Space for macos dots */
+  }
+
+  .markdown-body pre::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ef4444;
+    box-shadow: 18px 0 0 #f59e0b, 36px 0 0 #10b981;
   }
 
   .markdown-body pre code {
@@ -524,8 +541,8 @@ const editUrl = `https://github.com/bhaskarjha-com/gitsetu/tree/main/docs`;
 
   /* Target lines inside blockquotes that look like [!NOTE] etc */
   .markdown-body blockquote:has(p:first-child:contains("[!NOTE]")) {
-    border-left-color: var(--accent-primary);
-    background: rgba(0, 229, 255, 0.05);
+    border-left-color: var(--text-heading);
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .markdown-body blockquote:has(p:first-child:contains("[!WARNING]")),

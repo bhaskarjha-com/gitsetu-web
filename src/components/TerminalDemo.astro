@@ -126,16 +126,16 @@
         fontSize: 13,
         theme: {
           background: 'transparent',
-          foreground: '#d4d4d8',
-          cursor: '#00e5ff',
+          foreground: '#ededed',
+          cursor: '#ffffff',
           black: '#000000',
-          red: '#ff5f56',
-          green: '#27c93f',
-          yellow: '#ffbd2e',
-          blue: '#00e5ff',
-          magenta: '#ff79c6',
-          cyan: '#8be9fd',
-          white: '#bfbfbf'
+          red: '#ef4444',
+          green: '#10b981',
+          yellow: '#f59e0b',
+          blue: '#e2e8f0',
+          magenta: '#a1a1aa',
+          cyan: '#ffffff',
+          white: '#ffffff'
         },
         allowTransparency: true,
         disableStdin: false
@@ -407,13 +407,13 @@
   .terminal-window {
     width: 100%;
     margin: 0 auto;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(5, 5, 5, 0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl);
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 1), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 1), 0 0 0 1px rgba(255, 255, 255, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     position: relative;
     text-align: left; /* Fix inherited text-align: center from Hero.astro on mobile */
   }
@@ -441,9 +441,9 @@
     border-radius: 50%;
   }
 
-  .terminal-dot.red { background: #ff5f56; }
-  .terminal-dot.yellow { background: #ffbd2e; }
-  .terminal-dot.green { background: #27c93f; }
+  .terminal-dot.red { background: #ef4444; }
+  .terminal-dot.yellow { background: #f59e0b; }
+  .terminal-dot.green { background: #10b981; }
 
   .terminal-title {
     color: var(--text-muted);

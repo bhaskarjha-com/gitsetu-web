@@ -18,40 +18,40 @@ html {
 
 /* --- Custom Properties --- */
 :root {
-  /* Background layers (Deep Space Theme - OLED Blacks) */
+  /* Background layers (Zero-Trust Obsidian) */
   --bg-primary: #000000;
-  --bg-secondary: #050505;
-  --bg-tertiary: #0a0a0a;
-  --bg-code: #030303;
-  --bg-nav: rgba(0, 0, 0, 0.6);
+  --bg-secondary: #080808;
+  --bg-tertiary: #121212;
+  --bg-code: rgba(255, 255, 255, 0.03);
+  --bg-nav: rgba(0, 0, 0, 0.7);
 
-  /* Text */
+  /* Text (Titanium Silver to White) */
   --text-primary: #ededed;
   --text-secondary: #a1a1aa;
   --text-heading: #ffffff;
   --text-muted: #71717a;
 
-  /* Brand accent (Cyan/Teal - Deep Space Glow) */
-  --accent-primary: #00e5ff;
-  --accent-secondary: #00bfff;
-  --accent-glow: rgba(0, 229, 255, 0.15);
-  --accent-glow-strong: rgba(0, 229, 255, 0.3);
+  /* Brand accent (Monochrome / Silver-Blue) */
+  --accent-primary: #e2e8f0;
+  --accent-secondary: #ffffff;
+  --accent-glow: rgba(255, 255, 255, 0.06);
+  --accent-glow-strong: rgba(255, 255, 255, 0.12);
 
   /* Status colors */
-  --color-success: #22c55e;
-  --color-warning: #eab308;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
   --color-error: #ef4444;
 
   /* Gradients */
-  --gradient-hero: linear-gradient(180deg, #000000 0%, #050505 100%);
-  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
-  --gradient-accent: linear-gradient(90deg, #00e5ff 0%, #00bfff 100%);
-  --gradient-accent-text: linear-gradient(90deg, #ffffff 0%, #a1a1aa 100%);
+  --gradient-hero: linear-gradient(180deg, #000000 0%, #080808 100%);
+  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  --gradient-accent: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  --gradient-accent-text: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
 
-  /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-card: rgba(255, 255, 255, 0.12);
-  --border-accent: rgba(0, 229, 255, 0.4);
+  /* Borders (Ultra-thin glass) */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-card: rgba(255, 255, 255, 0.04);
+  --border-accent: rgba(255, 255, 255, 0.15);
 
   /* Fluid Spacing using clamp */
   --space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
@@ -66,6 +66,7 @@ html {
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: 'Outfit', 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
 
   /* Fluid Typography using Viewport Width */
@@ -88,14 +89,14 @@ html {
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 30px var(--accent-glow);
-  --shadow-glow-strong: 0 0 50px var(--accent-glow-strong);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 40px var(--accent-glow);
+  --shadow-glow-strong: 0 0 60px var(--accent-glow-strong);
 
   /* Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-base: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 500ms cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Layout */
   --max-width: 1200px;
@@ -127,12 +128,12 @@ html {
 
 body {
   background-color: transparent;
-  /* Deep Space Noise / Grid / Spotlight */
+  /* Premium Dark Mode Mesh / Grid */
   background-image: 
-    radial-gradient(circle 800px at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(0, 229, 255, 0.03) 0%, transparent 100%),
-    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-  background-size: 100% 100%, 40px 40px, 40px 40px;
+    radial-gradient(circle 800px at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(255, 255, 255, 0.04) 0%, transparent 100%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
   background-position: top center;
   background-attachment: fixed;
   color: var(--text-primary);
@@ -151,15 +152,16 @@ body {
   z-index: 9999;
   pointer-events: none;
   background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');
-  opacity: 0.03;
+  opacity: 0.02;
   mix-blend-mode: screen;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: var(--text-heading);
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-weight: 600;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 a {
