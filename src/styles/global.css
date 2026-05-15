@@ -31,11 +31,11 @@ html {
   --text-heading: #ffffff;
   --text-muted: #71717a;
 
-  /* Brand accent (Monochrome / Silver-Blue) */
-  --accent-primary: #e2e8f0;
-  --accent-secondary: #ffffff;
-  --accent-glow: rgba(255, 255, 255, 0.06);
-  --accent-glow-strong: rgba(255, 255, 255, 0.12);
+  /* Brand accent (GitSetu Teal/Blue) */
+  --accent-primary: #00c4cc;
+  --accent-secondary: #0ea5e9;
+  --accent-glow: rgba(0, 196, 204, 0.12);
+  --accent-glow-strong: rgba(0, 196, 204, 0.25);
 
   /* Status colors */
   --color-success: #10b981;
@@ -45,13 +45,13 @@ html {
   /* Gradients */
   --gradient-hero: linear-gradient(180deg, #000000 0%, #080808 100%);
   --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-  --gradient-accent: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
-  --gradient-accent-text: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  --gradient-accent: linear-gradient(135deg, #00c4cc 0%, #0ea5e9 100%);
+  --gradient-accent-text: linear-gradient(135deg, #00c4cc 0%, #0ea5e9 100%);
 
   /* Borders (Ultra-thin glass) */
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-card: rgba(255, 255, 255, 0.04);
-  --border-accent: rgba(255, 255, 255, 0.15);
+  --border-accent: rgba(0, 196, 204, 0.3);
 
   /* Fluid Spacing using clamp */
   --space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
